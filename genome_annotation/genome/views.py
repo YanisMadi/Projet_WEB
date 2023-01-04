@@ -7,4 +7,4 @@ def annotation_list(request):
     # Créer un contexte de données à passer au template
     context = {'annotations': annotations}
     # Rendre le template avec le contexte de données
-    return render(request, '../templates/annotation_list.html', context)
+    return render(request, 'templates/annotation_list.html', context)
