@@ -1,0 +1,171 @@
+/* Google Font Import Link */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Ubuntu',sans-serif;
+}
+body{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center; /* centrer body*/
+    padding: 10px;
+    background: url(DNA.jpg) ; /* mettre la photo en background */
+
+}
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    /*transition: all 0.4s ease;*/
+}
+nav.sticky{
+    padding: 15px 20px;
+    background: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+nav .nav-content{
+    height: 100%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+nav .logo a{
+    font-weight: 500;
+    font-size: 35px;
+    color: #4070f4;
+}
+nav.sticky .logo a{
+    color: #fff;
+}
+.nav-content .nav-links{
+    display: flex;
+}
+.nav-content .nav-links li{
+    list-style: none;
+    margin: 0 8px;
+}
+/* Les titre dans le menu de navigation */
+.nav-links li a{
+    text-decoration: none;
+    color: #0E2431;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 4px;
+    transition: all 0.3s ease;
+}
+.nav-links li a:hover{
+    color: #4070f4;
+}
+nav.sticky .nav-links li a{
+    color:  #0E2431;
+    transition: all 0.4s ease;
+}
+nav.sticky .nav-links li a:hover{
+    color: #0E2431;
+}
+
+.container{
+    max-width: 700px;
+    width:100%;
+    background: #fff; /* la couleur du fond de border*/
+    padding: 25px 30px; /* la taille du carrée */
+    border-radius: 5px; /* arrondir les bords  du carré */
+}
+.container .title{ /* class title */
+    font-size: 25px;
+    font-weight: 500;
+    /* Agrandir la taille du  titre */
+    position: relative;
+}
+/* Mettre le petit trait en dessous de Sign up(Title)*/
+.container .title::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;/*Mettre en dessous du titre*/
+    height: 3px;
+    width: 30px;
+    background: linear-gradient(135deg, #71b7e6,#71b7e6);/*Colorer le trait en bleu*/
+}
+.container form .user-details{
+    display: flex; /*  mettre  les input sur la méme ligne */
+    flex-wrap: wrap;/* mettre les input un en dessous de l'autre */
+    justify-content: space-between;
+    margin: 20px 0 12px 0;
+}
+
+form .user-details .input-box{
+   margin-bottom: 15px;
+
+    width: calc(100% / 2- 20px);
+}
+.user-details .input-box .details{
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+
+}
+.user-details .input-box input{
+    height: 45px; /* augmente la taille des champs à remplir */
+    width: 100%;
+    outline: none;
+    border-radius: 5px; /* Bordure des input */
+    border: 1px solid #ccc;
+    padding-left: 15px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+
+.user-details .input-box input:focus,
+.user-details .input-box input:valid{
+    border-color: #9b59b6;
+
+}
+/* Bouton register*/
+ form .button{
+    height: 45px; /* la hauteur du bouton*/
+    margin: 45px 0; /* la marge */
+ }
+ form .button input{
+    outline: none;
+    height: 100% ;
+    width: 100%;
+    border: none;
+    color:#fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 5px;
+    background-color: #197bbd  ;
+  
+ }
+ form .button input:hover{
+    background-color: #000 ;
+ }
+ /*Appel le container et adapte la page quand on diminue avec la souris */
+ @media (max-width: 584px)  {
+     .container{
+         max-width: 100%;
+     }
+     form .user-details .input-box{
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .container form .user-details{
+        max-height: 300px;
+        overflow-y: scroll; /*quand on diminue la age et on a beaucoup d'in*/
+    }
+    .user-details::-webkit-scrollbar{
+        width: 0;
+    }
+ }

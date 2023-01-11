@@ -18,3 +18,9 @@ def login_view(request):
     return render(request, 'genome/login.html', {
         'css_files': ['login.css'],
     })
+
+def inscription(request) :
+
+    return render(request, 'genome/inscription.html', {
+        'css_files': ['inscription.css'],
+    })
