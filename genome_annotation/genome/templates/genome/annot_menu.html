@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- Cette page est la page de d'accueil du site -->
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home_page.css' %}"">
+   </head>
+<body>
+<!-- Barre de navigation -->
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a href="annot_menu.html">CYPS Genome Annotation.</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="annot_menu.html">Accueil</a></li>
+        <li><a href="annot_menu.html">S'inscrire</a></li>
+        <li><a href="annot_menu.html">Se connecter</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="home"></section>
+  <div class="text">
+    <p><h2> Bienvenue dans l'application CYPS Genome Annotation ! </h2><br>
+    <p> Cette application web a été créée par quatre étudiants en Biologie Computationnelle (AMI2B) à l'Université Paris-Saclay. CYPS genome annotation regorge d'informations sur les génomes, les gènes et les protéines bactériens.
+        <br>T"Le but de ce site web est de faire des annotations fonctionnelles sur les gènes et les protéines. Les nouvelles annotations seront validées ou rejetées avant d'être soumises à la base de données. La base de données est<br>
+        écrite en SQLite. En tant qu'utilisateur, vous avez le droit de choisir votre rôle en tant que lecteur, validateur ou annotateur :
+        <br>
+        <br> - Si vous vous inscrivez en tant que lecteur, vous ne pouvez qu'effectuer des recherches, lire des informations sur les génomes bactériens, les gènes et les protéines. Vous pouvez également vérifier les annotations en cours de validation et télécharger les données de la base de données.<br>
+        <br> - Cependant, si vous vous inscrivez en tant qu'annotateur ou validateur, vous pourrez effectuer des annotations et des analyses fonctionnelles sur le génome bactérien.<br>
+        <br> - Sinon, si vous choisissez le rôle de validateur, vous avez la permission de valider ou de rejeter les annotations. Vous êtes entièrement libre de choisir le rôle que vous voulez.<br>
+        <br> - Il y a également la page d'administration pour l'administrateur GenAnnot, où l'administrateur peut consulter des informations sur les utilisateurs enregistrés et supprimer les utilisateurs indésirables. Néanmoins, le rôle d'administrateur ne peut pas être choisi dans le formulaire d'inscription. <br>
+        <br> <strong>/!\ Information importante :</strong> Si vous avez déjà un compte, vous ne pouvez pas vous réinscrire sur le site. Seuls les utilisateurs existants du site peuvent consulter et rechercher des informations dans la base de données GenAnnot.
+  </div>
+<!-- Logo -->
+  <script>
+let nav = document.querySelector("nav");
+    window.onscroll = function() {
+        if(document.documentElement.scrollTop > 20){
+            nav.classList.add("sticky");
+        }else {
+            nav.classList.remove("sticky");
+        }
+    }
+  </script>
+</body>
+</html>

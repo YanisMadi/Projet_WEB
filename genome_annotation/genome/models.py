@@ -11,3 +11,4 @@ class GenomeAnnotation(models.Model):
     end_position = models.IntegerField()
     # Champ de type choix limité
     strand = models.CharField(max_length=1, choices=[('+', 'Forward'), ('-', 'Reverse')])
+

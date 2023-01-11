@@ -20,4 +20,5 @@ from genome import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('annotations/', views.annotation_list, name='annotation_list'),
+    path('menu/', views.annot_menu, name='annot_menu'),
 ]
