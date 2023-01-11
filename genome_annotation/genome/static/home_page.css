@@ -33,7 +33,7 @@ nav .nav-content{
 nav .logo a{
     font-weight: 500;
     font-size: 35px;
-    color: #4070f4;
+    color: #b5329d;
 }
 nav.sticky .logo a{
     color: #fff;
@@ -55,7 +55,7 @@ nav.sticky .logo a{
     transition: all 0.3s ease;
 }
 .nav-links li a:hover{
-    color: #4070f4;
+    color: #be3cc0;
 }
 nav.sticky .nav-links li a{
     color:  #0E2431;
@@ -76,7 +76,7 @@ nav.sticky .nav-links li a:hover{
 h2{
     font-size: 30px;
     margin-bottom: 6px;
-    color: #4070f4;
+    color: #be3cc0;
 }
 /*Description du site*/
 .text{
