@@ -13,3 +13,8 @@ def annot_menu(request):
     return render(request, 'genome/annot_menu.html', {
         'css_files': ['home_page.css'],
     })
+
+def login_view(request):
+    return render(request, 'genome/login.html', {
+        'css_files': ['login.css'],
+    })

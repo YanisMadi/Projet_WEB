@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title> Se connecter </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+<body>
+
+<!-- Barre de navigation -->
+<nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a href="annot_menu.html">CYPS Genome Annotation.</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="annot_menu.html">Accueil</a></li>
+        <li><a href="annot_menu.html">S'inscrire</a></li>
+        <li><a href="annot_menu.html">Se connecter</a></li>
+      </ul>
+    </div>
+  </nav>
+
+<div id='login-form' class="loginbox">
+    <img src="login.jpg" class="avatar">
+    <h1> Login Here </h1> </br>
+    <form method="post" action="">
+        <p>Email</p>
+        <input type="text" name="email" placeholder="Enter Email">
+        <p>Password</p>
+        <input type="password" name="password" placeholder="Enter Password">
+        <input type="submit" name="submit" value="Sign In"></br>
+    </form>
+    <a href="inscription.html " target="_blank">Don't have an account?</a> </br>
+</div>
+
+</body>
+</html>

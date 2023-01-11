@@ -1,0 +1,240 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background: url(DNA.jpg);
+}
+.container {
+  max-width: 700px;
+  width: 100%;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 5px;
+}
+.container .title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+.container .title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 30px;
+  background: linear-gradient(135deg, #71b7e6, #71b7e6);
+}
+.container form .user-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+form .user-details .input-box {
+  margin-bottom: 15px;
+  width: calc(100% / 2- 20px);
+}
+.user-details .input-box .details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.user-details .input-box input {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 15px;
+  font-size: 16px;
+  border-bottom-width: 2px;
+  transition: all 0.3 ease;
+}
+
+.user-details .input-box input:focus,
+.user-details .input-box input:valid {
+  border-color: #9b59b6;
+}
+form .file-type .file-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+form .file-type.category {
+  display: flex;
+  width: 80%;
+  margin: 14px 0;
+  justify-content: space-between;
+}
+form .category label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+form .category label .dot {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: #d9d9d9;
+  border: 5px solid transparent;
+  transition: height 0.3s ease-in;
+}
+#dot-1:checked ~ .category label .one,
+#dot-2:checked ~ .category label .two {
+  background: #9b59b6;
+  border-color: #d9d9d9;
+}
+form input[type="radio"] {
+  display: none;
+}
+form .butyon {
+  height: 45px;
+  margin: 45px 0;
+}
+form .button input {
+  outline: none;
+  height: 100%;
+  width: 100%;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  background-color: #197bbd;
+}
+form .button input:hover {
+  background-color: #000;
+}
+@media (max-width: 584) {
+  .container {
+    max-width: 100%;
+  }
+  form .user-details .input-box {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .container form .user-details {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+  .user-details::-webkit-scrollbar {
+    width: 0;
+  }
+  @media (max-width: 459px) {
+    .container .title .category {
+      flex-direction: column;
+    }
+  }
+  /* formulaire*/
+  .Genomebox {
+    width: 320px;
+    height: 420px;
+    background: #fff;
+    color: #000;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+  }
+}
+
+/* Page Genome  */
+
+.button-id {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: -9px;
+  left: 50%;
+}
+
+.genome {
+  display: flex;
+  font-size: small;
+  white-space: nowrap;
+  position: relative;
+  font-size: 16px;
+  font-family: monospace;
+  color: #646262;
+}
+
+.labely {
+  /* display: flex; */
+  color: grey;
+  /* padding: 0px 2px; */
+  /* height: 10px; */
+  top : -30px;
+  /* font-size: small; */
+  white-space: nowrap;
+  position: absolute;
+  
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-family: monospace;
+}
+
+.labeltext {
+    font-size: 8px;
+    color: #c3baba;
+}
+
+.label-bar {
+  padding: 0px 0.2px;
+  background-color: #ddd;
+  position: absolute;
+  top: 10px;
+  transform: translateY(-50%);
+  height: 60px;
+  font-size: 16px;
+  font-family: monospace;
+}
+/* .bouton{ */
+/* left: <?php echo $seqpage[i]; ?>;
+    width: <?php echo $longsequence[i]; ?>;
+    height: défini avec J */
+
+/* } */
+.bouton-seq-container {
+    position: absolute;
+    font-size: 16px;
+    font-family: monospace;
+    height: 30px;
+    background-color: rgba(170, 182, 252, 1);
+    border-radius: 4px;
+    display: flex;
+    border: none;
+    justify-content: center;
+}
+/* .button-seq {
+
+} */
+.card-container {
+  margin: auto;
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.card {
+  max-width: 1000px;
+  background-color: white;
+  border: solid 1px rgb(70, 67, 67);
+  box-shadow: 4px 8px 14px 3px rzgb(0 0 0 / 44%);
+  padding: 50px 20px;
+  height: 300px;
+  border-radius: 20px;
+  overflow-x: scroll;
+  position: relative;
+}
