@@ -6,34 +6,38 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'login.css' %}">
 </head>
+
 <body>
 
 <!-- Barre de navigation -->
 <nav>
     <div class="nav-content">
       <div class="logo">
-        <a href="annot_menu.html">CYPS Genome Annotation.</a>
+        <a >CYPS Genome Annotation.</a> <!-- enlever le lien ? -->
       </div>
       <ul class="nav-links">
         <li><a href="annot_menu.html">Accueil</a></li>
-        <li><a href="annot_menu.html">S'inscrire</a></li>
-        <li><a href="annot_menu.html">Se connecter</a></li>
+        <li><a href="inscription.html">S'inscrire</a></li>
+        <li><a href="login.html">Se connecter</a></li>
       </ul>
     </div>
   </nav>
 
-<div id='login-form' class="loginbox">
-    <img src="login.jpg" class="avatar">
-    <h1> Login Here </h1> </br>
+  <!-- Connexion -->
+<div class="loginbox">
+    <h1> Connexion </h1> </br>
     <form method="post" action="">
         <p>Email</p>
-        <input type="text" name="email" placeholder="Enter Email">
-        <p>Password</p>
-        <input type="password" name="password" placeholder="Enter Password">
-        <input type="submit" name="submit" value="Sign In"></br>
+        <input type="text" name="email" placeholder="exemple@exemple.fr">
+        <p>Mot de passe</p>
+        <input type="password" name="password" placeholder="Mot de passe">
+        <input type="submit" name="submit" value="Me connecter"></br>
     </form>
-    <a href="inscription.html " target="_blank">Don't have an account?</a> </br>
+    <a href="inscription.html " target="_blank">Pas encore de compte ?</a> </br>
+    
 </div>
 
 </body>
 </html>
+
+

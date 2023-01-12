@@ -2,104 +2,37 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
+
 body {
   display: flex;
   height: 100vh;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  padding: 10px;
-  background: url(DNA.jpg);
-}
-.container {
-  max-width: 700px;
-  width: 100%;
-  background: #fff;
-  padding: 25px 30px;
-  border-radius: 5px;
-}
-.container .title {
-  font-size: 25px;
-  font-weight: 500;
-  position: relative;
-}
-.container .title::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 30px;
-  background: linear-gradient(135deg, #71b7e6, #71b7e6);
-}
-.container form .user-details {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 20px 0 12px 0;
-}
-form .user-details .input-box {
-  margin-bottom: 15px;
-  width: calc(100% / 2- 20px);
-}
-.user-details .input-box .details {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-.user-details .input-box input {
-  height: 45px;
-  width: 100%;
-  outline: none;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  padding-left: 15px;
-  font-size: 16px;
-  border-bottom-width: 2px;
-  transition: all 0.3 ease;
+  padding:1em;
+  background-color: #997ba5;
+  /*background: url(DNA.jpg);
+  background-size: cover;
+  background-blend-mode: 0.6;
+  */
 }
 
-.user-details .input-box input:focus,
-.user-details .input-box input:valid {
-  border-color: #9b59b6;
+/* Espace d'écriture : rectangle blancs */
+form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
-form .file-type .file-title {
-  font-size: 20px;
-  font-weight: 500;
-}
-form .file-type.category {
-  display: flex;
-  width: 80%;
-  margin: 14px 0;
-  justify-content: space-between;
-}
-form .category label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-form .category label .dot {
-  height: 18px;
-  width: 18px;
-  border-radius: 50%;
-  margin-right: 10px;
-  background: #d9d9d9;
-  border: 5px solid transparent;
-  transition: height 0.3s ease-in;
-}
-#dot-1:checked ~ .category label .one,
-#dot-2:checked ~ .category label .two {
-  background: #9b59b6;
-  border-color: #d9d9d9;
-}
-form input[type="radio"] {
-  display: none;
-}
-form .butyon {
-  height: 45px;
-  margin: 45px 0;
-}
+
+/* Bouton submit */
+
 form .button input {
   outline: none;
   height: 100%;
@@ -115,126 +48,64 @@ form .button input {
 form .button input:hover {
   background-color: #000;
 }
-@media (max-width: 584) {
-  .container {
-    max-width: 100%;
-  }
-  form .user-details .input-box {
-    margin-bottom: 15px;
-    width: 100%;
-  }
-  .container form .user-details {
-    max-height: 300px;
-    overflow-y: scroll;
-  }
-  .user-details::-webkit-scrollbar {
-    width: 0;
-  }
-  @media (max-width: 459px) {
-    .container .title .category {
-      flex-direction: column;
-    }
-  }
-  /* formulaire*/
-  .Genomebox {
-    width: 320px;
-    height: 420px;
-    background: #fff;
-    color: #000;
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    padding: 70px 30px;
-  }
+
+/* Barre de navigation */
+
+nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: white;
+  /*transition: all 0.4s ease;*/
 }
-
-/* Page Genome  */
-
-.button-id {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: -9px;
-  left: 50%;
+nav.sticky{
+  padding: 15px 20px;
+  background: white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
-
-.genome {
-  display: flex;
-  font-size: small;
-  white-space: nowrap;
-  position: relative;
-  font-size: 16px;
-  font-family: monospace;
-  color: #646262;
-}
-
-.labely {
-  /* display: flex; */
-  color: grey;
-  /* padding: 0px 2px; */
-  /* height: 10px; */
-  top : -30px;
-  /* font-size: small; */
-  white-space: nowrap;
-  position: absolute;
-  
-  transform: translateX(-50%);
-  font-size: 16px;
-  font-family: monospace;
-}
-
-.labeltext {
-    font-size: 8px;
-    color: #c3baba;
-}
-
-.label-bar {
-  padding: 0px 0.2px;
-  background-color: #ddd;
-  position: absolute;
-  top: 10px;
-  transform: translateY(-50%);
-  height: 60px;
-  font-size: 16px;
-  font-family: monospace;
-}
-/* .bouton{ */
-/* left: <?php echo $seqpage[i]; ?>;
-    width: <?php echo $longsequence[i]; ?>;
-    height: défini avec J */
-
-/* } */
-.bouton-seq-container {
-    position: absolute;
-    font-size: 16px;
-    font-family: monospace;
-    height: 30px;
-    background-color: rgba(170, 182, 252, 1);
-    border-radius: 4px;
-    display: flex;
-    border: none;
-    justify-content: center;
-}
-/* .button-seq {
-
-} */
-.card-container {
-  margin: auto;
+nav .nav-content{
   height: 100%;
+  max-width: 1200px;
+  margin: auto;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
 }
-.card {
-  max-width: 1000px;
-  background-color: white;
-  border: solid 1px rgb(70, 67, 67);
-  box-shadow: 4px 8px 14px 3px rzgb(0 0 0 / 44%);
-  padding: 50px 20px;
-  height: 300px;
-  border-radius: 20px;
-  overflow-x: scroll;
-  position: relative;
+/* Titre du site */
+nav .logo a{
+  font-weight: 500;
+  font-size: 35px;
+  color: #b5329d;
+}
+/* Côte à côte : Accueil / s'inscrire / se connecter */
+.nav-content .nav-links{
+  display: flex;
+}
+/* Ecriture non chevauchante du menu */
+.nav-content .nav-links li{
+  list-style: none;
+  margin: 0 8px;
+}
+
+/* Les titre dans le menu de navigation */
+/* LINKS */
+.nav-links li a{
+  text-decoration: none;
+  color: #0E2431;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 4px;
+  transition: all 0.3s ease;
+}
+.nav-links li a:hover{
+  color: #be3cc0;
+}
+nav.sticky .nav-links li a{
+  color:  #0E2431;
+  transition: all 0.4s ease;
+}
+nav.sticky .nav-links li a:hover{
+  color: #0E2431;
 }
