@@ -18,6 +18,13 @@ body {
   */
 }
 
+.loginbox{
+  width: 500px;
+  height: 400px;
+  background: rgba(91, 55, 110, 0.553);
+  box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
 /* Espace d'écriture : rectangle blancs */
 form input {
   font-family: "Roboto", sans-serif;
