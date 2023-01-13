@@ -2,9 +2,9 @@ from django.db import models
 
 class GenomeAnnotation(models.Model):
     # Champ de type texte de longueur maximale 100 caractères
-    gene_name = models.CharField(max_length=100)
+    gene_name = models.TextField()
     # Champ de type texte de longueur maximale 500 caractères
-    description = models.CharField(max_length=500)
+    description = models.TextField()
     # Champ de type nombre entier
     start_position = models.IntegerField()
     # Champ de type nombre entier
@@ -14,49 +14,48 @@ class GenomeAnnotation(models.Model):
 
 class User(models.Model):
 
-    ROLES = [('admin', 'Admin'),('reader', 'Reader'),('annotator', 'Annotator'),('validator', 'Validator')]
+    ROLES = [('admin', 'Admin'),('lecteur', 'Lecteur'),('annotateur', 'Annotateur'),('valideur', 'Valideur')]
 
     # email de l'utilisateur
-    email = models.TextField(null=False,primary_key=True, blank=False)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    phone_number = models.IntegerField()
-    role = models.TextField(choices=ROLES,default='reader')
-    password = models.TextField(null=False)
+    email = models.TextField(primary_key=True, blank=False)
+    prenom = models.CharField(max_length=100)
+    nom = models.CharField(max_length=100)
+    numero_tel = models.IntegerField()
+    role = models.TextField(choices=ROLES,default='lecteur')
+    motdepasse = models.TextField(null=False)
 
 
 class Genome(models.Model):
-    accession_number = models.IntegerField(primary_key=True, blank=False)
-    species = models.CharField(max_length=100)
-    strain = models.CharField(max_length=100) #souche
-    seq_length = models.IntegerField(null=False)
-    seq_sequence = models.TextField(null=False)
+    num_accession = models.IntegerField(primary_key=True, blank=False)
+    espece = models.TextField()
+    souche = models.TextField()
+    sequence_seq = models.TextField()
+    longueur_seq = models.PositiveIntegerField()
 
 
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
     STRAND_TYPE = [('backward','-1'),('forward','+1')]
-    ANNOTATION = [('yes','annotated'),('no','not annotated')]
+    ANNOTATION = [('oui','annoté'),('no,','non annoté')]
 
     sequence_id = models.TextField(primary_key=True, blank=False)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
-    accession_number = models.ForeignKey(Genome,on_delete=models.CASCADE)
-    dna_type = models.TextField(choices=DNA_TYPE,default='chromosome')
-    start = models.PositiveBigIntegerField(null=False)
-    end = models.PositiveBigIntegerField(null=False)
-    CDS_size = models.PositiveIntegerField()
-    CDS_sequence = models.TextField()
+    num_accession = models.ForeignKey(Genome,on_delete=models.CASCADE)
+    type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
+    start = models.IntegerField()
+    end = models.IntegerField()
+    sequence_CDS = models.TextField()
+    longueur_CDS = models.PositiveIntegerField()
+    sequence_pep = models.TextField()
+    longueur_pep = models.PositiveIntegerField()
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
-    annotated_state = models.TextField(choices=ANNOTATION, default='no')
-    pep_sequence = models.TextField()
-    pep_size = models.PositiveIntegerField()
+    annotated_state = models.TextField(choices=ANNOTATION, default='non annoté')
+    
 
-    # person = models.ForeignKey(Person, on_delete=models.CASCADE)
+class Annotations(models.Model):
 
-class Annotations (models.Model):
-
-    STATUS = [('validated','val'),('processing', 'proc'),('rejected', 'rej')]
+    STATUS = [('validé','val'),('en cours', 'en attente'),('rejeté', 'rej')]
 
     annot_id = models.IntegerField(primary_key=True, blank=False)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -64,4 +63,4 @@ class Annotations (models.Model):
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
     Biotype = models.CharField(max_length=100)
     comments = models.TextField()
-    annotation_status = models.CharField(max_length=100, choices=STATUS)
+    annotation_status = models.TextField(choices=STATUS,default='en attente')
