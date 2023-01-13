@@ -1,17 +1,5 @@
 from django.db import models
 
-class GenomeAnnotation(models.Model):
-    # Champ de type texte de longueur maximale 100 caractères
-    gene_name = models.TextField()
-    # Champ de type texte de longueur maximale 500 caractères
-    description = models.TextField()
-    # Champ de type nombre entier
-    start_position = models.IntegerField()
-    # Champ de type nombre entier
-    end_position = models.IntegerField()
-    # Champ de type choix limité
-    strand = models.CharField(max_length=1, choices=[('+', 'Forward'), ('-', 'Reverse')])
-
 class User(models.Model):
 
     ROLES = [('admin', 'Admin'),('lecteur', 'Lecteur'),('annotateur', 'Annotateur'),('valideur', 'Valideur')]
@@ -27,10 +15,12 @@ class User(models.Model):
 
 class Genome(models.Model):
     num_accession = models.IntegerField(primary_key=True, blank=False)
+    nom_gene = models.TextField()
     espece = models.TextField()
     souche = models.TextField()
     sequence_seq = models.TextField()
     longueur_seq = models.PositiveIntegerField()
+    description = models.TextField()
 
 
 class SequenceInfo(models.Model):
