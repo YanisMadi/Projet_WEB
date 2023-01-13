@@ -29,64 +29,32 @@
     </nav>
     <div class="container">
         <div class="title"> Sign up </div><br>
-        <?php
-        require_once 'db_utils.php';
-        connect_db();
-        //Insert the new user informations in the database
-        if (isset($_POST['submit'])) {
-            $name = $_POST['name'];
-            $family_name = $_POST['family_name'];
-            $email = $_POST['email'];
-            $phone = $_POST['phone'];
-            $password = $_POST['password'];
-            $confirm_password = $_POST['confirm_password'];
-            $role = $_POST['role'];
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email format";
-            } else if ((strlen($password))<=5){
-                echo "Invalid password format";
-            } else if ($password != $confirm_password) {
-                //Check password confirmationb
-                    header('Location:signup.php?Error=1');
-                } else {
-                    $sql_Query = "SELECT * FROM w_gene.users WHERE email='" . $_POST["email"] . "'";
-                    $result = pg_query($db_conn, $sql_Query);
-                    if (pg_num_rows($result) != 0) {
-                        echo " You are already a user! ";
-                    } else {
-                        $sqlQuery = "INSERT INTO w_gene.users(email, name, family_name, phone, role, password) VALUES ('" . $email . "','" . $name . "', '" . $family_name . "', '" . $phone . "', '" . $role . "','" . $password . "')";
-                        $result = pg_query($db_conn, $sqlQuery) or die(pg_last_error());
-                        echo "Your registration has been successfully registred.";
-                    }
-                }
-            }
-
-        ?>
-        <form action="signup.php" method="post">
+        
+        <form method="post">
             <div class="user-details">
                 <div class = "input-box">
                     <span class="details"> Prénom </span>
-                    <input type="text" name = "name" placeholder="Enter your name" required>
+                    <input type="text" name = "name" placeholder="Entrer votre prénom" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Nom de Famille</span>
-                    <input type="text" name="family_name" placeholder="Enter your Family name " required>
+                    <input type="text" name="family_name" placeholder="Entrer votre nom de Famille " required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Email</span>
-                    <input type="text" name = "email" placeholder="Enter your Email" required>
+                    <input type="text" name = "email" placeholder="Entrer votre Email" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Numéro de Téléphone </span>
-                    <input type="text" name = "phone" placeholder="Enter your Number" required>
+                    <input type="text" name = "phone" placeholder="Entrer votre numéro" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Mot de passe</span>
-                    <input type="password" name = "password" placeholder="Enter your password" required>
+                    <input type="password" name = "password" placeholder="Entrer votre mot de passe" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Confirmer votre mot de passe</span>
-                    <input type="password" name = "confirm_password" placeholder="Enter your password" required>
+                    <input type="password" name = "confirm_password" placeholder="Confirmer votre mot de passe" required>
                 </div>
             </div>
             <div class= "input-box">
@@ -98,10 +66,9 @@
              </select> <br>
             </div> <br>
                 <div class="button">
-                    <input type="submit" name = "submit" value="Register">
+                    <input type="submit" name = "submit" value="Enregistrer">
                 </div>
         </form>
     </div> 
 </body>
 </html>
-<?php   disconnect_db(); //deconnexion from the database ?>

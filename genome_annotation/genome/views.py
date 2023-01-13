@@ -24,3 +24,9 @@ def inscription(request) :
     return render(request, 'genome/inscription.html', {
         'css_files': ['inscription.css'],
     })
+
+def formulaire_genome(request) :
+
+    return render(request, 'genome/formulaire.html', {
+        'css_files': ['form.css'],
+    })

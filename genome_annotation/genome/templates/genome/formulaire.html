@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Genomes Search Form </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'form.css' %}">
+  </head>
+ <body>
+ <nav>
+        <div class="nav-content">
+        <div class="logo">
+            <a >CYPS Genome Annotation.</a> <!-- enlever le lien ? -->
+        </div>
+        <ul class="nav-links">
+            <li><a href="/menu/">Accueil</a></li>
+            <li><a href="/inscription/">S'inscrire</a></li>
+            <li><a href="/login/">Se connecter</a></li>
+        </ul>
+        </div>
+    </nav>
+    
+ 	<div class ="container">
+        <div class="title"> Recherche des informations à propos du génome </div><br>
+		<form method="get">
+            <div class="form-details">
+                <div class = "input-box">
+
+                <strong>Numéro d'accession : </strong>
+		        <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
+
+                <strong> Espèces :</strong>
+		        <input type="text" placeholder="Entrer le nom de l'espèce" name="espèce"><br><br>
+
+                <strong> Souche :</strong>
+		        <input type="text" placeholder="Entrer le nom de la souche" name="souche"><br><br>
+
+                <strong> Taille de la séquence :</strong>
+		        <input type="text" placeholder="Entrer la taille de la seq" name="taille_seq"><br><br>
+
+                <strong>Séquence :</strong><br>
+    	        <textarea id="textarea" rows="10" cols="55" name="seq_nt" placeholder = "Entrer la séquence" minlength="4"></textarea>
+
+                <strong>Sequence ID :</strong>
+            <input type="text" placeholder="Enter the sequence ID" name="idsequence"><br><br>
+    
+                <strong>Accession Number (Genome) :</strong>
+            <input type="text" placeholder="Enter the accession number" name="accessionnb"><br><br>
+    
+                <strong>DNA type :</strong>
+            <input type="text" placeholder="Enter chromosome or plasmid" name="dna_type">
+    
+                <strong>CDS start position :</strong>
+            <input type="text" placeholder="Enter the CDS start position" name="cds_start"><br><br>
+    
+                <strong>CDS end position :</strong>
+            <input type="text" placeholder="Enter the CDS end position" name="cds_end"><br><br>
+    
+                <strong>Strand :</strong>
+            <input type="text" placeholder="Enter 1 (direct) or -1 (indirect) strand" name="strand"><br><br>
+    
+                <strong>CDS sequence :</strong><br>
+            <textarea id="textarea" rows="3" cols="45" name="cds_seq" placeholder = "Enter the CDS sequence" minlength="9" maxlength="27000"></textarea><br><br>
+    
+                <strong>CDS length :</strong>
+            <input type="text" placeholder="Enter the CDS length" name="cds_size"><br><br>
+    
+                <strong>Peptide sequence :</strong><br>
+            <textarea id="textarea" rows="3" cols="45" name="pep_seq" placeholder = "Enter the pep. sequence" minlength="3" maxlength="9000"></textarea><br><br>
+    
+                <strong>Peptide size :</strong>
+            <input type="text" placeholder="Enter the pep. size" name="pep_size"><br><br>
+    
+                <!--Annotation Table-->
+                <strong>Gene ID :</strong>
+            <input type="text" placeholder="Enter the gene ID" name="geneid"><br><br>
+    
+                <strong>Gene Biotype :</strong>
+            <input type="text" placeholder="Enter the gene biotype" name="genebiotype"><br><br>
+    
+                <strong>Transcript Biotype :</strong>
+            <input type="text" placeholder="Enter the transcript biotype" name="transcriptbiotype"><br><br>
+    
+                <strong>Gene Symbol :</strong>
+            <input type="text" placeholder="Enter the gene symbol" name="genesymbol"><br><br>
+    
+                <strong>Description :</strong>
+            <input type="text" placeholder="Enter the description" name="description">
+
+
+            <div class="button">
+              <input type="submit" value="Recherche"><br> <!-- submit the research-->
+            </div>
+            
+          </div>
+
+            
+		</form>
+	</div>
+  </body>
+</html>
