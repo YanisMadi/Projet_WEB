@@ -24,8 +24,3 @@ def inscription(request) :
     return render(request, 'genome/inscription.html', {
         'css_files': ['inscription.css'],
     })
-
-def gobackmenu(request):
-    return render (request, 'genome/annot_menu.html', {
-        'css_files' : ['home_page.css']
-    })
