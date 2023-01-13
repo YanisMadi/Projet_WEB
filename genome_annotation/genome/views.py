@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import Genome
+from .models import Annotations
 
 def annotation_list(request):
     # Récupérer toutes les annotations de génome de la base de données
-    annotations = Genome.objects.all()
+    annotations = Annotations.objects.all()
     # Créer un contexte de données à passer au template
     context = {'annotations': annotations}
     # Rendre le template avec le contexte de données

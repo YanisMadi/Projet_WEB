@@ -1,11 +1,13 @@
-<h1>Liste des annotations de génome</h1>
-
-{% for annotation in annotations %}
-<p>
-  <strong>Nom du gène :</strong> {{ annotation.nom_gene }}<br>
-  <strong>Description :</strong> {{ annotation.description }}<br>
-  <!-- <strong>Position de départ :</strong> {{ annotation.start_position }}<br> -->
-  <!-- <strong>Position de fin :</strong> {{ annotation.end_position }}<br> -->
-  <!-- <strong>Brin :</strong> {{ annotation.get_strand_display }} -->
-</p>
-{% endfor %}
+<!DOCTYPE html>
+<html>
+  <script> /* code en JavaScript */
+  /* comme la base de données est vide, le code (Javascript) n'a 
+  pas été testé */
+  document.write("Hello World!");
+  for (annotation in annotations){
+    annotation_id=annotation.annot_id
+    genome_id=annotation.genome_ID
+    annotateur=annotation.email_annot
+  }
+</script>
+</html>
