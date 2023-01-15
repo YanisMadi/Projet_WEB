@@ -22,7 +22,7 @@ def login_view(request):
 def inscription(request) :
 
     return render(request, 'genome/inscription.html', {
-        'css_files': ['inscription.css'],
+        'css_files': ['Inscription.css'],
     })
 
 def formulaire_genome(request) :
