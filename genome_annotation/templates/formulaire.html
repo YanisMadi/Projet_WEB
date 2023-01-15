@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Gene Protein details </title>
+		<link rel="stylesheet" type="text/css" href="">
+        <link rel="stylesheet" type="text/css" href="signin.css">
+	</head>
+	<body>
+        <div class="container">
+            <div class="title"> Fill out this Form: </div>
+                <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" >
+                    <div class= "Gene proteine details">
+                    <br>
+			    
+                    <div class = "input-box">
+                            <span class="details">Annotation ID</span>
+                            <input type="text" name = "id_annot" placeholder="Enter the annotation ID" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Email Annotator</span>
+                        <input type="text" name = "email_annot" placeholder="Enter your email" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Annotation Date</span>
+                        <input type="text" name = "date_annot" placeholder="Annotation Date" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Gene ID</span>
+                        <input type="text" name = "id_gene" placeholder="Enter the Gene ID" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Gene Biotype</span>
+                        <input type="text" name = "gene_biotype" placeholder="Enter the gene biotype" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Transcript Biotype</span>
+                        <input type="text" name = "transcript_biotype" placeholder=" Enter the transcript biotype" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Gene Symbol</span>
+                        <input type="text" name = "gene_symbol" placeholder="Enter the Gene Symbol" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Description</span>
+                        <input type="text" name = "description" placeholder=" Enter the Description" required>
+                    </div><br>
+                    <div class = "input-box">
+                        <span class="details">Strand</span>
+                        <select name="brin">
+                            <option value= "1">1</option>
+                            <option value= "-1">-1</option>
+                        </select> <br>
+                    </div><br>
+                    <div class="button">
+                        <input type="submit" name="submit" value="Submit">
+                    </div><br>
+        
+                    <a href="GeneProt.html">Gene Protein Form Results</a> <!--Le renvoi de la page vers la page results sera ensuite codé en php-->
+
+                </form>
+    </div>
+        
+	</body>
