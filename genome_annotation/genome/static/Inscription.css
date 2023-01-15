@@ -11,9 +11,9 @@ body{
     display: flex;
     height: 100vh;
     justify-content: center;
-    align-items: center; /* centrer body*/
+    align-items: center; 
     padding: 10px;
-    background: url(DNA.jpg) ; /* mettre la photo en background */
+    background: url(DNA.jpg) ; 
 
 }
 nav{
@@ -23,7 +23,7 @@ nav{
     width: 100%;
     padding: 20px;
     background: white;
-    /*transition: all 0.4s ease;*/
+    
 }
 nav.sticky{
     padding: 15px 20px;
@@ -53,7 +53,7 @@ nav.sticky .logo a{
     list-style: none;
     margin: 0 8px;
 }
-/* Les titre dans le menu de navigation */
+
 .nav-links li a{
     text-decoration: none;
     color: #0E2431;
@@ -76,29 +76,28 @@ nav.sticky .nav-links li a:hover{
 .container{
     max-width: 700px;
     width:100%;
-    background: #fff; /* la couleur du fond de border*/
-    padding: 25px 30px; /* la taille du carrée */
-    border-radius: 5px; /* arrondir les bords  du carré */
+    background: #fff; 
+    padding: 25px 30px; 
+    border-radius: 5px; 
 }
-.container .title{ /* class title */
+.container .title{ 
     font-size: 25px;
     font-weight: 500;
-    /* Agrandir la taille du  titre */
     position: relative;
 }
-/* Mettre le petit trait en dessous de Sign up(Title)*/
+
 .container .title::before{
     content: '';
     position: absolute;
     left: 0;
-    bottom: 0;/*Mettre en dessous du titre*/
+    bottom: 0;
     height: 3px;
     width: 30px;
     background: linear-gradient(135deg, #e489ea,#e489ea);/*Colorer le trait en rose*/
 }
 .container form .user-details{
-    display: flex; /*  mettre  les input sur la méme ligne */
-    flex-wrap: wrap;/* mettre les input un en dessous de l'autre */
+    display: flex; 
+    flex-wrap: wrap;
     justify-content: space-between;
     margin: 20px 0 12px 0;
 }
@@ -115,10 +114,10 @@ form .user-details .input-box{
 
 }
 .user-details .input-box input{
-    height: 45px; /* augmente la taille des champs à remplir */
+    height: 45px;
     width: 100%;
     outline: none;
-    border-radius: 5px; /* Bordure des input */
+    border-radius: 5px;
     border: 1px solid #ccc;
     padding-left: 15px;
     font-size: 16px;
@@ -131,10 +130,10 @@ form .user-details .input-box{
     border-color: #d980e0;
 
 }
-/* Bouton register*/
+
  form .button{
-    height: 45px; /* la hauteur du bouton*/
-    margin: 45px 0; /* la marge */
+    height: 45px; 
+    margin: 45px 0; 
  }
  form .button input{
     outline: none;
@@ -152,7 +151,7 @@ form .user-details .input-box{
  form .button input:hover{
     background-color: #000 ;
  }
- /*Appel le container et adapte la page quand on diminue avec la souris */
+
  @media (max-width: 584px)  {
      .container{
          max-width: 100%;
@@ -163,7 +162,7 @@ form .user-details .input-box{
     }
     .container form .user-details{
         max-height: 300px;
-        overflow-y: scroll; /*quand on diminue la age et on a beaucoup d'in*/
+        overflow-y: scroll; 
     }
     .user-details::-webkit-scrollbar{
         width: 0;

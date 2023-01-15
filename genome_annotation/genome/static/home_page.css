@@ -15,7 +15,7 @@ nav{
     width: 100%;
     padding: 20px;
     background: white;
-    /*transition: all 0.4s ease;*/
+    
 }
 nav.sticky{
     padding: 15px 20px;
@@ -78,7 +78,7 @@ h2{
     margin-bottom: 6px;
     color: #be3cc0;
 }
-/*Description du site*/
+
 .text{
     text-align: justify;
     padding: 40px 80px;
