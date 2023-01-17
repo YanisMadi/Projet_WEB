@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="fr" dir="ltr">
+<html lang="en" dir="ltr">
     <head>
         <meta charset="UTF-8">
         <title>
@@ -49,6 +49,9 @@
                 <div class = "input-box">
                     <span class="details">Email</span>
                     <input type="text" name = "email" placeholder="Entrer votre Email" required>
+                    {% for error in form.email.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
                 </div>
                 <div class = "input-box">
                     <span class="details">Numéro de Téléphone </span>
@@ -57,17 +60,23 @@
                 <div class = "input-box">
                     <span class="details">Mot de passe</span>
                     <input type="password" name = "motdepasse" placeholder="Entrer votre mot de passe" required>
+                    {% for error in form.motdepasse.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
                 </div>
                 <div class = "input-box">
                     <span class="details">Confirmer votre mot de passe</span>
                     <input type="password" name = "confirm_mdp" placeholder="Confirmer votre mot de passe" required>
+                    {% for error in form.confirm_mdp.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
                 </div>
             </div>
             <div class= "input-box">
                 <span class="details">Choisissez votre rôle</span>
             <select name="role">
                 <option value= "lecteur">Lecteur</option>
-                <option value= "annotateur">Annotateurr</option>
+                <option value= "annotateur">Annotateur</option>
                 <option value= "validateur">Validateur</option>
              </select> <br>
             </div> <br>
