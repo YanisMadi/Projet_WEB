@@ -11,6 +11,7 @@ class User(models.Model):
     numero_tel = models.IntegerField()
     role = models.TextField(choices=ROLES,default='lecteur')
     motdepasse = models.TextField(null=False)
+    confirm_mdp = models.TextField(null=False)
 
 
 class Genome(models.Model):
