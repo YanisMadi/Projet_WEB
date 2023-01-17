@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" dir="ltr">
+<html lang="fr" dir="ltr">
     <head>
         <meta charset="UTF-8">
         <title>
@@ -28,17 +28,23 @@
         </div>
     </nav>
     <div class="container">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
         <div class="title"> Inscription </div><br>
         
         <form method="post">
+            {% csrf_token %}
             <div class="user-details">
                 <div class = "input-box">
                     <span class="details"> Prénom </span>
-                    <input type="text" name = "name" placeholder="Entrer votre prénom" required>
+                    <input type="text" name = "prenom" placeholder="Entrer votre prénom" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Nom de Famille</span>
-                    <input type="text" name="family_name" placeholder="Entrer votre nom de Famille " required>
+                    <input type="text" name="nom" placeholder="Entrer votre nom de Famille " required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Email</span>
@@ -46,29 +52,37 @@
                 </div>
                 <div class = "input-box">
                     <span class="details">Numéro de Téléphone </span>
-                    <input type="text" name = "phone" placeholder="Entrer votre numéro" required>
+                    <input type="text" name = "numero_tel" placeholder="Entrer votre numéro" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Mot de passe</span>
-                    <input type="password" name = "password" placeholder="Entrer votre mot de passe" required>
+                    <input type="password" name = "motdepasse" placeholder="Entrer votre mot de passe" required>
                 </div>
                 <div class = "input-box">
                     <span class="details">Confirmer votre mot de passe</span>
-                    <input type="password" name = "confirm_password" placeholder="Confirmer votre mot de passe" required>
+                    <input type="password" name = "confirm_mdp" placeholder="Confirmer votre mot de passe" required>
                 </div>
             </div>
             <div class= "input-box">
                 <span class="details">Choisissez votre rôle</span>
             <select name="role">
-                <option value= "reader">Reader</option>
-                <option value= "annotator">Annotator</option>
-                <option value= "validator">Validator</option>
+                <option value= "lecteur">Lecteur</option>
+                <option value= "annotateur">Annotateurr</option>
+                <option value= "validateur">Validateur</option>
              </select> <br>
             </div> <br>
                 <div class="button">
                     <input type="submit" name = "submit" value="Enregistrer">
                 </div>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </form>
+        
     </div> 
 </body>
 </html>
