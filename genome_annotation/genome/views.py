@@ -43,12 +43,12 @@ def inscription(request):
                 send_mail(
                     'Confirmation d\'inscription',
                     'Merci de vous être inscrit sur notre site.',
-                    'from@example.com',
+                    'cypsgenome@gmail.com',
                     [user.email],
                     fail_silently=False,
                 )
-                # Redirection vers une autre page
-                return redirect('menu')
+                # Redirection vers la page d'accueil du site
+                return redirect('annot_menu')
     else:
         form = InscriptionForm()
 
