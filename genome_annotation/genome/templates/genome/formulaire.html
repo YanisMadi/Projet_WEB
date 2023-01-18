@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'form.css' %}">
+  </head>
+ <body>
+ <nav>
+        <div class="nav-content">
+        <div class="logo">
+            <a >CYPS Genome Annotation.</a> 
+        </div>
+        <ul class="nav-links">
+            <li><a href="/menu/">Accueil</a></li>
+            <li><a href="/inscription/">S'inscrire</a></li>
+            <li><a href="/login/">Se connecter</a></li>
+        </ul>
+        </div>
+    </nav>
+    
+ 	<div class ="container">
+        <div class="title"> Formulaire </div><br>
+		<form method="get">
+            <div class="form-details">
+                <div class = "input-box">
+
+                <strong>Numéro d'accession : </strong>
+		        <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
+
+                <strong> Espèces :</strong>
+		        <input type="text" placeholder="Entrer le nom de l'espèce" name="espèce"><br><br>
+
+                <strong> Souche :</strong>
+		        <input type="text" placeholder="Entrer le nom de la souche" name="souche"><br><br>
+
+                <strong> Taille de la séquence :</strong>
+		        <input type="text" placeholder="Entrer la taille de la seq" name="taille_seq"><br><br>
+
+                <strong>Séquence ID :</strong>
+                <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>
+    
+                <strong> Type d'ADN :</strong>
+                <input type="text" placeholder="Entrer le chromosome ou le" name="adn_type">
+    
+                <strong>CDS start position :</strong>
+                <input type="text" placeholder="Entrer le CDS start position" name="cds_start"><br><br>
+    
+                <strong>CDS end position :</strong>
+                <input type="text" placeholder="Entrer le CDS end position" name="cds_end"><br><br>
+    
+                <strong> Brin :</strong>
+                <input type="text" placeholder="Entrer 1 (direct) ou -1 (indirect)" name="Brin"><br><br>
+    
+                <strong>Séquence du CDS :</strong><br>
+                <textarea id="textarea" rows="3" cols="45" name="cds_seq" placeholder = "Entrer la séquence du CDS" minlength="9" maxlength="27000"></textarea><br><br>
+    
+                <strong>Taille du CDS :</strong>
+                <input type="text" placeholder="Entrer la taille du CDS" name="cds_taille"><br><br>
+    
+                <strong>Sequence du Peptide :</strong><br>
+                <textarea id="textarea" rows="3" cols="45" name="pep_seq" placeholder = "Entrer la séquence péptidique" minlength="3" maxlength="9000"></textarea><br><br>
+    
+                <strong>Taille du Peptide :</strong>
+                <input type="text" placeholder="Entrer la taille du peptide" name="pep_size"><br><br>
+    
+                <strong>Gene ID :</strong>
+                <input type="text" placeholder="Entrer le gène ID" name="geneid"><br><br>
+    
+                <strong>Gene Biotype :</strong>
+                <input type="text" placeholder="Entrer le gene biotype" name="gene_biotype"><br><br>
+    
+                <strong>Transcript Biotype :</strong>
+                <input type="text" placeholder="Entrer le transcript biotype" name="tr_biotype"><br><br>
+    
+                <strong>Gene Symbol :</strong>
+                <input type="text" placeholder="Entrer le gene symbol" name="gene_symbol"><br><br>
+    
+                <strong>Description :</strong>
+                <input type="text" placeholder="Entrer la description" name="description">
+
+                <strong>Séquence du Génome:</strong><br>
+    	        <textarea id="textarea" rows="10" cols="55" name="seq_nt" placeholder = "Entrer la séquence" minlength="4"></textarea>
+
+
+
+        
+                <div class="button">
+                  <input type="submit" value="Recherche"><br> 
+                </div>
+            </div>  
+		</form>
+	</div>
+  </body>
+</html>

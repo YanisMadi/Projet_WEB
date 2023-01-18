@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+        
+          Inscription
+        </title>
+        {% load static %}
+        
+        <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+        <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+    <!-- Barre de navigation -->
+    <nav>
+        <div class="nav-content">
+        <div class="logo">
+            <a >CYPS Genome Annotation.</a> 
+        </div>
+        <ul class="nav-links">
+            <li><a href="/menu/">Accueil</a></li>
+            <li><a href="/inscription/">S'inscrire</a></li>
+            <li><a href="/login/">Se connecter</a></li>
+        </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="title"> Inscription </div><br>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="user-details">
+                <div class = "input-box">
+                    <span class="details"> Prénom </span>
+                    <input type="text" name = "prenom" placeholder="Entrer votre prénom" required>
+                </div>
+                <div class = "input-box">
+                    <span class="details">Nom de Famille</span>
+                    <input type="text" name="nom" placeholder="Entrer votre nom de Famille " required>
+                </div>
+                <div class = "input-box">
+                    <span class="details">Email</span>
+                    <input type="text" name = "email" placeholder="Entrer votre Email" required>
+                    {% for error in form.email.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+                </div>
+                <div class = "input-box">
+                    <span class="details">Numéro de Téléphone </span>
+                    <input type="text" name = "numero_tel" placeholder="Entrer votre numéro" required>
+                </div>
+                <div class = "input-box">
+                    <span class="details">Mot de passe</span>
+                    <input type="password" name = "motdepasse" placeholder="Entrer votre mot de passe" required>
+                    {% for error in form.motdepasse.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+                </div>
+                <div class = "input-box">
+                    <span class="details">Confirmer votre mot de passe</span>
+                    <input type="password" name = "confirm_mdp" placeholder="Confirmer votre mot de passe" required>
+                    {% for error in form.confirm_mdp.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+                </div>
+            </div>
+            <div class= "input-box">
+                <span class="details">Choisissez votre rôle</span>
+            <select name="role">
+                <option value= "lecteur">Lecteur</option>
+                <option value= "annotateur">Annotateur</option>
+                <option value= "validateur">Validateur</option>
+             </select> <br>
+            </div> <br>
+                <div class="button">
+                    <input type="submit" name = "submit" value="Enregistrer">
+                </div>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </form>
+        
+    </div> 
+</body>
+</html>

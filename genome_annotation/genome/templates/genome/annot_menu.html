@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- Cette page est la page de d'accueil du site -->
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home_page.css' %}">
+   </head>
+<body>
+  
+  <!-- Barre de navigation --> 
+  <nav>
+    <div class="nav-content">
+    <div class="logo">
+        <a >CYPS Genome Annotation.</a> <!-- enlever le lien ? -->
+    </div>
+    <ul class="nav-links">
+        <li><a href="/menu/">Accueil</a></li>
+        <li><a href="/inscription/">S'inscrire</a></li>
+        <li><a href="/login/">Se connecter</a></li>
+    </ul>
+    </div>
+  </nav>
+
+  <section class="home"></section>
+  <div class="text">
+    <p><h2> Bienvenue dans l'application CYPS Genome Annotation ! </h2><br>
+    <p> 
+      <a href="/formulaire/"> Formulaire </a>
+      <br>
+      <a href="/annotations/">Génomes annotés </a>
+  </div>
+<!-- Logo -->
+  <script>
+let nav = document.querySelector("nav");
+    window.onscroll = function() {
+        if(document.documentElement.scrollTop > 20){
+            nav.classList.add("sticky");
+        }else {
+            nav.classList.remove("sticky");
+        }
+    }
+  </script>
+</body>
+</html>

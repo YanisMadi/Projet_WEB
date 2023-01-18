@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title> Se connecter </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+
+<body>
+
+<!-- Barre de navigation -->
+<nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> <!-- enlever le lien ? -->
+      </div>
+      <ul class="nav-links">
+        <li><a href="/menu/">Accueil</a></li>
+        <li><a href="/inscription/">S'inscrire</a></li>
+        <li><a href="/login/">Se connecter</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Connexion -->
+<div class="loginbox">
+    <h1> Connexion </h1> </br>
+    <form method="post" action="">
+        <p>Email</p>
+        <input type="text" name="email" placeholder="exemple@exemple.fr">
+        <p>Mot de passe</p>
+        <input type="password" name="password" placeholder="Mot de passe">
+        <input type="submit" name="submit" value="Me connecter"></br>
+    </form>
+    <a href="/inscription/" target="_blank">Pas encore de compte ?</a> </br>
+    
+</div>
+
+</body>
+</html>
+
+
