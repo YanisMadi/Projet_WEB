@@ -48,7 +48,7 @@ def inscription(request):
                     fail_silently=False,
                 )
                 # Redirection vers la page d'accueil du site
-                return redirect('annot_menu')
+                return redirect('inscription')
     else:
         form = InscriptionForm()
 
