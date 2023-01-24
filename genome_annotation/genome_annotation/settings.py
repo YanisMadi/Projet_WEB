@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'genome',
-    'django_extensions',
+    #'django_extensions',
+    'django.contrib.auth.password_validation',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'genome_annotation.urls'
@@ -78,7 +80,7 @@ WSGI_APPLICATION = 'genome_annotation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'genome_database',
+        'NAME': BASE_DIR / 'genome_database.sqlite',
         'USER': 'genomeuser',
         'PASSWORD': 'genomeCYPS',
         'HOST': '127.0.0.1',
@@ -96,6 +98,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -129,10 +134,17 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email server
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cypsgenome@gmail.com'
 EMAIL_HOST_PASSWORD = 'pumwrxkkoqzwfahv'
+
+# Authentification pour se connecter
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'genome.backend.UserModelBackend',
+]
+
+AUTH_USER_MODEL = 'genome.User'
