@@ -1,9 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Annotations, User
+from .backend import UserModelBackend
 from .forms.inscription_form import InscriptionForm
 from django.core.mail import send_mail
-from django.shortcuts import redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.decorators import user_passes_test
+
+
 
 
 def annotation_list(request):
@@ -19,10 +25,34 @@ def annot_menu(request):
         'css_files': ['home_page.css'],
     })
 
+
 def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        ## Mon backend
+        # backend = UserModelBackend()
+        # user = backend.authenticate(request, email=email, password=password)
+        ## Django backend
+        user = authenticate(request, email=email, password=password, backend='django.contrib.auth.backends.ModelBackend')
+        if user is not None:
+            login(request, user)
+            if user.role == "annotateur":
+                # Redirection vers une page pour les annotateurs
+                return redirect('annotateur_page')
+            elif user.role == "lecteur":
+                # Redirection vers une page pour les lecteurs
+                return redirect('lecteur_page')
+            elif user.role == "validateur":
+                # Redirection vers une page pour les validateurs
+                return redirect('validateur_page')
+        else:
+            # Message d'erreur si les identifiants sont incorrects
+            messages.error(request, "Email ou mot de passe incorrect.")
     return render(request, 'genome/login.html', {
         'css_files': ['login.css'],
     })
+
 
 def inscription(request):
     if request.method == 'POST':
@@ -32,12 +62,26 @@ def inscription(request):
             if User.objects.filter(email=form.cleaned_data['email']).exists():
                 form.add_error('email', 'Cette adresse email est déjà utilisée.')
             # Vérification que les mots de passe correspondent
-            elif form.cleaned_data['motdepasse'] != form.cleaned_data['confirm_mdp']:
-                form.add_error('motdepasse', 'Les mots de passe ne correspondent pas.')
-                form.add_error('confirm_mdp', 'Les mots de passe ne correspondent pas.')
+            elif form.cleaned_data['password'] != request.POST.get('confirm_mdp'):
+                form.add_error('password', 'Les mots de passe ne correspondent pas.')
             else:
+                # Validation du mot de passe avec validate_password
+                try:
+                    validate_password(form.cleaned_data['password'])
+                except ValidationError as e:
+                    form.add_error('password', e)
+                    return render(request, 'genome/inscription.html', {'form': form, 'css_files': ['Inscription.css']})
+                # Cryptage du mot de passe pour le stocker dans la base de données
+                # Création d'un objet User
+                user = User()
+                user.email = form.cleaned_data['email']
+                user.numero_tel = form.cleaned_data['numero_tel']
+                user.nom = form.cleaned_data['nom']
+                user.prenom = form.cleaned_data['prenom']
+                user.role= form.cleaned_data['role']
+                user.set_password(form.cleaned_data['password'])
                 # Enregistrement des données d'inscription dans la base de données
-                user = form.save()
+                user.save()
                 messages.success(request, "Votre inscription a été effectuée avec succès.")
                 # Envoi d'un email de confirmation
                 send_mail(
@@ -48,9 +92,7 @@ def inscription(request):
                     fail_silently=False,
                 )
                 # Redirection vers la page d'accueil du site
-                
                 return redirect('inscription')
-
     else:
         form = InscriptionForm()
 
@@ -59,6 +101,14 @@ def inscription(request):
         'css_files': ['Inscription.css'],
     })
 
+def annotateur_required(user):
+    return user.role == "annotateur"
+
+#@user_passes_test(annotateur_required, login_url='/login/')
+def annotateur_page(request):
+    return render(request, 'genome/annot_menu.html', {
+        'css_files': ['form.css'],
+    })
 
 def formulaire_genome(request) :
 
