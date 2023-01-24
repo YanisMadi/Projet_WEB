@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'genome',
     #'django_extensions',
-    'django.contrib.auth.password_validation',
 ]
 
 MIDDLEWARE = [
@@ -142,9 +141,10 @@ EMAIL_HOST_USER = 'cypsgenome@gmail.com'
 EMAIL_HOST_PASSWORD = 'pumwrxkkoqzwfahv'
 
 # Authentification pour se connecter
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'genome.backend.UserModelBackend',
-]
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+
 
 AUTH_USER_MODEL = 'genome.User'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+

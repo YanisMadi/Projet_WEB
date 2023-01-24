@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import Annotations, User
-from .backend import UserModelBackend
 from .forms.inscription_form import InscriptionForm
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -9,48 +8,13 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.decorators import user_passes_test
 
-
-
-
-def annotation_list(request):
-    # Récupérer toutes les annotations de génome de la base de données
-    annotations = Annotations.objects.all()
-    # Créer un contexte de données à passer au template
-    context = {'annotations': annotations}
-    # Rendre le template avec le contexte de données
-    return render(request, 'genome/annotation_list.html', context)
-
+# Page d'accueil du site Web
 def annot_menu(request):
     return render(request, 'genome/annot_menu.html', {
         'css_files': ['home_page.css'],
     })
 
-
-def login_view(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        backend = UserModelBackend()
-        user = backend.authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            if user.role == "annotateur":
-                # Redirection vers une page pour les annotateurs
-                return redirect('annotateur_page')
-            elif user.role == "lecteur":
-                # Redirection vers une page pour les lecteurs
-                return redirect('lecteur_page')
-            elif user.role == "validateur":
-                # Redirection vers une page pour les validateurs
-                return redirect('validateur_page')
-        else:
-            # Message d'erreur si les identifiants sont incorrects
-            messages.error(request, "Email ou mot de passe incorrect.")
-    return render(request, 'genome/login.html', {
-        'css_files': ['login.css'],
-    })
-
-
+# Page d'inscription au site
 def inscription(request):
     if request.method == 'POST':
         form = InscriptionForm(request.POST)
@@ -98,17 +62,52 @@ def inscription(request):
         'css_files': ['Inscription.css'],
     })
 
-def annotateur_required(user):
-    return user.role == "annotateur"
+# Page de tous les génomes annotés
+def annotation_list(request):
+    # Récupérer toutes les annotations de génome de la base de données
+    annotations = Annotations.objects.all()
+    # Créer un contexte de données à passer au template
+    context = {'annotations': annotations}
+    # Rendre le template avec le contexte de données
+    return render(request, 'genome/annotation_list.html', context)
 
-#@user_passes_test(annotateur_required, login_url='/login/')
-def annotateur_page(request):
-    return render(request, 'genome/annot_menu.html', {
+# Page de recherche de génomes annotés
+def formulaire_genome(request) :
+    return render(request, 'genome/formulaire.html', {
         'css_files': ['form.css'],
     })
 
-def formulaire_genome(request) :
+# Page de connexion au site
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            if user.role == "annotateur":
+                # Redirection vers une page pour les annotateurs
+                return redirect('annotateur_page')
+            elif user.role == "lecteur":
+                # Redirection vers une page pour les lecteurs
+                return redirect('lecteur_page')
+            elif user.role == "validateur":
+                # Redirection vers une page pour les validateurs
+                return redirect('validateur_page')
+        else:
+            # Message d'erreur si les identifiants sont incorrects
+            messages.error(request, "Email ou mot de passe incorrect.")
+    return render(request, 'genome/login.html', {
+        'css_files': ['login.css'],
+    })
 
-    return render(request, 'genome/formulaire.html', {
+# Page d'accueil des Annotateurs
+def annotateur_required(user):
+    return user.role == "annotateur"
+
+@user_passes_test(annotateur_required, login_url='/login/')
+
+def annotateur_page(request):
+    return render(request, 'genome/annotateur_page.html', {
         'css_files': ['form.css'],
     })

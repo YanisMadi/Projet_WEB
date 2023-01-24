@@ -24,5 +24,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login_view'),
     path('inscription/', views.inscription, name = 'inscription'),
     path('formulaire/', views.formulaire_genome, name = 'formulaire'),
-    path('annotateur_page/', views.login_view, name='annotateur_page'),
+    path('annotateur_page/', views.annotateur_page, name='annotateur_page'),
 ]

@@ -43,13 +43,14 @@ class User(AbstractBaseUser):
         
     @property
     def is_active(self):
-        return self.is_active
+        return True
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
         
-    def check_password(self, password):
-        return check_password(password, self.password)
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+
     
     def set_is_active(self, value):
         self.is_active = value
@@ -63,17 +64,6 @@ class User(AbstractBaseUser):
 
     def get_full_name(self):
         return self.prenom + ' ' + self.nom
-
-
-
-
-
-        
-
-
-
-
-
 
 class Genome(models.Model):
     num_accession = models.IntegerField(primary_key=True, blank=False)
