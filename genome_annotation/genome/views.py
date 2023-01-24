@@ -71,7 +71,6 @@ def inscription(request):
                 except ValidationError as e:
                     form.add_error('password', e)
                     return render(request, 'genome/inscription.html', {'form': form, 'css_files': ['Inscription.css']})
-                # Cryptage du mot de passe pour le stocker dans la base de données
                 # Création d'un objet User
                 user = User()
                 user.email = form.cleaned_data['email']
@@ -79,6 +78,7 @@ def inscription(request):
                 user.nom = form.cleaned_data['nom']
                 user.prenom = form.cleaned_data['prenom']
                 user.role= form.cleaned_data['role']
+                # Cryptage du mot de passe pour le stocker dans la base de données
                 user.set_password(form.cleaned_data['password'])
                 # Enregistrement des données d'inscription dans la base de données
                 user.save()
