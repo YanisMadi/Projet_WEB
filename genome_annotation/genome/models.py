@@ -47,6 +47,9 @@ class User(AbstractBaseUser):
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
+        
+    def check_password(self, password):
+        return check_password(password, self.password)
     
     def set_is_active(self, value):
         self.is_active = value

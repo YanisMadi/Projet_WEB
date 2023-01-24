@@ -30,11 +30,8 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        ## Mon backend
-        # backend = UserModelBackend()
-        # user = backend.authenticate(request, email=email, password=password)
-        ## Django backend
-        user = authenticate(request, email=email, password=password, backend='django.contrib.auth.backends.ModelBackend')
+        backend = UserModelBackend()
+        user = backend.authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             if user.role == "annotateur":
