@@ -25,4 +25,7 @@ urlpatterns = [
     path('inscription/', views.inscription, name = 'inscription'),
     path('formulaire/', views.formulaire_genome, name = 'formulaire'),
     path('annotateur_page/', views.annotateur_page, name='annotateur_page'),
+    path('validateur_page/', views.validateur_page, name='validateur_page'),
+    path('lecteur_page/', views.lecteur_page, name='lecteur_page'),
+    path('logout/', views.logout_view, name='logout'),
 ]

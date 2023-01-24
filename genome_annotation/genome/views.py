@@ -3,7 +3,7 @@ from .models import Annotations, User
 from .forms.inscription_form import InscriptionForm
 from django.core.mail import send_mail
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.decorators import user_passes_test
@@ -101,13 +101,37 @@ def login_view(request):
         'css_files': ['login.css'],
     })
 
+# Pour se deconnecter 
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
 # Page d'accueil des Annotateurs
 def annotateur_required(user):
     return user.role == "annotateur"
 
 @user_passes_test(annotateur_required, login_url='/login/')
-
 def annotateur_page(request):
     return render(request, 'genome/annotateur_page.html', {
+        'css_files': ['form.css'],
+    })
+
+# Page d'accueil des Validateurs
+def validateur_required(user):
+    return user.role == "validateur"
+
+@user_passes_test(validateur_required, login_url='/login/')
+def validateur_page(request):
+    return render(request, 'genome/validateur_page.html', {
+        'css_files': ['form.css'],
+    })
+
+# Page d'accueil des Lecteurs
+def lecteur_required(user):
+    return user.role == "lecteur"
+
+@user_passes_test(lecteur_required, login_url='/login/')
+def lecteur_page(request):
+    return render(request, 'genome/lecteur_page.html', {
         'css_files': ['form.css'],
     })
