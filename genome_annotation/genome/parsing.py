@@ -5,9 +5,6 @@ Created on Sat Jan 21 14:50:55 2023
 @author: Pauli
 """
 
-import os
-os.chdir("./data")
-
 ## FONCTIONS
 
 def parsing_genome(fasta_file) : 
