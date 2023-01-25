@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.decorators import user_passes_test
+from django.core.exceptions import PermissionDenied
 
 # Page d'accueil du site Web
 def annot_menu(request):
@@ -108,7 +109,9 @@ def logout_view(request):
 
 # Page d'accueil des Annotateurs
 def annotateur_required(user):
-    return user.role == "annotateur"
+    if user.is_authenticated:
+        return user.role == "annotateur"
+    return False
 
 @user_passes_test(annotateur_required, login_url='/login/')
 def annotateur_page(request):
@@ -118,7 +121,9 @@ def annotateur_page(request):
 
 # Page d'accueil des Validateurs
 def validateur_required(user):
-    return user.role == "validateur"
+    if user.is_authenticated:
+        return user.role == "validateur"
+    return False
 
 @user_passes_test(validateur_required, login_url='/login/')
 def validateur_page(request):
@@ -128,7 +133,9 @@ def validateur_page(request):
 
 # Page d'accueil des Lecteurs
 def lecteur_required(user):
-    return user.role == "lecteur"
+    if user.is_authenticated:
+        return user.role == "lecteur"
+    return False
 
 @user_passes_test(lecteur_required, login_url='/login/')
 def lecteur_page(request):

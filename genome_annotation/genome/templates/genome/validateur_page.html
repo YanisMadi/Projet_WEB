@@ -11,17 +11,15 @@
   <!-- Barre de navigation --> 
   <nav>
     <div class="nav-content">
-    <div class="logo">
-        <a >CYPS Genome Annotation.</a> 
+        <div class="logo">
+            <a >CYPS Genome Annotation.</a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+            <li><a href="{% url 'logout' %}">Se deconnecter</a></li>
+        </ul>
     </div>
-    <ul class="nav-links">
-        <li><a href="/">Acceuil</a></li>
-        <li><a href="annotateur_seq.html">Choisir une séquence à annoter</a></li>
-        <li><a href="annotateur_historique.html">Historique des Annotations</a></li>
-        <li><a href="{% url 'logout' %}">Se deconnecter</a></li>
-    </ul>
-    </div>
-  </nav>
+</nav>
 
 <div class ="container">
     <p><h2> Tu es Annotateur tu as plusieurs fonctionnalités ! </h2><br>
