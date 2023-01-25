@@ -56,6 +56,21 @@ class User(AbstractBaseUser):
     def get_full_name(self):
         return self.prenom + ' ' + self.nom
 
+class UserManager(UserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Les utilisateurs doivent avoir un email")
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        user = self.create_user(email, password, **extra_fields)
+        user.is_admin = True
+        user.save()
+        return user
+
 class Genome(models.Model):
     num_accession = models.IntegerField(primary_key=True, blank=False)
     nom_gene = models.TextField()
@@ -64,6 +79,7 @@ class Genome(models.Model):
     sequence_seq = models.TextField()
     longueur_seq = models.PositiveIntegerField()
     description = models.TextField()
+    adn_type = models.TextField()
 
 
 class SequenceInfo(models.Model):
@@ -77,13 +93,19 @@ class SequenceInfo(models.Model):
     num_accession = models.ForeignKey(Genome,on_delete=models.CASCADE)
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
     start = models.IntegerField()
-    end = models.IntegerField()
+    end =models.IntegerField()
     sequence_CDS = models.TextField()
     longueur_CDS = models.PositiveIntegerField()
     sequence_pep = models.TextField()
     longueur_pep = models.PositiveIntegerField()
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
     annotated_state = models.TextField(choices=ANNOTATION, default='non annoté')
+    gene_id = models.IntegerField()
+    gene_biotype = models.CharField(max_length=100)
+    transcript_biotype = models.CharField(max_length=100)
+    gene_symbol = models.CharField(max_length=100)
+    description = models.TextField()
+
     
 
 class Annotations(models.Model):
@@ -97,3 +119,10 @@ class Annotations(models.Model):
     Biotype = models.CharField(max_length=100)
     comments = models.TextField()
     annotation_status = models.TextField(choices=STATUS,default='en attente')
+    gene_id = models.IntegerField()
+    gene_biotype = models.CharField(max_length=100)
+    transcript_biotype = models.CharField(max_length=100)
+    gene_symbol = models.CharField(max_length=100)
+    description = models.TextField()
+
+

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Annotations, User
+from .models import Annotations, User, Genome, SequenceInfo
 from .forms.inscription_form import InscriptionForm
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -137,14 +137,68 @@ def lecteur_page(request):
         'css_files': ['form.css'],
     })
 
-# Page de recherche de génomes annotés
-@user_passes_test(annotateur_required, login_url='/login/')
-@user_passes_test(validateur_required, login_url='/login/')
-@user_passes_test(lecteur_required, login_url='/login/')
-def formulaire_genome(request) :
+def formulaire_genome(request):
     return render(request, 'genome/formulaire.html', {
         'css_files': ['form.css'],
-    })
+        })
+
+def search_genome(request):
+    if request.method == 'GET':
+        accessionnb = request.GET.get('accessionnb')
+        espece = request.GET.get('espèce')
+        souche = request.GET.get('souche')
+        taille_seq = request.GET.get('taille_seq')
+        idsequence = request.GET.get('idsequence')
+        adn_type = request.GET.get('adn_type')
+        cds_start = request.GET.get('cds_start')
+        cds_end = request.GET.get('cds_end')
+        Brin = request.GET.get('Brin')
+        cds_seq = request.GET.get('cds_seq')
+        cds_taille = request.GET.get('cds_taille')
+        pep_seq = request.GET.get('pep_seq')
+        pep_size = request.GET.get('pep_size')
+        geneid = request.GET.get('geneid')
+        gene_biotype = request.GET.get('gene_biotype')
+        output_type = request.GET.get('output_type')
+        query_params = {}
+        if accessionnb:
+            query_params['num_accession'] = accessionnb
+        if espece:
+            query_params['espece__icontains'] = espece
+        if souche:
+            query_params['souche__icontains'] = souche
+        if taille_seq:
+            query_params['longueur'] = taille_seq
+        if adn_type:
+            query_params['type_adn__icontains'] = adn_type
+        if output_type == 'génome':
+            genomes = Genome.objects.filter(**query_params)
+            return render(request, 'genomes_list.html', {'genomes': genomes})
+        elif output_type == 'gène/protéine':
+            query_params = {}
+        if idsequence:
+            query_params['sequence_id'] = idsequence
+        if cds_start:
+            query_params['start'] = cds_start
+        if cds_end:
+            query_params['end'] = cds_end
+        if Brin:
+            query_params['strand'] = Brin
+        if cds_seq:
+            query_params['sequence_CDS__icontains'] = cds_seq
+        if cds_taille:
+            query_params['longueur_CDS'] = cds_taille
+        if pep_seq:
+            query_params['sequence_pep__icontains'] = pep_seq
+        if pep_size:
+            query_params['longueur_pep'] = pep_size
+        if geneid:
+            query_params['gene_id'] = geneid
+        if gene_biotype:
+            query_params['gene_biotype__icontains'] = gene_biotype
+        sequences = SequenceInfo.objects.filter(**query_params)
+        return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
+
 
 # Admin 
 def admin_required(user):
