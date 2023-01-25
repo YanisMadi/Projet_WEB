@@ -137,13 +137,13 @@ def lecteur_page(request):
         'css_files': ['form.css'],
     })
 
+
 def formulaire_genome(request):
-    return render(request, 'genome/formulaire.html', {
+    if request.method == 'GET':
+        return render(request, 'genome/formulaire.html', {
         'css_files': ['form.css'],
         })
-
-def search_genome(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         accessionnb = request.GET.get('accessionnb')
         espece = request.GET.get('espèce')
         souche = request.GET.get('souche')
@@ -173,7 +173,7 @@ def search_genome(request):
             query_params['type_adn__icontains'] = adn_type
         if output_type == 'génome':
             genomes = Genome.objects.filter(**query_params)
-            return render(request, 'genomes_list.html', {'genomes': genomes})
+            return render(request, 'genome/gene_protein_info.html', {'genomes': genomes})
         elif output_type == 'gène/protéine':
             query_params = {}
         if idsequence:

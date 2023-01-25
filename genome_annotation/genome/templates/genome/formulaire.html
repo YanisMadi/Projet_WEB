@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fr" dir="ltr">
   <head>
   <meta charset="utf-8" />
         <title> Formulaire </title>
@@ -22,7 +22,8 @@
     
  	<div class ="container">
         <div class="title"> Formulaire </div><br>
-		<form method="get">
+		<form method="post">
+      {% csrf_token %}
             <div class="form-details">
                 <div class = "input-box">
                   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

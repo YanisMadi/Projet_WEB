@@ -1,4 +1,25 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'form.css' %}">
+  </head>
+ <body>
+ <nav>
+        <div class="nav-content">
+        <div class="logo">
+            <a >CYPS Genome Annotation.</a> 
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/inscription/">S'inscrire</a></li>
+            <li><a href="/login/">Se connecter</a></li>
+        </ul>
+        </div>
+    </nav>
+    
 
 {% block content %}
   <h1>Informations sur les gènes et protéines</h1>
