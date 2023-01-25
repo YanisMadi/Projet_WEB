@@ -72,12 +72,6 @@ def annotation_list(request):
     # Rendre le template avec le contexte de données
     return render(request, 'genome/annotation_list.html', context)
 
-# Page de recherche de génomes annotés
-def formulaire_genome(request) :
-    return render(request, 'genome/formulaire.html', {
-        'css_files': ['form.css'],
-    })
-
 # Page de connexion au site
 def login_view(request):
     if request.method == 'POST':
@@ -143,8 +137,16 @@ def lecteur_page(request):
         'css_files': ['form.css'],
     })
 
-# Admin 
+# Page de recherche de génomes annotés
+@user_passes_test(annotateur_required, login_url='/login/')
+@user_passes_test(validateur_required, login_url='/login/')
+@user_passes_test(lecteur_required, login_url='/login/')
+def formulaire_genome(request) :
+    return render(request, 'genome/formulaire.html', {
+        'css_files': ['form.css'],
+    })
 
+# Admin 
 def admin_required(user):
     return user.is_staff
 
@@ -152,7 +154,7 @@ def admin_required(user):
 def manage_users(request):
     users = User.objects.all()
     context = {'users': users}
-    return render(request, 'users/manage_users.html', context)
+    return render(request, 'genome/manage_users.html', context)
 
 @user_passes_test(admin_required)
 def create_user(request):
@@ -163,7 +165,7 @@ def create_user(request):
         user = User.objects.create_user(email=email, password=password, role=role)
         user.save()
         return redirect('manage_users')
-    return render(request, 'users/create_user.html')
+    return render(request, 'genome/create_user.html')
 
 @user_passes_test(admin_required)
 def delete_user(request, user_id):
@@ -178,4 +180,4 @@ def assign_role(request, user_id):
         user.role = role
         user.save()
         return redirect('manage_users')
-    return
+    return render(request, 'genome/assign_role.html', {'user': User.objects.get(id=user_id), 'roles': User.ROLES})

@@ -4,13 +4,6 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
 from django.contrib.auth.hashers import check_password, make_password
 
-class UserManager(UserManager):
-    def create_superuser(self, email, password=None, **extra_fields):
-        user = self.create_user(email, password, **extra_fields)
-        user.is_admin = True
-        user.save()
-        return user
-
 class User(AbstractBaseUser):
     ROLES = [('admin', 'Admin'), ('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
     email = models.EmailField(primary_key=True, unique=True)
@@ -22,6 +15,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['password']
@@ -44,14 +38,13 @@ class User(AbstractBaseUser):
         
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
-
-
-    def set_is_staff(self, value):
-        self.is_staff = value
-        self.save()
     
     def set_is_active(self, value):
         self.is_active = value
+        self.save()
+    
+    def set_is_staff(self, value):
+        self.is_staff = value
         self.save()
     
     def get_username(self):
