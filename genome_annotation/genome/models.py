@@ -20,7 +20,7 @@ class UserManager(UserManager):
         return user
 
 class User(AbstractBaseUser):
-    ROLES = [('admin', 'Admin'), ('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('valideur', 'Valideur')]
+    ROLES = [('admin', 'Admin'), ('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
     email = models.EmailField(primary_key=True, unique=True)
     prenom = models.CharField(max_length=100)
     nom = models.CharField(max_length=100)
