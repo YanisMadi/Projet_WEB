@@ -12,4 +12,5 @@ urlpatterns = [
     path('validateur_page/', views.validateur_page, name='validateur_page'),
     path('lecteur_page/', views.lecteur_page, name='lecteur_page'),
     path('logout/', views.logout_view, name='logout'),
+    path('manage_users/', views.manage_users, name='manage_users'),
 ]

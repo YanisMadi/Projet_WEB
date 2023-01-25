@@ -142,3 +142,40 @@ def lecteur_page(request):
     return render(request, 'genome/lecteur_page.html', {
         'css_files': ['form.css'],
     })
+
+# Admin 
+
+def admin_required(user):
+    return user.is_staff
+
+@user_passes_test(admin_required)
+def manage_users(request):
+    users = User.objects.all()
+    context = {'users': users}
+    return render(request, 'users/manage_users.html', context)
+
+@user_passes_test(admin_required)
+def create_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        role = request.POST.get('role')
+        user = User.objects.create_user(email=email, password=password, role=role)
+        user.save()
+        return redirect('manage_users')
+    return render(request, 'users/create_user.html')
+
+@user_passes_test(admin_required)
+def delete_user(request, user_id):
+    User.objects.get(id=user_id).delete()
+    return redirect('manage_users')
+
+@user_passes_test(admin_required)
+def assign_role(request, user_id):
+    if request.method == 'POST':
+        role = request.POST.get('role')
+        user = User.objects.get(id=user_id)
+        user.role = role
+        user.save()
+        return redirect('manage_users')
+    return
