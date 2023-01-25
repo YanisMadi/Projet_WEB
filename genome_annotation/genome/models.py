@@ -29,8 +29,6 @@ class Genome(models.Model):
 
 class SequenceInfo(models.Model):
 
-    
-    #STRAND_TYPE = [('backward','-1'),('forward','+1')]
     ANNOTATION = [('oui','annoté'),('no,','non annoté')]
 
     num_accession = models.CharField(max_length=30) # genome_id
@@ -50,7 +48,8 @@ class SequenceInfo(models.Model):
 class Annotations(models.Model):
     
     STATUS = [('validé','val'),('en cours', 'en attente'),('rejeté', 'rej')]
-
+    STRAND_TYPE = [('backward','-1'),('forward','+1')]
+    
     annot_id = models.IntegerField(primary_key=True, blank=False)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE,max_length=100)
     num_accession = models.ForeignKey(Genome,on_delete=models.CASCADE,max_length=50)
