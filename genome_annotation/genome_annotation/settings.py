@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'genome_annotation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'genome_database',
+        'NAME': BASE_DIR / 'genome_database.sqlite',
         'USER': 'genomeuser',
         'PASSWORD': 'genomeCYPS',
         'HOST': '127.0.0.1',

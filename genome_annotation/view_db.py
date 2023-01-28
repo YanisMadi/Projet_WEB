@@ -26,4 +26,4 @@ def show_tables_and_data(db_name):
     conn.close()
 
 # Example usage
-show_tables_and_data("genome_database")
+show_tables_and_data("genome_database.sqlite")
