@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Annotations, User, Genome, SequenceInfo
 from .forms.inscription_form import InscriptionForm
+from .forms.database_form import DatabaseForm
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -11,6 +12,7 @@ from django.core.exceptions import PermissionDenied
 import urllib.request
 import re
 from django.http import HttpResponse
+import urllib.request
 
 
 # Page d'accueil du site Web
@@ -141,7 +143,7 @@ def lecteur_page(request):
         'css_files': ['form.css'],
     })
 
-
+# Page de vaidation ou non des annotations
 @user_passes_test(validateur_required, login_url='/login/')
 def validate_annotation(request):
     if request.method == "GET":
@@ -184,30 +186,43 @@ def validate_annotation(request):
         return HttpResponse(message)
 
 
+# Les 3 rôles
 def role_required(user):
     if user.is_authenticated:
         return user.role in ['validateur', 'annotateur', 'lecteur']
     return False
 
+# Page pour accéder aux banques externes
 @user_passes_test(role_required, login_url='/login/')
-def show_sequences(request, cds_seq, pep_seq, id_databank):
-    url_ncbi = f"https://www.ncbi.nlm.nih.gov/protein/{id_databank}"
-    url_ensembl = f"http://bacteria.ensembl.org/Multi/Search/Results?species=all;idx=;q={id_databank};"
-    contents = urllib.request.urlopen(url_ensembl).read().decode("utf-8")
-    result = re.findall(r'<a class="name" href="/(.+?)">', contents)
-    url_ensembl = f"http://bacteria.ensembl.org/{result[0]}"
-    contents2 = urllib.request.urlopen(url_ensembl).read().decode("utf-8")
-    result2 = re.findall(r'<a href="http://www.uniprot.org/uniprot/(.+?)"', contents2)
-    url_uniprot = f"http://www.uniprot.org/uniprot/{result2[0]}"
+def show_sequences(request):
+    if request.method == "GET":
+        return render(request, "genome/select_database.html")
+    if request.method == "POST":
+        cds_seq = request.POST.get("cds_seq")
+        pep_seq = request.POST.get("pep_seq")
+        selected_database = request.POST.get("databank")
+        if selected_database == "ncbi":
+            url_ncbi = "https://www.ncbi.nlm.nih.gov/"
+            url_ensembl = "#"
+            url_uniprot = "#"
+        elif selected_database == "ensembl":
+            url_ncbi = "#"
+            url_ensembl = "https://www.ensembl.org/"
+            url_uniprot = "#"
+        else:
+            url_ncbi = "#"
+            url_ensembl = "#"
+            url_uniprot = "https://www.uniprot.org/"
 
-    return render(request, "sequences.html", {
-        "cds_seq": cds_seq,
-        "pep_seq": pep_seq,
-        "url_ncbi": url_ncbi,
-        "url_ensembl": url_ensembl,
-        "url_uniprot": url_uniprot,
-    })
+        return render(request, "genome/sequence.html", {
+            "cds_seq": cds_seq,
+            "pep_seq": pep_seq,
+            "url_ncbi": url_ncbi,
+            "url_ensembl": url_ensembl,
+            "url_uniprot": url_uniprot
+        })
 
+# Pour chercher un génome ou un gène / une protéine dans la base de données du site
 @user_passes_test(role_required, login_url='/login/')
 def formulaire_genome(request):
     if request.method == 'GET':

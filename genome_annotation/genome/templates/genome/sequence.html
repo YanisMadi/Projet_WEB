@@ -26,7 +26,7 @@
     </div>
   </nav>
   
-  <strong>Séquence CDS : </strong>
+<strong>Séquence CDS : </strong>
 <textarea name="text" cols="55" rows="10" id="text">
   {{ cds_seq }}
 </textarea>
@@ -49,9 +49,5 @@
   <input type="hidden" name="gene_seq" value="{{ cds_seq|default:''|replace:'\n','' }}">
   <input type="submit" class='btn btn--assign' value="BLASTn">
 </form> <br>
-
-<strong>Blastp (protéines) :</strong>
-<form action="{% url 'blast_pep' %}" method="get">
-  <input type="hidden" name="prot_seq" value="{{ pep_seq|default:''|replace:'\n','' }}">
-  <input type="submit" class='btn btn--assign' value="BLASTp">
-</form> <br>
+</body>
+</html>
