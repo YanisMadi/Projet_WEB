@@ -1,14 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Annotation en cours </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'gene_info.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
 
-  <h1> Liste des annotations</h1>
-  <script> /* code en JavaScript */
-  /* comme la base de données est vide, le code (Javascript) 
-  n'a pas été testé */
-  for (annotation in annotations){
-    annotation_id=annotation.annot_id
-    genome_id=annotation.genome_ID
-    annotateur=annotation.email_annot
-  }
-</script>
-</html>
+  <div class ="container">
+    {% block content %}
+      <h1>Annotation en cours</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID annotation</th>
+            <th>Email annotateur</th>
+            <th>ID génome</th>
+            <th>ID séquence</th>
+            <th>Biotype</th>
+            <th>Comments</th>
+            <th>ID gène</th>
+            <th>Gène Biotype</th>
+            <th>Transcript Biotype</th>
+            <th>Gène symbol</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for annotation in annotations %}
+            <tr>
+              <td>{{ annotation.annot_id }}</td>
+              <td>{{ annotation.email_annot }}</td>
+              <td>{{ annotation.genome_ID }}</td>
+              <td>{{ annotation.sequence_id }}</td>
+              <td>{{ annotation.Biotype }}</td>
+              <td>{{ annotation.comments }}</td>
+              <td>{{ annotation.gene_id }}</td>
+              <td>{{ annotation.gene_biotype }}</td>
+              <td>{{ annotation.transcript_biotype }}</td>
+              <td>{{ annotation.gene_symbol }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endblock %}
+    </div>
+    

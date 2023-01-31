@@ -8,6 +8,10 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
+import urllib.request
+import re
+from django.http import HttpResponse
+
 
 # Page d'accueil du site Web
 def annot_menu(request):
@@ -63,16 +67,16 @@ def inscription(request):
         'css_files': ['Inscription.css'],
     })
 
-# Page de tous les génomes annotés
+# Page de toutes les annotations en cours
 def annotation_list(request):
     # Récupérer toutes les annotations de génome de la base de données
-    annotations = Annotations.objects.all()
-    # Créer un contexte de données à passer au template
-    context = {'annotations': annotations}
+    query_param={}
+    query_param['annotation_status'] = 'en attente'
+    annotations = Annotations.objects.filter(**query_param)
     # Rendre le template avec le contexte de données
-    return render(request, 'genome/annotation_list.html', context)
+    return render(request, 'genome/annotation_list.html',{'annotations': annotations})
 
-# Page de connexion au site
+# Page de connexion au site 
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -137,10 +141,72 @@ def lecteur_page(request):
         'css_files': ['form.css'],
     })
 
+
+@user_passes_test(validateur_required, login_url='/login/')
+def validate_annotation(request):
+    if request.method == "GET":
+        annotations = Annotations.objects.filter(annotation_status='en attente')
+        return render(request, 'genome/validation.html', {'annotations': annotations})
+    if request.method == "POST":
+        count_validated = 0
+        count_rejected = 0
+        for annot in Annotations.objects.filter(annotation_status='en attente'):
+            if request.POST.get('validate_reject_' + str(annot.annot_id)) == 'validate':
+                annot.annotation_status = 'val'
+                annot.comments = request.POST.get('comment_' + str(annot.annot_id))
+                annot.save()
+                count_validated += 1
+                send_mail(
+                    'Annotation Validée',
+                    'Votre annotation ID ('+str(annot.annot_id)+') a été validée avec le commentaire suivant : ' + annot.comments,
+                    'cypsgenome@gmail.com',
+                    [annot.email_annot],
+                    fail_silently=False,
+                )
+            elif request.POST.get('validate_reject_' + str(annot.annot_id)) == 'reject':
+                annot.annotation_status = 'rej'
+                annot.comments = request.POST.get('comment_' + str(annot.annot_id))
+                annot.save()
+                count_rejected += 1
+                send_mail(
+                    'Annotation Rejetée',
+                    'Votre annotation ID ('+str(annot.annot_id)+') a été rejetée avec le commentaire suivant : ' + annot.comments,
+                    'cypsgenome@gmail.com',
+                    [annot.email_annot],
+                    fail_silently=False,
+                )
+        message = ""
+        if count_validated > 0:
+            message += str(count_validated) + " annotations ont été validées. "
+        if count_rejected > 0:
+            message += str(count_rejected) + " annotations ont été rejetées. "
+
+        return HttpResponse(message)
+
+
 def role_required(user):
     if user.is_authenticated:
         return user.role in ['validateur', 'annotateur', 'lecteur']
     return False
+
+@user_passes_test(role_required, login_url='/login/')
+def show_sequences(request, cds_seq, pep_seq, id_databank):
+    url_ncbi = f"https://www.ncbi.nlm.nih.gov/protein/{id_databank}"
+    url_ensembl = f"http://bacteria.ensembl.org/Multi/Search/Results?species=all;idx=;q={id_databank};"
+    contents = urllib.request.urlopen(url_ensembl).read().decode("utf-8")
+    result = re.findall(r'<a class="name" href="/(.+?)">', contents)
+    url_ensembl = f"http://bacteria.ensembl.org/{result[0]}"
+    contents2 = urllib.request.urlopen(url_ensembl).read().decode("utf-8")
+    result2 = re.findall(r'<a href="http://www.uniprot.org/uniprot/(.+?)"', contents2)
+    url_uniprot = f"http://www.uniprot.org/uniprot/{result2[0]}"
+
+    return render(request, "sequences.html", {
+        "cds_seq": cds_seq,
+        "pep_seq": pep_seq,
+        "url_ncbi": url_ncbi,
+        "url_ensembl": url_ensembl,
+        "url_uniprot": url_uniprot,
+    })
 
 @user_passes_test(role_required, login_url='/login/')
 def formulaire_genome(request):

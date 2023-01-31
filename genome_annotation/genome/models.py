@@ -123,7 +123,7 @@ class SequenceInfo(models.Model):
 
 class Annotations(models.Model):
 
-    STATUS = [('validé','val'),('en cours', 'en attente'),('rejeté', 'rej')]
+    STATUS = [('validé','val'),('non_annoté','n.a.'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
 
     annot_id = models.IntegerField(primary_key=True, blank=False)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -131,7 +131,7 @@ class Annotations(models.Model):
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
     Biotype = models.CharField(max_length=100)
     comments = models.TextField()
-    annotation_status = models.TextField(choices=STATUS,default='en attente')
+    annotation_status = models.TextField(choices=STATUS,default='n.a.')
     gene_id = models.IntegerField()
     gene_biotype = models.CharField(max_length=100)
     transcript_biotype = models.CharField(max_length=100)
