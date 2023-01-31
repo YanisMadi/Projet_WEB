@@ -6,18 +6,25 @@
         {% load static %}
 	    <link rel="stylesheet" href="{% static 'form.css' %}">
   </head>
- <body>
- <nav>
-        <div class="nav-content">
+  <body>
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
         <div class="logo">
-            <a >CYPS Genome Annotation.</a> 
+          <a >CYPS Genome Annotation.</a> 
         </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
         <ul class="nav-links">
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/inscription/">S'inscrire</a></li>
-            <li><a href="/login/">Se connecter</a></li>
+          {% if user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
         </ul>
-        </div>
+      </div>
     </nav>
     
  	<div class ="container">
@@ -96,10 +103,6 @@
                       <option value="gene_protein">Gène/protéine</option>
                   </select><br><br>
 
-
-
-
-        
                 <div class="button">
                   <input type="submit" value="Recherche"><br> 
                 </div>

@@ -32,6 +32,19 @@ class User(AbstractBaseUser):
     @property
     def is_active(self):
         return True
+
+    @property
+    def is_validateur(self):
+        return self.role == 'validateur'
+
+    @property
+    def is_annotateur(self):
+        return self.role == 'annotateur'
+
+    @property
+    def is_lecteur(self):
+        return self.role == 'lecteur'
+
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
