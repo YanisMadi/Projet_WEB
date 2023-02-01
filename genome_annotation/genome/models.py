@@ -63,6 +63,7 @@ class User(AbstractBaseUser):
     def get_username(self):
         return self.email
 
+
     def get_short_name(self):
         return self.prenom
 
@@ -85,41 +86,42 @@ class UserManager(UserManager):
         return user
 
 class Genome(models.Model):
-    num_accession = models.IntegerField(primary_key=True, blank=False)
-    nom_gene = models.TextField()
-    espece = models.TextField()
-    souche = models.TextField()
-    sequence_seq = models.TextField()
-    longueur_seq = models.PositiveIntegerField()
-    description = models.TextField()
-    adn_type = models.TextField()
+    DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
 
+    num_accession = models.IntegerField(primary_key=True, blank=False)
+    nom_gene = models.CharField(max_length=50)
+    espece = models.CharField(max_length=50)
+    souche = models.CharField(max_length=50)
+    type_adn = models.CharField(choices=DNA_TYPE,default='chromosome',max_length=10)
+    sequence = models.TextField()
+    longueur = models.PositiveIntegerField()
+    description = models.CharField(max_length=1000)
+  
 
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
     STRAND_TYPE = [('backward','-1'),('forward','+1')]
-    ANNOTATION = [('oui','annoté'),('no,','non annoté')]
+    STATUS = [('validé','val'),('non_annoté','n.a.'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
 
-    sequence_id = models.TextField(primary_key=True, blank=False)
-    email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
+    
     num_accession = models.ForeignKey(Genome,on_delete=models.CASCADE)
+    email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
+    sequence_id = models.TextField(primary_key=True, blank=False)
+    seq_name = models.CharField(max_length=30)
+    seq_type = models.CharField(max_length=30)
+    seq_biotype = models.CharField(max_length=30)
+    fonction = models.CharField(max_length=100)
     start = models.IntegerField()
     end =models.IntegerField()
-    sequence_CDS = models.TextField()
-    longueur_CDS = models.PositiveIntegerField()
-    sequence_pep = models.TextField()
-    longueur_pep = models.PositiveIntegerField()
+    sequence = models.TextField()
+    longueur = models.IntegerField()
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
-    annotated_state = models.TextField(choices=ANNOTATION, default='non annoté')
-    gene_id = models.IntegerField()
-    gene_biotype = models.CharField(max_length=100)
+    annotated_state = models.TextField(choices=STATUS, default='non annoté')
     transcript_biotype = models.CharField(max_length=100)
     gene_symbol = models.CharField(max_length=100)
     description = models.TextField()
-
-    
 
 class Annotations(models.Model):
 
@@ -137,5 +139,4 @@ class Annotations(models.Model):
     transcript_biotype = models.CharField(max_length=100)
     gene_symbol = models.CharField(max_length=100)
     description = models.TextField()
-
 

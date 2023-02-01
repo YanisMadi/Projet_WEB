@@ -15,4 +15,3 @@ urlpatterns = [
     path('manage_users/', views.manage_users, name='manage_users'),
     path('sequence/', views.show_sequences, name='sequence'),
     path('validation/', views.validate_annotation, name='validation'),
-]
