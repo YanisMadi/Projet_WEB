@@ -1,31 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fr" dir="ltr">
   <head>
   <meta charset="utf-8" />
         <title> Formulaire </title>
         {% load static %}
 	    <link rel="stylesheet" href="{% static 'form.css' %}">
   </head>
- <body>
- <nav>
-        <div class="nav-content">
+  <body>
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
         <div class="logo">
-            <a >CYPS Genome Annotation.</a> 
+          <a >CYPS Genome Annotation.</a> 
         </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
         <ul class="nav-links">
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/inscription/">S'inscrire</a></li>
-            <li><a href="/login/">Se connecter</a></li>
+          {% if user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
         </ul>
-        </div>
+      </div>
     </nav>
     
  	<div class ="container">
         <div class="title"> Formulaire </div><br>
-		<form method="get">
+		<form method="post">
+      {% csrf_token %}
             <div class="form-details">
                 <div class = "input-box">
-
+                  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
                 <strong>Numéro d'accession : </strong>
 		        <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
 
@@ -42,7 +50,10 @@
                 <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>
     
                 <strong> Type d'ADN :</strong>
-                <input type="text" placeholder="Entrer le chromosome ou le" name="adn_type">
+                  <select name="Type d'ADN">
+                      <option value="chromosome">Chromosome</option>
+                      <option value="plasmide">Plasmide</option>
+                  </select><br><br>
     
                 <strong>CDS start position :</strong>
                 <input type="text" placeholder="Entrer le CDS start position" name="cds_start"><br><br>
@@ -51,7 +62,10 @@
                 <input type="text" placeholder="Entrer le CDS end position" name="cds_end"><br><br>
     
                 <strong> Brin :</strong>
-                <input type="text" placeholder="Entrer 1 (direct) ou -1 (indirect)" name="Brin"><br><br>
+                  <select name="Brin">
+                      <option value="1">Direct</option>
+                      <option value="-1">Indirect</option>
+                  </select><br><br>
     
                 <strong>Séquence du CDS :</strong><br>
                 <textarea id="textarea" rows="3" cols="45" name="cds_seq" placeholder = "Entrer la séquence du CDS" minlength="9" maxlength="27000"></textarea><br><br>
@@ -82,10 +96,13 @@
 
                 <strong>Séquence du Génome:</strong><br>
     	        <textarea id="textarea" rows="10" cols="55" name="seq_nt" placeholder = "Entrer la séquence" minlength="4"></textarea>
+              
+                <strong>Type de sortie :</strong>
+                  <select name="output_type">
+                      <option value="genome">Génome</option>
+                      <option value="gene_protein">Gène/protéine</option>
+                  </select><br><br>
 
-
-
-        
                 <div class="button">
                   <input type="submit" value="Recherche"><br> 
                 </div>
