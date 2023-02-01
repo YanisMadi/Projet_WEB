@@ -10,7 +10,7 @@ data = dat.iterdir()
 #pour le fichier dans le dossier data
 for file in data : 
     file = str(file)
-    #print(file) 
+    print(file) 
     
     #si ce n'est pas un fichier avec écrit new et que c'est une cds ou un pep
     if not "new" in file : 

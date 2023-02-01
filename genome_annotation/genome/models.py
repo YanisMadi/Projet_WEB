@@ -88,7 +88,7 @@ class UserManager(UserManager):
 class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
 
-    num_accession = models.IntegerField(primary_key=True, blank=False)
+    num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
     nom_gene = models.CharField(max_length=50)
     espece = models.CharField(max_length=50)
     souche = models.CharField(max_length=50)
@@ -105,16 +105,15 @@ class SequenceInfo(models.Model):
     STATUS = [('validé','val'),('non_annoté','n.a.'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
 
     
-    num_accession = models.ForeignKey(Genome,on_delete=models.CASCADE)
-    email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
+    num_accession = models.CharField(max_length=30) # genome_id
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
-    sequence_id = models.TextField(primary_key=True, blank=False)
+    seq_id = models.TextField(primary_key=True, blank=False)
     seq_name = models.CharField(max_length=30)
     seq_type = models.CharField(max_length=30)
     seq_biotype = models.CharField(max_length=30)
     fonction = models.CharField(max_length=100)
-    start = models.IntegerField()
-    end =models.IntegerField()
+    seq_start = models.IntegerField()
+    seq_end =models.IntegerField()
     sequence = models.TextField()
     longueur = models.IntegerField()
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
