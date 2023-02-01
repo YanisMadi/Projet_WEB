@@ -124,7 +124,7 @@ class SequenceInfo(models.Model):
 
 class Annotations(models.Model):
 
-    STATUS = [('validé','val'),('non_annoté','n.a.'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
+    STATUS = [('validé','val'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
 
     annot_id = models.IntegerField(primary_key=True, blank=False)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)

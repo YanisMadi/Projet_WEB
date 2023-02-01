@@ -16,3 +16,5 @@ urlpatterns = [
     path('sequence/', views.show_sequences, name='sequence'),
     path('validation/', views.validate_annotation, name='validation'),
 ]
+
+

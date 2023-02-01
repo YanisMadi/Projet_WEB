@@ -2,7 +2,7 @@
 <html lang="fr" dir="ltr">
   <head>
   <meta charset="utf-8" />
-        <title> Banques externes </title>
+        <title> Banque externe recherche </title>
         {% load static %}
 	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
   </head>
@@ -25,14 +25,13 @@
       </ul>
     </div>
   </nav>
-  
   <div class ="container">
-    <div class="title"> Banques externes </div><br>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-      </form>
-    </div>
- </body>
+    <div class="title"> Résultat de la recherche </div><br>
+<p>Banque : {{selected_database}}</p>
+<br>
+<pre>
+    {{ data|safe }}
+    </pre>
+</div>
+</body>
 </html>

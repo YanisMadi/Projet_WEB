@@ -13,6 +13,10 @@ import urllib.request
 import re
 from django.http import HttpResponse
 import urllib.request
+import requests
+import ensembl_rest
+import json
+
 
 
 # Page d'accueil du site Web
@@ -71,7 +75,7 @@ def inscription(request):
 
 # Page de toutes les annotations en cours
 def annotation_list(request):
-    # Récupérer toutes les annotations de génome de la base de données
+    # Récupérer toutes les annotations en attente de validation de génome de la base de données
     query_param={}
     query_param['annotation_status'] = 'en attente'
     annotations = Annotations.objects.filter(**query_param)
@@ -193,34 +197,46 @@ def role_required(user):
     return False
 
 # Page pour accéder aux banques externes
-@user_passes_test(role_required, login_url='/login/')
+def get_data_from_ncbi(id_databank):
+    url = f'https://api.ncbi.nlm.nih.gov/data/databank/id/{id_databank}'
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
+def get_data_from_ensembl(id_databank):
+    result = ensembl_rest.sequence_id(id_databank, content_type='application/json')
+    return result
+
+def get_data_from_uniprot(id_databank):
+    url = f'https://www.uniprot.org/uniprot/{id_databank}.json'
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
+
+
 def show_sequences(request):
     if request.method == "GET":
-        return render(request, "genome/select_database.html")
-    if request.method == "POST":
-        cds_seq = request.POST.get("cds_seq")
-        pep_seq = request.POST.get("pep_seq")
-        selected_database = request.POST.get("databank")
-        if selected_database == "ncbi":
-            url_ncbi = "https://www.ncbi.nlm.nih.gov/"
-            url_ensembl = "#"
-            url_uniprot = "#"
-        elif selected_database == "ensembl":
-            url_ncbi = "#"
-            url_ensembl = "https://www.ensembl.org/"
-            url_uniprot = "#"
-        else:
-            url_ncbi = "#"
-            url_ensembl = "#"
-            url_uniprot = "https://www.uniprot.org/"
+        form = DatabaseForm()
+        return render(request, 'genome/select_database.html', {'form': form})
+    if request.method == 'POST':
+        form = DatabaseForm(request.POST)
+        if form.is_valid():
+            selected_database = form.cleaned_data['Choisir_une_banque_de_données_externe']
+            id_databank = form.cleaned_data['id_databank']
+            if selected_database == 'NCBI':
+                data = get_data_from_ncbi(id_databank)
+            elif selected_database == 'Ensembl':
+                data = get_data_from_ensembl(id_databank)
+            elif selected_database == 'Uniprot':
+                data = get_data_from_uniprot(id_databank)
+            data=json.dumps(data, indent=4)
+            return render(request, "genome/data.html", {'selected_database': selected_database, 'data': data})
 
-        return render(request, "genome/sequence.html", {
-            "cds_seq": cds_seq,
-            "pep_seq": pep_seq,
-            "url_ncbi": url_ncbi,
-            "url_ensembl": url_ensembl,
-            "url_uniprot": url_uniprot
-        })
 
 # Pour chercher un génome ou un gène / une protéine dans la base de données du site
 @user_passes_test(role_required, login_url='/login/')
@@ -235,14 +251,12 @@ def formulaire_genome(request):
         souche = request.POST.get('souche')
         taille_seq = request.POST.get('taille_seq')
         idsequence = request.POST.get('idsequence')
-        adn_type = request.POST.get('adn_type')
-        cds_start = request.POST.get('cds_start')
-        cds_end = request.POST.get('cds_end')
+        adn_type = request.POST.get('type_adn')
+        seq_start = request.POST.get('seq_start')
+        seq_end = request.POST.get('seq_end')
         Brin = request.POST.get('Brin')
-        cds_seq = request.POST.get('cds_seq')
-        cds_taille = request.POST.get('cds_taille')
-        pep_seq = request.POST.get('pep_seq')
-        pep_size = request.POST.get('pep_size')
+        seq = request.POST.get('sequence')
+        seq_taille = request.POST.get('seq_taille')
         geneid = request.POST.get('geneid')
         gene_biotype = request.POST.get('gene_biotype')
         output_type = request.POST.get('output_type')
@@ -251,38 +265,37 @@ def formulaire_genome(request):
             if accessionnb:
                 query_params['num_accession'] = accessionnb
             if espece:
-                query_params['espece__icontains'] = espece
+                query_params['espece'] = espece
             if souche:
-                query_params['souche__icontains'] = souche
+                query_params['souche'] = souche
             if taille_seq:
                 query_params['longueur'] = taille_seq
             if adn_type:
-                query_params['type_adn__icontains'] = adn_type
-            genomes = Genome.objects.filter(**query_params)
+                query_params['type_adn'] = adn_type
+            #genomes = Genome.objects.filter(**query_params)
+            genomes = Genome.objects.filter()
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
         elif output_type == 'gene_protein':
             query_params = {}
             if idsequence:
-                query_params['sequence_id'] = idsequence
-            if cds_start:
-                query_params['start'] = cds_start
-            if cds_end:
-                query_params['end'] = cds_end
+                query_params['seq_id'] = idsequence
+            if seq_start:
+                query_params['seq_start'] = seq_start
+            if seq_end:
+                query_params['seq_end'] = seq_end
             if Brin:
                 query_params['strand'] = Brin
-            if cds_seq:
-                query_params['sequence_CDS__icontains'] = cds_seq
-            if cds_taille:
-                query_params['longueur_CDS'] = cds_taille
-            if pep_seq:
-                query_params['sequence_pep__icontains'] = pep_seq
-            if pep_size:
-                query_params['longueur_pep'] = pep_size
+            if seq:
+                query_params['sequence'] = seq
+            if seq_taille:
+                query_params['longueur'] = seq_taille
             if geneid:
-                query_params['gene_id'] = geneid
+                query_params['seq_id'] = geneid
             if gene_biotype:
-                query_params['gene_biotype__icontains'] = gene_biotype
-            sequences = SequenceInfo.objects.filter(**query_params)
+                query_params['seq_biotype'] = gene_biotype
+            print(query_params)
+            #sequences = SequenceInfo.objects.filter(**query_params)
+            sequences = SequenceInfo.objects.filter()
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
     
 

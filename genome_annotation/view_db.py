@@ -13,12 +13,12 @@ def show_tables_and_data(db_name):
         print(table[0])
 
     # Get all data in each table
-    table_name = 'genome_genome'
-    cursor.execute("SELECT * FROM %s" % table_name)
-    data = cursor.fetchall()
-    print("\nData in table '%s':" % table_name)
-    for row in data:
-        print(row)
+    for table_name in tables:
+        cursor.execute("SELECT * FROM %s" % table_name)
+        data = cursor.fetchall()
+        print("\nData in table '%s':" % table_name)
+        for row in data:
+            print(row)
 
     # Close the connection
     cursor.close()
