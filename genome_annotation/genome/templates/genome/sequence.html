@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Banques externes </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+<strong>Séquence CDS : </strong>
+<textarea name="text" cols="55" rows="10" id="text">
+  {{ cds_seq }}
+</textarea>
+<br>
+<br>
+<strong>Séquence de protéine : </strong>
+<textarea name="text" cols="55" rows="10" id="text">
+  {{ pep_seq }}
+</textarea>
+
+<br><br>
+<strong>Besoin d'informations supplémentaires ? Liens vers d'autres banques de données : </strong><br>
+<a href="{{ url_ncbi }}" class="btn btn--assign">NCBI</a>
+<a href="{{ url_ensembl }}" class="btn btn--assign">Ensembl</a>
+<a href="{{ url_uniprot }}" class="btn btn--assign">Uniprot</a>
+<br>
+
+<strong>Blastn (gènes) :</strong><br>
+<form action="{% url 'blast_cds' %}" method="get"> 
+  <input type="hidden" name="gene_seq" value="{{ cds_seq|default:''|replace:'\n','' }}">
+  <input type="submit" class='btn btn--assign' value="BLASTn">
+</form> <br>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'form.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class ="container">
+    <div class="title"> Banques externes </div><br>
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="id_databank">Entrer l'identifiant:</label>
+        <input type="text" id="id_databank" name="id_databank">
+        <br><br>
+        <label for="cds_seq">Entrer la séquence CDS:</label>
+        <input type="text" id="cds_seq" name="cds_seq">
+        <br><br>
+        <label for="pep_seq">Entrer la séquence peptidique:</label>
+        <input type="text" id="pep_seq" name="pep_seq">
+        <br><br>
+        <label for="databank">Select database:</label>
+        <select id="databank" name="databank">
+          <option value="ncbi">NCBI</option>
+          <option value="ensembl">Ensembl</option>
+          <option value="uniprot">UniProt</option>
+        </select>
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+ </body>
+</html>

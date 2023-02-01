@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" dir="ltr">
+<html lang="fr" dir="ltr">
     <head>
         <meta charset="UTF-8">
         <title>
@@ -59,8 +59,8 @@
                 </div>
                 <div class = "input-box">
                     <span class="details">Mot de passe</span>
-                    <input type="password" name = "motdepasse" placeholder="Entrer votre mot de passe" required>
-                    {% for error in form.motdepasse.errors %}
+                    <input type="password" name = "password" placeholder="Entrer votre mot de passe" required>
+                    {% for error in form.password.errors %}
                 <p class="error">{{ error }}</p>
             {% endfor %}
                 </div>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'gene_info.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
+
+<div class ="container">
+{% block content %}
+  <h1>Informations sur les gènes et protéines</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID de séquence</th>
+        <th>Nom de séquence</th>
+        <th>Type de séquence</th>
+        <th>Fonction</th>
+        <th>Position de début</th>
+        <th>Position de fin</th>
+        <th>Brin</th>
+        <th>Séquence</th>
+        <th>Longueur</th>
+        <th>Etat d'annotation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sequence in sequences %}
+        <tr>
+          <td>{{ sequence.seq_id }}</td>
+          <td>{{ sequence.seq_name }}</td>
+          <td>{{ sequence.seq_type }}</td>
+          <td>{{ sequence.fonction }}</td>
+          <td>{{ sequence.seq_start }}</td>
+          <td>{{ sequence.seq_end }}</td>
+          <td>{{ sequence.strand }}</td>
+          <td>{{ sequence.sequence }}</td>
+          <td>{{ sequence.longueur }}</td>
+          <td>{{ sequence.annotated_state }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+</div>
