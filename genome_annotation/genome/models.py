@@ -63,6 +63,7 @@ class User(AbstractBaseUser):
     def get_username(self):
         return self.email
 
+
     def get_short_name(self):
         return self.prenom
 
@@ -138,3 +139,4 @@ class Annotations(models.Model):
     transcript_biotype = models.CharField(max_length=100)
     gene_symbol = models.CharField(max_length=100)
     description = models.TextField()
+

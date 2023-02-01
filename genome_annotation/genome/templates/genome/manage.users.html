@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Gérer les utilisateurs</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Rôle</th>
+        <th>Dernière connexion</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.email }}</td>
+          <td>{{ user.nom }}</td>
+          <td>{{ user.prenom }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.last_login }}</td>
+          <td>
+            <form action="{% url 'assign_role' user.id %}" method="post">
+              {% csrf_token %}
+              <select name="role">
+                {% for role in ROLES %}
+                  <option value="{{ role.0 }}" {% if role.0 == user.role %}selected{% endif %}>{{ role.1 }}</option>
+                {% endfor %}
+              </select>
+              <input type="submit" value="Assigner rôle">
+            </form>
+            <form action="{% url 'delete_user' user
+            .id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Supprimer">
+            </form>
+            </td>
+            <td>{{ user.last_login }}</td>
+            </tr>
+            {% endfor %}
+            </table>
+            
+            <a href="{% url 'create_user' %}">Créer un utilisateur</a>
+            </body>
+            </html>
+            
+            {% endblock}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <title>Lecteur</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <a >CYPS Genome Annotation.</a> 
+            </div>
+            <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+            <ul class="nav-links">
+                <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+
+<div class ="container">
+    <p><h2> Tu es Lecteur tu as plusieurs fonctionnalités ! </h2><br>
+    <p>Clique sur <strong>Chercher un génome/une protéine</strong> pour recherche un génome ou une protéine sur notre site et sur <strong>Annotation validées</strong> pour voir les annotations validées</p><br>
+    Tu peux chercher et lire des informations sur les bactéries, les gènes et les péptides à partir de notre base de données. Si tu as besoin d'extraire les données de notre base tu peux cliquer sur <strong>Télécharger les données</strong>.</p><br>
+    <button class='btn btn--assign' type='submit' onclick = "location.href='/formulaire/'">Chercher un génome/une protéine</button>
+    <button class='btn btn--assign' type='submit' onclick = "location.href='annotation_valide.html'">Annotations validées</button>
+    <button class='btn btn--assign' type='submit' onclick = "location.href='telechargement.html'">Télécharger des données</button>
+    <button class='btn btn--assign' type='submit' onclick = "location.href = '/annotations/'">Voir les annotations en cours</button>
+</div>
+
+<!-- Logo -->
+<script>
+    let nav = document.querySelector("nav");
+        window.onscroll = function() {
+            if(document.documentElement.scrollTop > 20){
+                nav.classList.add("sticky");
+            }else {
+                nav.classList.remove("sticky");
+            }
+        }
+      </script>
+    </body>
+    </html>

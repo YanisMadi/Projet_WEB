@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'gene_info.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class ="container">
+  {% block content %}
+    <h1>Informations sur les génomes</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Numéro d'accès</th>
+          <th>Nom du génome</th>
+          <th>Espèce</th>
+          <th>Souche</th>
+          <th>Séquence</th>
+          <th>Longueur de la séquence</th>
+          <th>Description</th>
+          <th>Type d'ADN</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for genome in genomes %}
+          <tr>
+            <td>{{ genome.num_accession }}</td>
+            <td>{{ genome.nom_gene }}</td>
+            <td>{{ genome.espece }}</td>
+            <td>{{ genome.souche }}</td>
+            <td>{{ genome.sequence_seq }}</td>
+            <td>{{ genome.longueur_seq }}</td>
+            <td>{{ genome.description }}</td>
+            <td>{{ genome.adn_type }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endblock %}
+  </div>

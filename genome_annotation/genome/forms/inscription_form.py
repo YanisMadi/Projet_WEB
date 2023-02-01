@@ -4,4 +4,4 @@ from ..models import User
 class InscriptionForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['email', 'prenom', 'nom', 'numero_tel', 'role', 'motdepasse','confirm_mdp']
+        fields = ['email', 'prenom', 'nom', 'numero_tel', 'role', 'password']
