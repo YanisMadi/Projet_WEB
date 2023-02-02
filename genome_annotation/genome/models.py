@@ -101,25 +101,22 @@ class Genome(models.Model):
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
-    STRAND_TYPE = [('backward','-1'),('forward','+1')]
-    STATUS = [('validé','val'),('non_annoté','n.a.'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
-
+    STRAND_TYPE = [('backward','-1'),('forward','1')]
     
     num_accession = models.CharField(max_length=30) # genome_id
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
     seq_id = models.TextField(primary_key=True, blank=False)
     seq_name = models.CharField(max_length=30)
-    seq_type = models.CharField(max_length=30)
+    cds = models.BooleanField(default=False)
+    pep = models.BooleanField(default=False)
     seq_biotype = models.CharField(max_length=30)
     fonction = models.CharField(max_length=100)
     seq_start = models.IntegerField()
     seq_end =models.IntegerField()
-    sequence = models.TextField()
+    seq_cds = models.TextField()
+    seq_pep = models.TextField()
     longueur = models.IntegerField()
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
-    annotated_state = models.TextField(choices=STATUS, default='non annoté')
-    transcript_biotype = models.CharField(max_length=100)
-    gene_symbol = models.CharField(max_length=100)
     description = models.TextField()
 
 class Annotations(models.Model):
