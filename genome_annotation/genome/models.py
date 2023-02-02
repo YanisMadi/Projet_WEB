@@ -101,7 +101,7 @@ class Genome(models.Model):
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
-    STRAND_TYPE = [('backward','-1'),('forward','1')]
+    STRAND_TYPE = [('-1'),('1')]
     
     num_accession = models.CharField(max_length=30) # genome_id
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
@@ -116,7 +116,7 @@ class SequenceInfo(models.Model):
     seq_cds = models.TextField()
     seq_pep = models.TextField()
     longueur = models.IntegerField()
-    strand = models.TextField(choices=STRAND_TYPE,default='forward')
+    strand = models.TextField(choices=STRAND_TYPE,default=None)
     description = models.TextField()
 
 
