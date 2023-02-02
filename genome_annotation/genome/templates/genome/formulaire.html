@@ -28,68 +28,52 @@
     </nav>
     
  	<div class ="container">
+    <br><br>
         <div class="title"> Formulaire </div><br>
 		<form method="post">
       {% csrf_token %}
             <div class="form-details">
                 <div class = "input-box">
-                  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                <strong>Numéro d'accession : </strong>
+
+                <strong>Numéro d'accession du génome ou du gène : </strong>
 		        <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
 
-                <strong> Espèces :</strong>
+                <strong> Espèces pour la recherche du génome :</strong>
 		        <input type="text" placeholder="Entrer le nom de l'espèce" name="espèce"><br><br>
 
-                <strong> Souche :</strong>
+                <strong> Souche pour la recherche du génome :</strong>
 		        <input type="text" placeholder="Entrer le nom de la souche" name="souche"><br><br>
 
                 <strong> Taille de la séquence :</strong>
 		        <input type="text" placeholder="Entrer la taille de la seq" name="taille_seq"><br><br>
 
-                <strong>Séquence ID :</strong>
-                <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>
-    
-                <strong> Type d'ADN :</strong>
+                <strong> Type d'ADN du génome :</strong>
                   <select name="Type d'ADN">
                       <option value="chromosome">Chromosome</option>
                       <option value="plasmide">Plasmide</option>
                   </select><br><br>
     
-                <strong>Seq start position :</strong>
+                  <strong>Séquence ID du gène :</strong>
+                  <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>  
+
+                <strong>Start position de la séquence :</strong>
                 <input type="text" placeholder="Entrer la start position" name="seq_start"><br><br>
     
-                <strong>Seq end position :</strong>
+                <strong>End position de la séquence :</strong>
                 <input type="text" placeholder="Entrer la end position" name="seq_end"><br><br>
     
-                <strong> Brin :</strong>
+                <strong> Brin pour le gène :</strong>
                   <select name="Brin">
-                      <option value="1">Direct</option>
-                      <option value="-1">Indirect</option>
+                      <option value="both">Direct</option>
+                      <option value="backward">Indirect</option>
+                      <option value="forward">Direct et Indirect</option>
                   </select><br><br>
-    
-                <strong>Séquence du CDS :</strong><br>
-                <textarea id="textarea" rows="3" cols="45" name="seq" placeholder = "Entrer la séquence du CDS" minlength="9" maxlength="27000"></textarea><br><br>
-    
-                <strong>Taille du CDS :</strong>
-                <input type="text" placeholder="Entrer la taille de la seq" name="seq_taille"><br><br>
 
-                <strong>Gene ID :</strong>
-                <input type="text" placeholder="Entrer le gène ID" name="geneid"><br><br>
-    
-                <strong>Gene Biotype :</strong>
+                <strong>Biotype du gène :</strong>
                 <input type="text" placeholder="Entrer le gene biotype" name="gene_biotype"><br><br>
-    
-                <strong>Transcript Biotype :</strong>
-                <input type="text" placeholder="Entrer le transcript biotype" name="tr_biotype"><br><br>
-    
-                <strong>Gene Symbol :</strong>
-                <input type="text" placeholder="Entrer le gene symbol" name="gene_symbol"><br><br>
-    
-                <strong>Description :</strong>
-                <input type="text" placeholder="Entrer la description" name="description">
 
-                <strong>Séquence du Génome:</strong><br>
-    	        <textarea id="textarea" rows="10" cols="55" name="seq_nt" placeholder = "Entrer la séquence" minlength="4"></textarea>
+                <strong>Séquence du génome ou du gène :</strong><br>
+    	        <textarea id="textarea" rows="10" cols="55" name="seq" placeholder = "Entrer la séquence" minlength="4"></textarea>
               
                 <strong>Type de sortie :</strong>
                   <select name="output_type">
