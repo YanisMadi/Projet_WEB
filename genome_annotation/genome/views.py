@@ -272,30 +272,32 @@ def formulaire_genome(request):
                 query_params['longueur'] = taille_seq
             if adn_type:
                 query_params['type_adn'] = adn_type
-            #genomes = Genome.objects.filter(**query_params)
-            genomes = Genome.objects.filter()
+            if adn_type:
+                query_params['sequence'] = seq
+            print(query_params)
+            genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
         elif output_type == 'gene_protein':
             query_params = {}
+            if accessionnb:
+                query_params['num_accession'] = accessionnb
             if idsequence:
                 query_params['seq_id'] = idsequence
             if seq_start:
                 query_params['seq_start'] = seq_start
             if seq_end:
                 query_params['seq_end'] = seq_end
-            if Brin:
+            if Brin is not "both":
                 query_params['strand'] = Brin
             if seq:
                 query_params['sequence'] = seq
             if seq_taille:
-                query_params['longueur'] = seq_taille
-            if geneid:
-                query_params['seq_id'] = geneid
+                query_params['longueur'] = taille_seq
             if gene_biotype:
                 query_params['seq_biotype'] = gene_biotype
             print(query_params)
-            #sequences = SequenceInfo.objects.filter(**query_params)
-            sequences = SequenceInfo.objects.filter()
+            sequences = SequenceInfo.objects.filter(**query_params)
+            #sequences = SequenceInfo.objects.filter()
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
     
 
