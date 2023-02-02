@@ -56,7 +56,7 @@ for file in data :
                             type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True ).save(force_insert= True)
 
         else :
-            print('g')
+            #print('g')
             #pour le génome
             liSeq_g = ps.parsing_genome(file)
             for i in range(len(liSeq_g)) :
