@@ -14,32 +14,91 @@ for file in data :
     
     #si ce n'est pas un fichier avec écrit new et que c'est une cds ou un pep
     if not "new" in file : 
-        if ('cds' or 'pep') in file : 
+        if 'cds' in file : 
+            #on parse le fichier fasta
+            liSeq = ps.parsing_coding(file)
+            #liSeq = [(num_accession, biotype, seq, ...), (num_accession2, biotype2, seq2, ...), ...]
+            for i in range(len(liSeq)) :
+                #on stock dans des variable pour attribuer ensuite aux colonnes de la table 
+                #print(gene_id)
+                gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,seq, seq_length= liSeq[i]
+                
+                if SequenceInfo.objects.filter(pk=gene_id).exists(): 
+                    Seq = SequenceInfo.objects.get(pk=gene_id)
+                    Seq.seq_cds = seq
+                    Seq.cds = True
+                    Seq.save(force_update=True, update_fields=['seq_cds', 'cds'])               
+
+                else : 
+                    SequenceInfo(seq_id = gene_id ,seq_name =gene_name, seq_biotype=gene_biotype,
+                            fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
+                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, cds = True ).save(force_insert= True) 
+
+        elif 'pep' in file :
             #on parse le fichier fasta
             liSeq = ps.parsing_coding(file)
             #liSeq = [(num_accession, biotype, seq, ...), (num_accession2, biotype2, seq2, ...), ...]
             for i in range(len(liSeq)) :
                 #on stock dans des variable pour attribuer ensuite aux colonnes de la table 
                 gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,seq, seq_length= liSeq[i]
-                SequenceInfo(seq_id = gene_id ,seq_name =gene_name ,seq_type = gene_type,seq_biotype=gene_biotype,
-                            fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, sequence=seq, longueur=seq_length ).save(force_insert= True) 
+                #print(gene_id)
+                 
+                if SequenceInfo.objects.filter(pk=gene_id).exists(): 
+                    Seq = SequenceInfo.objects.get(pk=gene_id)
+                    Seq.seq_pep = seq
+                    Seq.pep = True
+                    Seq.save(force_update=True, update_fields=['seq_pep', 'pep'])               
+
+                else : 
                 
+                    SequenceInfo(seq_id = gene_id ,seq_name =gene_name ,seq_biotype=gene_biotype,
+                            fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
+                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True ).save(force_insert= True)
+
+        else :
+            print('g')
+            #pour le génome
+            liSeq_g = ps.parsing_genome(file)
+            for i in range(len(liSeq_g)) :
+                genome_id, genome_type, specy, seq, len_seq = liSeq_g[i]
+                Genome(num_accession = genome_id, espece = specy, type_adn = genome_type, sequence = seq, longueur = len_seq).save(force_insert= True)
+               
+
     #si c'est un nouveau
     elif 'new' in file :
+        #print('new')
         #et que c'est une cds ou pep
-        if ('cds' or 'pep') in file : 
+        if 'cds' in file : 
+            #print('cds')
             liSeq_new = ps.parsing_new(file) 
             for i in range(len(liSeq_new)) : 
                 gene_id,gene_type,start,end,genome_id,genome_type,seq,seq_length = liSeq_new[i]
-                SequenceInfo(seq_id = gene_id, seq_type=gene_type, seq_start= start, seq_end = end, 
-                                num_accession=genome_id, type_adn=genome_type, sequence = seq, longueur = seq_length).save(force_insert= True)
+                if SequenceInfo.objects.filter(pk=gene_id).exists(): 
+                    Seq = SequenceInfo.objects.get(pk=gene_id)
+                    Seq.seq_cds = seq
+                    Seq.cds = True
+                    Seq.save(force_update=True, update_fields=['seq_cds', 'cds'])
+
+                else : 
+                
+                    SequenceInfo(seq_id = gene_id, seq_start= start, seq_end = end, 
+                            num_accession=genome_id, type_adn=genome_type, seq_cds = seq, longueur = seq_length, cds = True).save(force_insert= True)
+
+        if 'pep' in file :
+            print('pep')
+            liSeq_new = ps.parsing_new(file) 
+            for i in range(len(liSeq_new)) : 
+                gene_id,gene_type,start,end,genome_id,genome_type,seq,seq_length = liSeq_new[i]
+                if SequenceInfo.objects.filter(pk=gene_id).exists(): 
+                    Seq = SequenceInfo.objects.get(pk=gene_id)
+                    Seq.seq_pep = seq
+                    Seq.pep = True
+                    Seq.save(force_update=True, update_fields=['seq_pep', 'pep'])
+                else : 
+            
+                    SequenceInfo(seq_id = gene_id, seq_start= start, seq_end = end, 
+                            num_accession=genome_id, type_adn=genome_type, seq_pep = seq, longueur = seq_length,
+                            pep = True).save(force_insert= True)
 
     
-    else :
-        #pour le génome
-        liSeq_g = ps.parsing_genome(file)
-        for i in range(len(liSeq_g)) :
-            genome_id, genome_type, specy, seq, len_seq = liSeq_g[i]
-            Genome(num_accession = genome_id, espece = specy, type_adn = genome_type, sequence = seq, longueur = len_seq).save(force_insert= True)
-            
+    
