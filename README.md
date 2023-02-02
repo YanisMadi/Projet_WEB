@@ -25,6 +25,6 @@ Pour chaque utilisateur une permission est accordée selon son rôle :
 
 ### Diagramme UML
 
-![site schema]("UML Class Diagram")
+![site schema]("/home/siwar/Bureau/Projet_WEB/genome_annotation/myapp_models.png")
 
 ## Import data
