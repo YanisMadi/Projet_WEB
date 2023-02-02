@@ -25,6 +25,6 @@ Pour chaque utilisateur une permission est accordée selon son rôle :
 
 ### Diagramme UML
 
-![site schema]("/home/siwar/Bureau/Projet_WEB/genome_annotation/myapp_models.png")
+![site schema]("https://github.com/YanisMadi/Projet_WEB/tree/Home_page/genome_annotation/myapp_models.png")
 
 ## Import data
