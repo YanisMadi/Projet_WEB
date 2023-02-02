@@ -119,6 +119,7 @@ class SequenceInfo(models.Model):
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
     description = models.TextField()
 
+
 class Annotations(models.Model):
 
     STATUS = [('validé','val'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
@@ -129,7 +130,7 @@ class Annotations(models.Model):
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
     Biotype = models.CharField(max_length=100)
     comments = models.TextField()
-    annotation_status = models.TextField(choices=STATUS,default='non annoté')
+    annotation_status = models.TextField(choices=STATUS,default='n.a.')
     gene_id = models.IntegerField()
     gene_biotype = models.CharField(max_length=100)
     transcript_biotype = models.CharField(max_length=100)
