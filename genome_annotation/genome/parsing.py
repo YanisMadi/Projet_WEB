@@ -27,12 +27,13 @@ def parsing_genome(fasta_file) :
     infoline=content[0].split(":")
     genome_id=infoline[2] #ASM744v1 par exemple
     genome_type=infoline[0].strip(">") #Chromosome dna
+    sens=infoline[4]
     
     ## Sequence
     for i in range(1,len(content)):
         sequence = sequence + content[i].strip("\n")
     seq_length=len(sequence)
-    #print(seq_length)
+    
     if sequence != '':
         tmp=(genome_id,genome_type,specy,sequence,seq_length)
         results.append(tmp)
@@ -62,6 +63,7 @@ def parsing_coding(fasta_file) :
             ## Information Gene
             gene_id = infoline[0][1:9]
             gene_type = infoline[0][10:13] #cds, pep, dna
+            sens = infoline[5][0:2]
             gene_name = infoline[6][0:5]
             gene_biotype = infoline[8].split(" ")[0]
             description = infoline[-1].strip("\n")#fonction
@@ -122,8 +124,7 @@ def parsing_new(fasta_file) :
                 else :
                     sequence = (sequence + content[j]).strip("\n")
             seq_length=len(sequence)
-            #print(sequence)
-            #print(seq_length)
+
             if sequence != '':
                 tmp=(gene_id,gene_type,start,end,genome_id,genome_type,sequence,seq_length)
                 results.append(tmp)
