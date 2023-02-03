@@ -19,6 +19,7 @@ import json
 
 
 
+
 # Page d'accueil du site Web
 def annot_menu(request):
     return render(request, 'genome/annot_menu.html', {
@@ -158,7 +159,7 @@ def validate_annotation(request):
     if request.method == "GET":
         annotations = Annotations.objects.filter(annotation_status='en attente')
         return render(request, 'genome/validation.html', {'annotations': annotations})
-    if request.method == "POST":
+    elif request.method == "POST":
         count_validated = 0
         count_rejected = 0
         for annot in Annotations.objects.filter(annotation_status='en attente'):
@@ -228,7 +229,7 @@ def show_sequences(request):
     if request.method == "GET":
         form = DatabaseForm()
         return render(request, 'genome/select_database.html', {'form': form})
-    if request.method == 'POST':
+    elif request.method == 'POST':
         form = DatabaseForm(request.POST)
         if form.is_valid():
             selected_database = form.cleaned_data['Choisir_une_banque_de_données_externe']
@@ -250,7 +251,7 @@ def formulaire_genome(request):
         return render(request, 'genome/formulaire.html', {
         'css_files': ['form.css'],
         })
-    if request.method == 'POST':
+    elif request.method == 'POST':
         accessionnb = request.POST.get('accessionnb')
         espece = request.POST.get('espèce')
         souche = request.POST.get('souche')
@@ -302,6 +303,36 @@ def formulaire_genome(request):
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
+
+## Page d'attribution d'une séquence à un annotateur
+@user_passes_test(validateur_required, login_url='/login/')
+def assign_annotation(request):
+    if request.method == 'GET':
+        users = User.objects.filter(role__in=['annotateur', 'validateur'])
+        sequences = SequenceInfo.objects.all()
+        context = {'users': users, 'sequences': sequences, 'message': ''}
+        return render(request, 'genome/assign_annotation.html', context)
+
+    if request.method == 'POST':
+        email = request.POST.get('user')
+        sequence_id = request.POST.get('sequence')
+        user = User.objects.get(email=email)
+        sequence = SequenceInfo.objects.get(seq_id=sequence_id)
+        genome = Genome.objects.get(num_accession=sequence.num_accession)
+        annotation = Annotations.objects.create(email_annot=user, sequence_id=sequence, genome_ID=genome, annotation_status='attribué')
+        annotation.save()
+        message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
+        context = {'users': User.objects.filter(role='annotateur'), 'sequences': SequenceInfo.objects.all(), 'message': message}
+        return render(request, 'genome/assign_annotation.html', context)
+
+
+
+@user_passes_test(validateur_required, login_url='/login/')
+def success(request):
+    return render(request, 'success.html')
+
+
+
     
 
 

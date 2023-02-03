@@ -13,7 +13,7 @@ class User(AbstractBaseUser):
     numero_tel = models.IntegerField()
     role = models.TextField(choices=ROLES,default='lecteur')
     password = models.CharField(null=False,max_length=128) 
-    is_active = models.BooleanField(default=True) ## Admin
+    is_active = models.BooleanField(default=True) 
     is_staff = models.BooleanField(default=False) ## Admin
     last_login = models.DateTimeField(auto_now=True) ## Dernière connexion du User enregisté
     is_superuser = models.BooleanField(default=False) ## Admin
@@ -138,14 +138,14 @@ class Annotations(models.Model):
 
     STATUS = [('validé','val'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
 
-    annot_id = models.IntegerField(primary_key=True, blank=False)
+    annot_id = models.AutoField(primary_key=True)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
     genome_ID = models.ForeignKey(Genome,on_delete=models.CASCADE)
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
     Biotype = models.CharField(max_length=100)
     comments = models.TextField()
     annotation_status = models.TextField(choices=STATUS,default='n.a.')
-    gene_id = models.IntegerField()
+    gene_id = models.CharField(max_length=100)
     gene_biotype = models.CharField(max_length=100)
     transcript_biotype = models.CharField(max_length=100)
     gene_symbol = models.CharField(max_length=100)
