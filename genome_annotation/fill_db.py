@@ -32,7 +32,7 @@ for file in data :
             for i in range(len(liSeq)) :
                 #on stock dans des variable pour attribuer ensuite aux colonnes de la table 
                 #print(gene_id)
-                gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,seq, seq_length= liSeq[i]
+                gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,seq, seq_length, sens= liSeq[i]
                 
                 if SequenceInfo.objects.filter(pk=gene_id).exists(): 
                     Seq = SequenceInfo.objects.get(pk=gene_id)
@@ -43,7 +43,7 @@ for file in data :
                 else : 
                     SequenceInfo(seq_id = gene_id ,seq_name =gene_name, seq_biotype=gene_biotype,
                             fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, cds = True ).save(force_insert= True) 
+                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, cds = True, strand =sens ).save(force_insert= True) 
 
         elif 'pep' in file :
             #on parse le fichier fasta
@@ -51,7 +51,7 @@ for file in data :
             #liSeq = [(num_accession, biotype, seq, ...), (num_accession2, biotype2, seq2, ...), ...]
             for i in range(len(liSeq)) :
                 #on stock dans des variable pour attribuer ensuite aux colonnes de la table 
-                gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,seq, seq_length= liSeq[i]
+                gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,seq, seq_length, sens = liSeq[i]
                 #print(gene_id)
                  
                 if SequenceInfo.objects.filter(pk=gene_id).exists(): 
@@ -64,7 +64,7 @@ for file in data :
                 
                     SequenceInfo(seq_id = gene_id ,seq_name =gene_name ,seq_biotype=gene_biotype,
                             fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True ).save(force_insert= True)
+                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True, strand =sens ).save(force_insert= True)
 
         else :
             #print('g')

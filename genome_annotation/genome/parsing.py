@@ -35,7 +35,7 @@ def parsing_genome(fasta_file) :
     seq_length=len(sequence)
     
     if sequence != '':
-        tmp=(genome_id,genome_type,specy,sequence,seq_length,sens)
+        tmp=(genome_id,genome_type,specy,sequence,seq_length)
         results.append(tmp)
     return results 
 
@@ -83,7 +83,7 @@ def parsing_coding(fasta_file) :
             #print(sequence)
             #print(seq_length)
             if sequence != '':
-                tmp=(gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,sequence,seq_length,sens)
+                tmp=(gene_id,gene_name,gene_type,gene_biotype,description,start,end,genome_id,genome_type,sequence,seq_length, sens)
                 results.append(tmp)
     return results
     
