@@ -6,20 +6,19 @@ from django.contrib.auth.hashers import check_password, make_password
 
 class User(AbstractBaseUser):
     ROLES = [('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
-    username = models.CharField(max_length=150,unique=True)
+    username = models.CharField(max_length=150,unique=True) 
     email = models.EmailField(primary_key=True, unique=True)
     prenom = models.CharField(max_length=100)
     nom = models.CharField(max_length=100)
     numero_tel = models.IntegerField()
     role = models.TextField(choices=ROLES,default='lecteur')
-    password = models.CharField(null=False,max_length=128)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    last_login = models.DateTimeField(auto_now=True)
-    is_superuser = models.BooleanField(default=False)
-    has_module_perms = models.BooleanField(default=False)
-    
-
+    password = models.CharField(null=False,max_length=128) 
+    is_active = models.BooleanField(default=True) ## Admin
+    is_staff = models.BooleanField(default=False) ## Admin
+    last_login = models.DateTimeField(auto_now=True) ## Dernière connexion du User enregisté
+    is_superuser = models.BooleanField(default=False) ## Admin
+    has_module_perms = models.BooleanField(default=False) ## Admin
+    is_validated = models.BooleanField(default=False) ## Pour chaque User créé l'admin doit valider
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','password']
@@ -85,7 +84,8 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("Les utilisateurs doivent avoir un email")
         user = self.model(username=username, email=self.normalize_email(email), numero_tel=numero_tel, role=role, **extra_fields)
-        user.set_password(password)
+        user.password = User.set_password(password)
+        user.last_login = timezone.now()
         user.save()
         return user
 
@@ -94,6 +94,9 @@ class UserManager(BaseUserManager):
         user.is_admin = True
         user.save()
         return user
+    
+
+
 
 
 class Genome(models.Model):

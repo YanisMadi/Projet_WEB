@@ -89,20 +89,24 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            if user.role == "annotateur":
-                # Redirection vers une page pour les annotateurs
-                return redirect('annotateur_page')
-            elif user.role == "lecteur":
-                # Redirection vers une page pour les lecteurs
-                return redirect('lecteur_page')
-            elif user.role == "validateur":
-                # Redirection vers une page pour les validateurs
-                return redirect('validateur_page')
+        if user is not None :
+            if user.is_validated == True:
+                login(request, user)
+                if user.role == "annotateur":
+                    # Redirection vers une page pour les annotateurs
+                    return redirect('annotateur_page')
+                elif user.role == "lecteur":
+                    # Redirection vers une page pour les lecteurs
+                    return redirect('lecteur_page')
+                elif user.role == "validateur":
+                    # Redirection vers une page pour les validateurs
+                    return redirect('validateur_page')
+            elif user.is_validated == False:
+                # Message d'erreur compte en cours de validation
+                messages.error(request, "Ton compte est en attente de validation par l'admin.")
         else:
-            # Message d'erreur si les identifiants sont incorrects
-            messages.error(request, "Email ou mot de passe incorrect.")
+            # Message d'erreur Email ou mot de passe incorect
+                messages.error(request, "Email ou mot de passe incorect.")
     return render(request, 'genome/login.html', {
         'css_files': ['login.css'],
     })
@@ -275,7 +279,6 @@ def formulaire_genome(request):
                 query_params['type_adn'] = adn_type
             if adn_type:
                 query_params['sequence'] = seq
-            print(query_params)
             genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
         elif output_type == 'gene_protein':
@@ -298,7 +301,6 @@ def formulaire_genome(request):
                 query_params['seq_biotype'] = gene_biotype
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
-            #sequences = SequenceInfo.objects.filter()
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
     
 
