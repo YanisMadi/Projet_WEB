@@ -14,7 +14,6 @@ urlpatterns = [
     path('validateur_page/', views.validateur_page, name='validateur_page'),
     path('lecteur_page/', views.lecteur_page, name='lecteur_page'),
     path('logout/', views.logout_view, name='logout'),
-    path('manage_users/', views.manage_users, name='manage_users'),
     path('sequence/', views.show_sequences, name='sequence'),
     path('validation/', views.validate_annotation, name='validation'),
     path('assign_annotation/', views.assign_annotation, name = 'assign_annotation'),

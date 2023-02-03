@@ -7,9 +7,10 @@ admin = User.objects.create_superuser(username='cyps@gmail.com',
                                       email='cyps@gmail.com',
                                       numero_tel='0000000000',
                                       role='validateur',
-                                      password='CYPSCYPS')
+                                      password='CYPSCYPS',)
 admin.is_staff = True
 admin.is_superuser = True
+admin.is_validated = True
 admin.save()
 
 print("L'administrateur a été créé avec succès !")

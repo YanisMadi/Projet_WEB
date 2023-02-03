@@ -49,6 +49,10 @@ class User(AbstractBaseUser):
     def is_lecteur(self):
         return self.role == 'lecteur'
 
+    @property
+    def is__staff(self):
+        return self.is_staff == True
+
     def has_module_perms(self, app_label):
         return self.is_staff
 
@@ -142,12 +146,9 @@ class Annotations(models.Model):
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
     genome_ID = models.ForeignKey(Genome,on_delete=models.CASCADE)
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
-    Biotype = models.CharField(max_length=100)
+    seq_biotype = models.CharField(max_length=30)
     comments = models.TextField()
-    annotation_status = models.TextField(choices=STATUS,default='n.a.')
+    annotation_status = models.TextField(choices=STATUS,default='attribué')
     gene_id = models.CharField(max_length=100)
-    gene_biotype = models.CharField(max_length=100)
-    transcript_biotype = models.CharField(max_length=100)
-    gene_symbol = models.CharField(max_length=100)
     description = models.TextField()
 

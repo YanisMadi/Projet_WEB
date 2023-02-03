@@ -318,56 +318,10 @@ def assign_annotation(request):
         sequence_id = request.POST.get('sequence')
         user = User.objects.get(email=email)
         sequence = SequenceInfo.objects.get(seq_id=sequence_id)
+        biotype = SequenceInfo.objects.get(seq_biotype=sequence_id)
         genome = Genome.objects.get(num_accession=sequence.num_accession)
-        annotation = Annotations.objects.create(email_annot=user, sequence_id=sequence, genome_ID=genome, annotation_status='attribué')
+        annotation = Annotations.objects.create(email_annot=user, sequence_id=sequence, genome_ID=genome, annotation_status='attribué',seq_biotype=biotype)
         annotation.save()
         message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
         context = {'users': User.objects.filter(role='annotateur'), 'sequences': SequenceInfo.objects.all(), 'message': message}
         return render(request, 'genome/assign_annotation.html', context)
-
-
-
-@user_passes_test(validateur_required, login_url='/login/')
-def success(request):
-    return render(request, 'success.html')
-
-
-
-    
-
-
-# Admin 
-def admin_required(user):
-    return user.is_staff
-
-@user_passes_test(admin_required)
-def manage_users(request):
-    users = User.objects.all()
-    context = {'users': users}
-    return render(request, 'genome/manage_users.html', context)
-
-@user_passes_test(admin_required)
-def create_user(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        role = request.POST.get('role')
-        user = User.objects.create_user(email=email, password=password, role=role)
-        user.save()
-        return redirect('manage_users')
-    return render(request, 'genome/create_user.html')
-
-@user_passes_test(admin_required)
-def delete_user(request, user_id):
-    User.objects.get(id=user_id).delete()
-    return redirect('manage_users')
-
-@user_passes_test(admin_required)
-def assign_role(request, user_id):
-    if request.method == 'POST':
-        role = request.POST.get('role')
-        user = User.objects.get(id=user_id)
-        user.role = role
-        user.save()
-        return redirect('manage_users')
-    return render(request, 'genome/assign_role.html', {'user': User.objects.get(id=user_id), 'roles': User.ROLES})
