@@ -309,7 +309,7 @@ def formulaire_genome(request):
 def assign_annotation(request):
     if request.method == 'GET':
         users = User.objects.filter(role__in=['annotateur', 'validateur'])
-        sequences = SequenceInfo.objects.all()
+        sequences = SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours'])
         context = {'users': users, 'sequences': sequences, 'message': ''}
         return render(request, 'genome/assign_annotation.html', context)
 
@@ -318,10 +318,9 @@ def assign_annotation(request):
         sequence_id = request.POST.get('sequence')
         user = User.objects.get(email=email)
         sequence = SequenceInfo.objects.get(seq_id=sequence_id)
-        biotype = SequenceInfo.objects.get(seq_biotype=sequence_id)
         genome = Genome.objects.get(num_accession=sequence.num_accession)
-        annotation = Annotations.objects.create(email_annot=user, sequence_id=sequence, genome_ID=genome, annotation_status='attribué',seq_biotype=biotype)
+        annotation = Annotations.objects.create(email_annot=user, sequence_id=sequence, genome_ID=genome, annotation_status='attribué')
         annotation.save()
         message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
-        context = {'users': User.objects.filter(role='annotateur'), 'sequences': SequenceInfo.objects.all(), 'message': message}
-        return render(request, 'genome/assign_annotation.html', context)
+        context = {'users': User.objects.filter(role__in=['annotateur', 'validateur']), 'sequences': SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours']), 'message': message}
+        return render(request, 'genome/assign_annotation.html',context)
