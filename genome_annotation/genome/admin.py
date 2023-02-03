@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import Genome, SequenceInfo
+from .models import User
 #pour regarder dans django admin
-admin.site.register(Genome)
-admin.site.register(SequenceInfo)
+admin.site.register(User)

@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.hashers import check_password, make_password
 
 class User(AbstractBaseUser):
-    ROLES = [('admin', 'Admin'), ('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
+    ROLES = [('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
     username = models.CharField(max_length=150,unique=True)
     email = models.EmailField(primary_key=True, unique=True)
     prenom = models.CharField(max_length=100)
@@ -17,6 +17,8 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
     is_superuser = models.BooleanField(default=False)
+    has_module_perms = models.BooleanField(default=False)
+    
 
 
     USERNAME_FIELD = 'email'
@@ -48,7 +50,12 @@ class User(AbstractBaseUser):
     def is_lecteur(self):
         return self.role == 'lecteur'
 
-    
+    def has_module_perms(self, app_label):
+        return self.is_staff
+
+    def has_perm(self, perm, obj=None):
+        return self.is_staff
+
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
         
@@ -74,16 +81,16 @@ class User(AbstractBaseUser):
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, email, numero_tel, password=None, **extra_fields):
+    def create_user(self, username, email, numero_tel, role, password=None, **extra_fields):
         if not email:
             raise ValueError("Les utilisateurs doivent avoir un email")
-        user = self.model(username=username, email=self.normalize_email(email), numero_tel=numero_tel, **extra_fields)
+        user = self.model(username=username, email=self.normalize_email(email), numero_tel=numero_tel, role=role, **extra_fields)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, email, numero_tel, password=None, **extra_fields):
-        user = self.create_user(email, numero_tel, password, **extra_fields)
+    def create_superuser(self, email, numero_tel, role, password=None, **extra_fields):
+        user = self.create_user(email, numero_tel, role, password, **extra_fields)
         user.is_admin = True
         user.save()
         return user
