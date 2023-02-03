@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import check_password, make_password
 
 class User(AbstractBaseUser):
     ROLES = [('admin', 'Admin'), ('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
+    username = models.CharField(max_length=150,unique=True)
     email = models.EmailField(primary_key=True, unique=True)
     prenom = models.CharField(max_length=100)
     nom = models.CharField(max_length=100)
@@ -15,10 +16,11 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
+    is_superuser = models.BooleanField(default=False)
 
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['password']
+    REQUIRED_FIELDS = ['username','password']
     objects = UserManager()
 
     @property
@@ -32,6 +34,7 @@ class User(AbstractBaseUser):
     @property
     def is_active(self):
         return True
+
 
     @property
     def is_validateur(self):
@@ -63,28 +66,28 @@ class User(AbstractBaseUser):
     def get_username(self):
         return self.email
 
-
     def get_short_name(self):
         return self.prenom
 
     def get_full_name(self):
         return self.prenom + ' ' + self.nom
 
-class UserManager(UserManager):
-    def create_user(self, email, password=None, **extra_fields):
+class UserManager(BaseUserManager):
+
+    def create_user(self, username, email, numero_tel, password=None, **extra_fields):
         if not email:
             raise ValueError("Les utilisateurs doivent avoir un email")
-        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user = self.model(username=username, email=self.normalize_email(email), numero_tel=numero_tel, **extra_fields)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        user = self.create_user(email, password, **extra_fields)
+    def create_superuser(self, email, numero_tel, password=None, **extra_fields):
+        user = self.create_user(email, numero_tel, password, **extra_fields)
         user.is_admin = True
-        user.username 
         user.save()
         return user
+
 
 class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]

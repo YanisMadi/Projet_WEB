@@ -45,6 +45,7 @@ def inscription(request):
                     return render(request, 'genome/inscription.html', {'form': form, 'css_files': ['Inscription.css']})
                 # Création d'un objet User
                 user = User()
+                user.username = form.cleaned_data['email']
                 user.email = form.cleaned_data['email']
                 user.numero_tel = form.cleaned_data['numero_tel']
                 user.nom = form.cleaned_data['nom']

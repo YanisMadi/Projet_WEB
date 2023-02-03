@@ -1,6 +1,17 @@
-from genome.models import Genome, SequenceInfo
+from genome.models import Genome, SequenceInfo, User
 import genome.parsing as ps
 from pathlib import Path
+
+# Création de l'administrateur
+admin = User.objects.create_superuser(username='cyps@gmail.com',
+                                      email='cyps@gmail.com',
+                                      numero_tel='0000000000',
+                                      password='CYPSCYPS')
+admin.is_staff = True
+admin.is_superuser = True
+admin.save()
+
+print("L'administrateur a été créé avec succès !")
 
 #je rends le dossier itérable
 da = "./genome/data" 
