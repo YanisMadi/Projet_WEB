@@ -6,6 +6,7 @@ from pathlib import Path
 admin = User.objects.create_superuser(username='cyps@gmail.com',
                                       email='cyps@gmail.com',
                                       numero_tel='0000000000',
+                                      role='validateur',
                                       password='CYPSCYPS')
 admin.is_staff = True
 admin.is_superuser = True
