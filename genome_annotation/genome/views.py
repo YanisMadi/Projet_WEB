@@ -287,7 +287,7 @@ def formulaire_genome(request):
                 query_params['seq_start'] = seq_start
             if seq_end:
                 query_params['seq_end'] = seq_end
-            if Brin is not "both":
+            if Brin != "both":
                 query_params['strand'] = Brin
             if seq:
                 query_params['sequence'] = seq
