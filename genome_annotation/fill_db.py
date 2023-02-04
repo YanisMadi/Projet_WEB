@@ -3,8 +3,8 @@ import genome.parsing as ps
 from pathlib import Path
 
 # Création de l'administrateur
-admin = User.objects.create_superuser(username='cypsa@gmail.com',
-                                      email='cypsa@gmail.com',
+admin = User.objects.create_superuser(username='cyps@gmail.com',
+                                      email='cyps@gmail.com',
                                       numero_tel='0000000000',
                                       role='validateur',
                                       password='CYPSCYPS',)

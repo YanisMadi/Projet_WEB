@@ -61,7 +61,7 @@ def inscription(request):
                 send_mail(
                     'Confirmation d\'inscription',
                     'Merci de vous être inscrit sur notre site.',
-                    'cypsagenome@gmail.com',
+                    'cypsgenome@gmail.com',
                     [user.email],
                     fail_silently=False,
                 )
@@ -171,7 +171,7 @@ def validate_annotation(request):
                 send_mail(
                     'Annotation Validée',
                     'Votre annotation de la séquence ('+str(annot.sequence_id.seq_id)+') a été validée avec le commentaire suivant : ' + annot.comments,
-                    'cypsagenome@gmail.com',
+                    'cypsgenome@gmail.com',
                     [annot.email_annot],
                     fail_silently=False,
                 )
@@ -183,7 +183,7 @@ def validate_annotation(request):
                 send_mail(
                     'Annotation Rejetée',
                     'Votre annotation ID ('+str(annot.sequence_id.seq_id)+') a été rejetée avec le commentaire suivant : ' + annot.comments,
-                    'cypsagenome@gmail.com',
+                    'cypsgenome@gmail.com',
                     [annot.email_annot],
                     fail_silently=False,
                 )
@@ -196,8 +196,8 @@ def validate_annotation(request):
             message += str(count_validated) + " annotations ont été validées. "
         if count_rejected > 1:
             message += str(count_rejected) + " annotations ont été rejetées. "
-
-        return HttpResponse(message)
+        context = {'message': message}
+        return render(request,"genome/success.html", context)
 
 
 # Les 3 rôles
