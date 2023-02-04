@@ -39,12 +39,6 @@
             <th>ID génome</th>
             <th>ID séquence</th>
             <th>Biotype</th>
-            <th>Comments</th>
-            <th>ID gène</th>
-            <th>Gène Biotype</th>
-            <th>Transcript Biotype</th>
-            <th>Gène symbol</th>
-            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -55,11 +49,6 @@
               <td>{{ annotation.genome_ID }}</td>
               <td>{{ annotation.sequence_id }}</td>
               <td>{{ annotation.Biotype }}</td>
-              <td>{{ annotation.comments }}</td>
-              <td>{{ annotation.gene_id }}</td>
-              <td>{{ annotation.gene_biotype }}</td>
-              <td>{{ annotation.transcript_biotype }}</td>
-              <td>{{ annotation.gene_symbol }}</td>
             </tr>
           {% endfor %}
         </tbody>
