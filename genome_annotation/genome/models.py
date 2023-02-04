@@ -95,7 +95,6 @@ class Genome(models.Model):
     num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
     nom_gene = models.CharField(max_length=50)
     espece = models.CharField(max_length=50)
-    souche = models.CharField(max_length=50)
     type_adn = models.CharField(choices=DNA_TYPE,default='chromosome',max_length=10)
     sequence = models.TextField()
     longueur = models.PositiveIntegerField()
