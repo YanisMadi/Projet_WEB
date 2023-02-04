@@ -35,13 +35,19 @@
   {% csrf_token %}
         <div class="form-details">
             <div class = "input-box">
-              
+
             <strong>Entrez l'ID de la séquence: </strong>
             <select id="seq_id" name="seq_id">
                 {% for seq_id in sequences %}
               <option value="{{ seq_id.seq_id }}">{{ seq_id.seq_id }}</option>
               {% endfor %}
             </select>
+
+            <strong> Choix du type de séquence :</strong>
+                  <select name="type_seq">
+                      <option value="pep"> Péptide</option>
+                      <option value="cds">CDS</option>
+            </select><br><br>
     
         <div class="button">
           <input type="submit" value="Recherche"><br> 

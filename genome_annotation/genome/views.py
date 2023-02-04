@@ -336,13 +336,16 @@ def blast_view(request):
     if request.method == 'POST':
         
         seq_id = request.POST.get('seq_id')
+        seq_type = request.POST.get('type_seq')
         #print(request.POST)
         sequence = SequenceInfo.objects.filter(seq_id=seq_id).first()
         
 
         if sequence:
-            # Récupérer la séquence associée à l'ID
-            sequence = sequence.seq_pep
+            if seq_type == "pep":
+                sequence = sequence.seq_pep
+            elif seq_type == "cds":
+                sequence = sequence.seq_cds
             
             # Effectuer la requête BLAST
             blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
