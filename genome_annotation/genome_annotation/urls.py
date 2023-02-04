@@ -3,6 +3,7 @@ from django.urls import path, include
 from genome import urls
 from genome import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('annotations/', views.annotation_list, name='annotation_list'),
@@ -17,4 +18,7 @@ urlpatterns = [
     path('sequence/', views.show_sequences, name='sequence'),
     path('validation/', views.validate_annotation, name='validation'),
     path('assign_annotation/', views.assign_annotation, name = 'assign_annotation'),
+    path('blast/', views.blast_view, name='blast'),
+   
+    
 ]

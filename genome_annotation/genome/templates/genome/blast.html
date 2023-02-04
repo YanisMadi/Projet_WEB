@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recherche alignement de séquences</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+</head>
+     
+
+<body>
+<!-- Barre de navigation --> 
+<nav>
+  <div class="nav-content">
+    <div class="logo">
+      <a >CYPS Genome Annotation.</a> 
+    </div>
+    <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+    <ul class="nav-links">
+      {% if user.is__staff %}
+      <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+      {% elif user.is_annotateur %}
+        <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+      {% elif user.is_validateur %}
+        <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+      {% elif user.is_lecteur %}
+        <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+      {% endif %}
+      <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class ="container">
+<form method="post">
+  {% csrf_token %}
+        <div class="form-details">
+            <div class = "input-box">
+              
+            <strong>Entrez l'ID de la séquence: </strong>
+            <select id="seq_id" name="seq_id">
+                {% for seq_id in sequences %}
+              <option value="{{ seq_id.seq_id }}">{{ seq_id.seq_id }}</option>
+              {% endfor %}
+            </select>
+    
+        <div class="button">
+          <input type="submit" value="Recherche"><br> 
+        </div>
+      </div>
+</form>
+</div>
+</body>
+</html>
+
+
+

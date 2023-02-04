@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Annotations, User, Genome, SequenceInfo
 from .forms.inscription_form import InscriptionForm
 from .forms.database_form import DatabaseForm
@@ -16,6 +16,8 @@ import urllib.request
 import requests
 import ensembl_rest
 import json
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
 
 
 
@@ -324,3 +326,47 @@ def assign_annotation(request):
         message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
         context = {'users': User.objects.filter(role__in=['annotateur', 'validateur']), 'sequences': SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours']), 'message': message}
         return render(request, 'genome/assign_annotation.html',context)
+
+
+
+def blast_view(request):
+
+    sequences = SequenceInfo.objects.all()
+    #print(sequences)
+    if request.method == 'POST':
+        
+        seq_id = request.POST.get('seq_id')
+        #print(request.POST)
+        sequence = SequenceInfo.objects.filter(seq_id=seq_id).first()
+        
+
+        if sequence:
+            # Récupérer la séquence associée à l'ID
+            sequence = sequence.seq_pep
+            
+            # Effectuer la requête BLAST
+            blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
+            #print(blast_result)
+            
+            # Analyser les résultats BLAST
+            blast_records = NCBIXML.parse(blast_result)
+            #print(blast_records)
+            alignments = []
+            alignments = [{'hit_id': alignment.hit_id,
+               'hit_def': alignment.hit_def,
+               'score': hsp.score,
+               'evalue': hsp.expect,
+               'identity': hsp.identities / hsp.align_length * 100}
+              for blast_record in blast_records
+              for alignment in blast_record.alignments
+              for hsp in alignment.hsps]
+                
+
+            return render(request, 'genome/results.html', {'results': alignments})
+        else:
+            return HttpResponse('Aucune séquence trouvée avec l\'ID: ' + seq_id)
+    else:
+        
+        return render(request, 'genome/blast.html', {'sequences': sequences})
+
+
