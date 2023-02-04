@@ -29,7 +29,7 @@
   <div class ="container">
   {% block content %}
     <h1>Informations sur les génomes</h1>
-    <table>
+    <table name="Mytable">
       <thead>
         <tr>
           <th>Numéro d'accès</th>
@@ -43,18 +43,30 @@
       </thead>
       <tbody>
         {% for genome in genomes %}
+        
+        <p id="value">{{genome.num_accession}}</p>
+        <script>
+          var num = document.getElementById("value").innerHTML;
+        </script>
+
           <tr>
             <td>{{ genome.num_accession }}</td>
             <td>{{ genome.nom_gene }}</td>
             <td>{{ genome.espece }}</td>
-            <td>{{ genome.souche }}</td>
-            <td>{{ genome.sequence_seq }}</td>
-            <td>{{ genome.longueur_seq }}</td>
+            <td>
+              <a href="view_sequence/?numacc="
+              onclick="location.href=this.href+num;return false">{{genome.num_accession}}</a>
+            </td>
+            <td>{{ genome.longueur }}</td>
             <td>{{ genome.description }}</td>
-            <td>{{ genome.adn_type }}</td>
+            <td>{{ genome.type_adn }}</td>
           </tr>
         {% endfor %}
       </tbody>
+      
     </table>
   {% endblock %}
   </div>
+
+  
+</body>
