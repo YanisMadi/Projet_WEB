@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+          <title> Formulaire </title>
+          {% load static %}
+        <link rel="stylesheet" href="{% static 'view_seq.css' %}">
+  </head>
+
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+          <a >CYPS Genome Annotation.</a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+          {% if user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+        </ul>
+      </div>
+    </nav>
+  
+  <body>
+    <div class ="container">
+      <script>
+        var currentURL = window.location.href;
+        var numacc = currentURL.split("?numacc=")[1];
+        document.write(numacc)
+      </script>
+      <div class="title">Sequence</div>
+      <div>
+        <button class="download-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
+          <a href="?numacc={{ genome.num_accession }}&download=true">Télécharger la séquence</a>
+      </button></div>
+      <div style="height: 1000px; width: 900px; overflow-y: scroll; word-wrap: break-word;">
+        {{ sequence }}</div>
+
+    </div>
+  </body>
+</html>

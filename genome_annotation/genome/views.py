@@ -241,6 +241,7 @@ def show_sequences(request):
 
 # Pour chercher un génome ou un gène / une protéine dans la base de données du site
 @user_passes_test(role_required, login_url='/login/')
+
 def formulaire_genome(request):
     if request.method == 'GET':
         return render(request, 'genome/formulaire.html', {
@@ -301,7 +302,19 @@ def formulaire_genome(request):
             #sequences = SequenceInfo.objects.filter()
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
     
-
+def view_sequence(request): 
+    # Récupération de la séquence depuis le numéro accession fourni par l'url
+    if request.method == "GET":
+        numacc = request.GET.get('numacc')
+        genome = Genome.objects.get(num_accession=numacc)
+        sequence = genome.sequence
+        # Bouton pour télécharger la séquence en .txt
+        if request.GET.get('download'):
+                response = HttpResponse(genome.sequence, content_type='text/plain')
+                response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(genome.num_accession)
+                return response
+        return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'],'genome': genome, 'sequence': sequence})
+        
 
 # Admin 
 def admin_required(user):

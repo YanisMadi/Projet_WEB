@@ -96,3 +96,72 @@ th {
   background-color: #FFC0CB;
 }
 
+orm .button{
+    height: 45px; 
+    margin: 45px 0; 
+}
+form .button input{
+    outline: none;
+    height: 100% ;
+    width: 100%;
+    border: none;
+    color:#fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 5px;
+    background-color: #d980e0  ;
+}
+form .button input:hover{
+    background-color: #000 ;
+}
+
+@media (max-width: 584px)  {
+    .container{
+        max-width: 100%;
+    }
+    form .form-details .input-box{
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .container form .form-details{
+        max-height: 300px;
+        overflow-y: scroll; 
+    }
+    .form-details::-webkit-scrollbar{
+        width: 0;
+    }
+}
+
+.btn{
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 60;
+    width: 150px; /* largeur des bouton */
+    background: #d980e0;
+    color: white;
+}
+.btn--assign{
+    background: #d980e0;
+    color: white;
+}
+ .btn--assign:hover{
+    background: #d980e0;
+}
+
+ /*download button*/
+.button .btn{
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 60;
+    width: 150px; /* largeur des bouton */
+    background: #d980e0;
+    color: white;
+}
+.button  .btn--assign{
+    background: #d980e0;
+    color: white;
+}
+.button .btn--assign:hover{
+    background: #d980e0;
+}
