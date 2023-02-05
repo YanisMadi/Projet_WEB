@@ -29,6 +29,7 @@
   </nav>
 
 <body>
+  <div class ="container">
     <form method="post">
         {% csrf_token %}
         <table>
@@ -40,12 +41,9 @@
                     <th>Sequence ID</th>
                     <th>Biotype</th>
                     <th>Gene ID</th>
-                    <th>Gene Biotype</th>
-                    <th>Transcript Biotype</th>
-                    <th>Gene Symbol</th>
                     <th>Description</th>
-                    <th>Validate/Reject</th>
-                    <th>Comment</th>
+                    <th>Valider/Rejeter</th>
+                    <th>Commentaire</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,26 +51,24 @@
                 <tr>
                     <td>{{ annot.annot_id }}</td>
                     <td>{{ annot.email_annot }}</td>
-                    <td>{{ annot.genome_ID }}</td>
-                    <td>{{ annot.sequence_id }}</td>
-                    <td>{{ annot.Biotype }}</td>
+                    <td>{{ annot.genome_ID.num_accession }}</td>
+                    <td>{{ annot.sequence_id.seq_id }}</td>
+                    <td>{{ annot.sequence_id.seq_biotype }}</td>
                     <td>{{ annot.gene_id }}</td>
-                    <td>{{ annot.gene_biotype }}</td>
-                    <td>{{ annot.transcript_biotype }}</td>
-                    <td>{{ annot.gene_symbol}}</td>
                     <td>{{ annot.description}}</td>
                     <td>
-                        <select name="validate_reject">
-                            <option value="validate">Validate</option>
-                            <option value="reject">Reject</option>
+                        <select name="validate_reject-{{ annot.annot_id }}">
+                            <option value="validate">Valider</option>
+                            <option value="reject">Rejeter</option>
                         </select>
                     </td>
-                    <td><textarea name="comment"></textarea></td>
+                    <td><textarea name="comment-{{ annot.annot_id }}"></textarea></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         <input type="submit" value="Submit">
     </form>
+  </div>
 </body>
 </html>

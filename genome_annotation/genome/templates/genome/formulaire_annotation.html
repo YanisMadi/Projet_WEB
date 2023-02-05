@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire Anntation </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+  </head>
+  <body>
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+          <a >CYPS Genome Annotation.</a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+          {% if user.is__staff %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+          {% elif user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+        </ul>
+      </div>
+    </nav>
+    
+ 	<div class ="container">
+        <div class="title"> Formulaire d'annotation </div><br>
+        <form action="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" method="post">
+  {% csrf_token %}
+  <br>
+  <div class="form-group">
+    <label for="genome_ID">ID Génome :    </label>
+    <td>{{ annotation.genome_ID.num_accession }}</td>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="sequence_id">ID Séquence :    </label>
+    <td>{{ annotation.sequence_id.seq_id }}</td>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="seq_biotype">Biotype :    </label>
+    <td>{{ annotation.sequence_id.seq_biotype }}
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="gene_id">ID Gène :    </label>
+    <input type="text" class="form-control" id="gene_id" name="gene_id" required>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="description">Description :    </label>
+    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+  </div>
+  <br>
+  <button type="submit" class="btn btn-primary">Envoyer</button>
+  <div>
+    {{ message }}
+  </div>  
+</form>
+</div>
+  </body>
+</html>

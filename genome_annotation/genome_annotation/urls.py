@@ -19,6 +19,7 @@ urlpatterns = [
     path('validation/', views.validate_annotation, name='validation'),
     path('assign_annotation/', views.assign_annotation, name = 'assign_annotation'),
     path('blast/', views.blast_view, name='blast'),
-   
-    
+    path('annotations_attrib/', views.annotations, name = 'annotations_attrib'),
+    path('formulaire_annotation/<int:annotation_id>/', views.formulaire_annotation, name = 'formulaire_annotation'),
+    path('success/', views.formulaire_annotation, name = 'success'),
 ]
