@@ -30,7 +30,7 @@
 
   <div class ="container">
     {% block content %}
-      <h1>Annotations en cours</h1>
+      <h1>Annotations en cours de validation</h1>
       <table>
         <thead>
           <tr>
@@ -46,9 +46,9 @@
             <tr>
               <td>{{ annotation.annot_id }}</td>
               <td>{{ annotation.email_annot }}</td>
-              <td>{{ annotation.genome_ID }}</td>
-              <td>{{ annotation.sequence_id }}</td>
-              <td>{{ annotation.Biotype }}</td>
+              <td>{{ annotation.genome_ID.num_accession }}</td>
+              <td>{{ annotation.sequence_id.seq_id }}</td>
+              <td>{{ annotation.sequence_id.biotype }}</td>
             </tr>
           {% endfor %}
         </tbody>
