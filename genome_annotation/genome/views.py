@@ -313,7 +313,7 @@ def view_sequence(request):
                 response = HttpResponse(genome.sequence, content_type='text/plain')
                 response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(genome.num_accession)
                 return response
-        return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'],'genome': genome, 'sequence': sequence})
+        return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'], 'sequence': sequence, 'numacc': numacc})
         
 
 # Admin 

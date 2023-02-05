@@ -29,12 +29,8 @@
   
   <body>
     <div class ="container">
-      <script>
-        var currentURL = window.location.href;
-        var numacc = currentURL.split("?numacc=")[1];
-        document.write(numacc)
-      </script>
-      <div class="title">Sequence</div>
+
+      <div class="title">Sequence {{numacc}}</div>
       <div>
         <button class="download-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
           <a href="?numacc={{ genome.num_accession }}&download=true">Télécharger la séquence</a>
