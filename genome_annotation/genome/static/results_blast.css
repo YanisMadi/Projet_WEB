@@ -9,11 +9,12 @@
 }
 body {
     display: flex;
-    height: 100vh;
+    height: 100%;
     justify-content: center;
     align-items: center; 
-    padding: 10px;
-    background: #bab3bb; /* mettre la photo en background */
+    background: #bab3bb; 
+    overflow-y: scroll;
+ 
 }
 nav{
     position: fixed;
@@ -30,7 +31,7 @@ nav.sticky{
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 nav .nav-content{
-    height: 100%;
+    height: 50%;
     max-width: 1200px;
     margin: auto;
     display: flex;
@@ -74,7 +75,9 @@ nav.sticky .nav-links li a:hover{
 
 .container {
     margin: auto;
-    width: 100%;
+    width: 75%;
+    max-height: calc(100vh - 100px); /* définir la hauteur maximale en fonction de la hauteur de l'écran moins une marge */
+    overflow-y: scroll; /* activé la barre de défilement seulement sur l'axe vertical */
 }
 .container .title{ 
     font-size: 25px;
@@ -82,6 +85,14 @@ nav.sticky .nav-links li a:hover{
     position: relative;
 }
 
+.container::-webkit-scrollbar {
+    width: 5px; /* définir la largeur de la barre de défilement */
+    background-color: #F5F5F5; /* définir la couleur de fond */
+  }
+  
+  .container::-webkit-scrollbar-thumb {
+    background-color: #000000; /* définir la couleur de la barre de défilement */
+  }
 
 h1 {
     text-align: center;
@@ -89,8 +100,9 @@ h1 {
 }
 
 table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
+    overflow-y: scroll;
 }
 
 th, td {
@@ -105,4 +117,5 @@ th {
 
 tr:nth-child(even) {
     background-color: #f2f2f2;
-}``
+}
+
