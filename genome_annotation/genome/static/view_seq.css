@@ -87,7 +87,7 @@ nav.sticky .nav-links li a:hover{
     background: #fff; /* la couleur du fond de border*/
     padding: 25px 30px; /* la taille du carrée */
     border-radius: 5px; /* arrondir les bords  du carré */
-    max-height: 500px;
+    max-height: 1000px;
     overflow-y: scroll; /* add scrolling to the container */
 }
 
@@ -107,3 +107,6 @@ nav.sticky .nav-links li a:hover{
     background: linear-gradient(135deg, #e489ea,#e489ea);
 }
 
+.container:first-child {
+    margin-bottom: 20px; /* add margin to separate the two containers */
+  }

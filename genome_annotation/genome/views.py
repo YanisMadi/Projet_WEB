@@ -315,6 +315,25 @@ def view_sequence(request):
                 return response
         return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'], 'sequence': sequence, 'numacc': numacc})
         
+def view_genesequence(request):
+    if request.method == "GET":
+        seqid = request.GET.get('seqid')
+        gene = SequenceInfo.objects.get(seq_id=seqid)
+        sequence_cds = gene.seq_cds
+        sequence_pep = gene.seq_pep
+        download_type = request.GET.get('download')
+        if download_type == 'cds':
+                response = HttpResponse(sequence_cds, content_type='text/plain')
+                response['Content-Disposition'] = 'attachment; filename="{}_cds.txt"'.format(gene.seq_id)
+                return response
+        elif download_type == 'pep':
+                response = HttpResponse(sequence_pep, content_type='text/plain')
+                response['Content-Disposition'] = 'attachment; filename="{}_pep.txt"'.format(gene.seq_id)
+                return response
+        return render(request,"genome/view_genesequence.html",{'css_files': ['view_seq.css'],
+        'sequence_cds': sequence_cds,
+        'sequence_pep': sequence_pep,
+        'seqid': seqid})
 
 # Admin 
 def admin_required(user):

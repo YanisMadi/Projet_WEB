@@ -45,6 +45,10 @@
     </thead>
     <tbody>
       {% for sequence in sequences %}
+      <p id="value">{{sequence.seq_id}}</p>
+      <script>
+        var num = document.getElementById("value").innerHTML;
+      </script>
         <tr>
           <td>{{ sequence.seq_id }}</td>
           <td>{{ sequence.seq_name }}</td>
@@ -53,7 +57,8 @@
           <td>{{ sequence.seq_start }}</td>
           <td>{{ sequence.seq_end }}</td>
           <td>{{ sequence.strand }}</td>
-          <td>{{ sequence.sequence }}</td>
+          <td><a href="view_genesequence/?seqid="
+            onclick="location.href=this.href+num;return false">Afficher la séquence</a></td>
           <td>{{ sequence.longueur }}</td>
         </tr>
       {% endfor %}

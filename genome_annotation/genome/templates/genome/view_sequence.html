@@ -28,16 +28,19 @@
     </nav>
   
   <body>
-    <div class ="container">
+    <div class="parent">
+      <div class ="container" style="margin-bottom: 20px;">
+        <div class="title">Sequence {{numacc}}</div>
+        <div>
+          <button class="download-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
+            <a href="?numacc={{ genome.num_accession }}&download=true">Télécharger la séquence</a>
+        </button></div>
+      </div>
 
-      <div class="title">Sequence {{numacc}}</div>
-      <div>
-        <button class="download-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
-          <a href="?numacc={{ genome.num_accession }}&download=true">Télécharger la séquence</a>
-      </button></div>
-      <div style="height: 1000px; width: 900px; overflow-y: scroll; word-wrap: break-word;">
-        {{ sequence }}</div>
-
+      <div class ="container" style="margin-bottom: 20px;">
+        <div style="height: 1000px; width: 900px; word-wrap: break-word;">
+          {{ sequence }}</div>
+      </div>
     </div>
   </body>
 </html>
