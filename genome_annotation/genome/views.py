@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Annotations, User, Genome, SequenceInfo
 from .forms.inscription_form import InscriptionForm
 from .forms.database_form import DatabaseForm
@@ -16,6 +16,8 @@ import urllib.request
 import requests
 import ensembl_rest
 import json
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
 
 
 
@@ -336,6 +338,50 @@ def assign_annotation(request):
         return render(request, 'genome/assign_annotation.html',context)
 
 
+def blast_view(request):
+
+    sequences = SequenceInfo.objects.all()
+    #print(sequences)
+    if request.method == 'POST':
+        
+        seq_id = request.POST.get('seq_id')
+        seq_type = request.POST.get('type_seq')
+        #print(request.POST)
+        sequence = SequenceInfo.objects.filter(seq_id=seq_id).first()
+        
+
+        if sequence:
+            if seq_type == "pep":
+                sequence = sequence.seq_pep
+            elif seq_type == "cds":
+                sequence = sequence.seq_cds
+            
+            # Effectuer la requête BLAST
+            blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
+            #print(blast_result)
+            
+            # Analyser les résultats BLAST
+            blast_records = NCBIXML.parse(blast_result)
+            #print(blast_records)
+            alignments = []
+            alignments = [{'hit_id': alignment.hit_id,
+               'hit_def': alignment.hit_def,
+               'score': hsp.score,
+               'evalue': hsp.expect,
+               'identity': hsp.identities / hsp.align_length * 100}
+              for blast_record in blast_records
+              for alignment in blast_record.alignments
+              for hsp in alignment.hsps]
+                
+
+            return render(request, 'genome/results.html', {'results': alignments})
+        else:
+            return HttpResponse('Aucune séquence trouvée avec l\'ID: ' + seq_id)
+    else:
+        
+        return render(request, 'genome/blast.html', {'sequences': sequences})
+
+
 ## Annotations
 # Rôles validateur et annotateur
 def a_v_role_required(user):
@@ -377,3 +423,4 @@ def formulaire_annotation(request, annotation_id):
         message = "L'annotation pour la séquence '{}' a bien été enregistrée. Un validateur va analyser cette anotations.".format(annot.sequence_id.seq_id)
         context = {'message': message}
         return render(request,"genome/success.html", context)
+

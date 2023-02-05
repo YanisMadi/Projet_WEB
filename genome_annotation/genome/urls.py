@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth.decorators import user_passes_test
 
+
+
 urlpatterns = [
     path('annotations/', views.annotation_list, name='annotation_list'),
     path('', views.annot_menu, name='annot_menu'),
@@ -15,6 +17,7 @@ urlpatterns = [
     path('sequence/', views.show_sequences, name='sequence'),
     path('validation/', views.validate_annotation, name='validation'),
     path('assign_annotation/', views.assign_annotation, name = 'assign_annotation'),
+    path('blast/', views.blast_view, name='blast'),
     path('annotations_attrib/', views.annotations, name = 'annotations_attrib'),
     path('formulaire_annotation/<int:annotation_id>/', views.formulaire_annotation, name = 'formulaire_annotation'),
     path('success/', views.formulaire_annotation, name = 'success'),
