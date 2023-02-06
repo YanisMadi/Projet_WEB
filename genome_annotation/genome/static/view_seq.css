@@ -110,3 +110,36 @@ nav.sticky .nav-links li a:hover{
 .container:first-child {
     margin-bottom: 20px; /* add margin to separate the two containers */
   }
+
+  .btn{
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 60;
+    width: 150px; /* largeur des bouton */
+    background: #d980e0;
+    color: white;
+}
+.btn--assign{
+    background: #d980e0;
+    color: white;
+}
+ .btn--assign:hover{
+    background: #d980e0;
+}
+
+ /*download button*/
+.button .btn{
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 60;
+    width: 150px; /* largeur des bouton */
+    background: #d980e0;
+    color: white;
+}
+.button  .btn--assign{
+    background: #d980e0;
+    color: white;
+}
+.button .btn--assign:hover{
+    background: #d980e0;
+}

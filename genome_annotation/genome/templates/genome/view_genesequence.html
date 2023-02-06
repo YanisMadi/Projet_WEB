@@ -55,6 +55,16 @@
             <div style="height: auto; width: 900px; overflow-y: scroll; word-wrap: break-word;">
                 {{ sequence_pep }}</div>
         </div>
+
+        <div class ="container" style="margin-bottom: 20px;">
+          <form method="post" action="{% url 'formulaire' %}">
+            {% csrf_token %}
+            <input type="hidden" name="idsequence" value='{{ seqid }}'>
+            <input type="hidden" name="output_type" value='gene_protein'>
+            <input type="submit" value="Informations sur la séquence " style="font-size: 15px; font-weight: 60; background: #d980e0; color: white;border-radius: 40px;">
+          </form>
+      </div>
+
     </div>
   </body>
 </html>

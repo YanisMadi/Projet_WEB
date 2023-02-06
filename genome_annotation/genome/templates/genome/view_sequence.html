@@ -48,11 +48,10 @@
           {% for gene in genes %}
             <!-- getting the gene seq_id-->
             <script>
-                var seqid = '{{gene.seq_id}}';
+              var seqid = '{{gene.seq_id}}';
             </script>
             <!-- seq_id clickable -->
-            <a href="view_genesequence/?seqid="
-            onclick="location.href=this.href+seqid;return false">{{ gene.seq_id }}</a>;
+            <a href="view_genesequence/?seqid={{gene.seq_id}}">{{ gene.seq_id }}</a>;
           {% endfor %}
         </div>
       </div>

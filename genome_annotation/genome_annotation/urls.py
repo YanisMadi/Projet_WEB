@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login_view'),
     path('inscription/', views.inscription, name = 'inscription'),
     path('formulaire/', views.formulaire_genome, name = 'formulaire'),
+    re_path('./formulaire/', views.formulaire_genome, name = 're_formulaire'),
     path('formulaire/view_sequence/', views.view_sequence, name="view_sequence"),
     path('annotateur_page/', views.annotateur_page, name='annotateur_page'),
     path('validateur_page/', views.validateur_page, name='validateur_page'),

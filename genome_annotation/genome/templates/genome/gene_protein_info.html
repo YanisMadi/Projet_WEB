@@ -34,31 +34,33 @@
       <tr>
         <th>ID de séquence</th>
         <th>Nom de séquence</th>
-        <th>Type de séquence</th>
         <th>Fonction</th>
+        <th>Séquence</th>
         <th>Position de début</th>
         <th>Position de fin</th>
-        <th>Brin</th>
-        <th>Séquence</th>
         <th>Longueur</th>
+        <th>Brin</th>
+        <th>Type ADN</th>
       </tr>
     </thead>
     <tbody>
       {% for sequence in sequences %}
+      <!-- getting the gene seq_id-->
       <script>
         var seqid = '{{sequence.seq_id}}';
       </script>
         <tr>
           <td>{{ sequence.seq_id }}</td>
           <td>{{ sequence.seq_name }}</td>
-          <td>{{ sequence.seq_type }}</td>
           <td>{{ sequence.fonction }}</td>
+          <td><a href="view_genesequence/?seqid="
+            onclick="location.href=this.href+seqid;return false">Afficher la séquence</a>
+          </td>
           <td>{{ sequence.seq_start }}</td>
           <td>{{ sequence.seq_end }}</td>
-          <td>{{ sequence.strand }}</td>
-          <td><a href="view_genesequence/?seqid="
-            onclick="location.href=this.href+seqid;return false">Afficher la séquence</a></td>
           <td>{{ sequence.longueur }}</td>
+          <td>{{ sequence.strand }}</td>
+          <td>{{ sequence.type_adn}}</td>
         </tr>
       {% endfor %}
     </tbody>
