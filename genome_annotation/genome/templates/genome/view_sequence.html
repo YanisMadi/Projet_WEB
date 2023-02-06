@@ -30,7 +30,7 @@
   <body>
     <div class="parent">
       <div class ="container" style="margin-bottom: 20px;">
-        <div class="title">Sequence {{numacc}}</div>
+        <div class="title">Sequence du génome {{numacc}}</div>
         <div>
           <button class="download-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
             <a href="?numacc={{ genome.num_accession }}&download=true">Télécharger la séquence</a>
@@ -40,6 +40,21 @@
       <div class ="container" style="margin-bottom: 20px;">
         <div style="height: 1000px; width: 900px; word-wrap: break-word;">
           {{ sequence }}</div>
+      </div>
+      
+      <div class ="container" style="margin-bottom: 20px;">
+        <div class="title">Sequences existantes associées au génome {{numacc}} </div>
+        <div style="height: 1000px; width: 900px; word-wrap: break-word;">
+          {% for gene in genes %}
+            <!-- getting the gene seq_id-->
+            <script>
+                var seqid = '{{gene.seq_id}}';
+            </script>
+            <!-- seq_id clickable -->
+            <a href="view_genesequence/?seqid="
+            onclick="location.href=this.href+seqid;return false">{{ gene.seq_id }}</a>;
+          {% endfor %}
+        </div>
       </div>
     </div>
   </body>
