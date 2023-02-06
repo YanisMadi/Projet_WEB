@@ -41,9 +41,8 @@
       </thead>
       <tbody>
         {% for genome in genomes %}
-        <p id="value">{{genome.num_accession}}</p>
         <script>
-          var num = document.getElementById("value").innerHTML;
+          var num = '{{genome.num_accession}}';
         </script>
 
           <tr>
