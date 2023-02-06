@@ -105,21 +105,21 @@ class UserManager(BaseUserManager):
 
 class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
-    ANNOTATION = [('oui','annoté'),('non,','non annoté')]
+    ANNOTATION = [('annoté','annoté'),('non annoté,','non annoté')]
 
     num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
     espece = models.CharField(max_length=50)
     type_adn = models.CharField(choices=DNA_TYPE,default='chromosome',max_length=10)
     sequence = models.TextField()
     longueur = models.PositiveIntegerField()
-    annotated_genome = models.CharField(choices=ANNOTATION, default='non annoté',max_length=10)
+    annotated_genome = models.CharField(choices=ANNOTATION, default='non annoté',max_length=12)
   
 
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
-    STRAND_TYPE = [('backward','-1'),('forward','1')]
-    ANNOTATION = [('oui','annoté'),('non,','non annoté')]
+    STRAND_TYPE = [('-1','-1'),('1','1'),('n.a.','n.a.')]
+    ANNOTATION = [('annoté','annoté'),('non annoté,','non annoté')]
     
     num_accession = models.CharField(max_length=30) # genome_id
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
@@ -134,22 +134,23 @@ class SequenceInfo(models.Model):
     seq_cds = models.TextField()
     seq_pep = models.TextField()
     longueur = models.IntegerField()
-    strand = models.TextField(choices=STRAND_TYPE,default='forward')
+    strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
     description = models.TextField()
-    annotated_state = models.CharField(choices=ANNOTATION, default='non annoté',max_length=10)
+    annotated_state = models.CharField(choices=ANNOTATION, default='non annoté',max_length=12)
 
 
 class Annotations(models.Model):
 
     STATUS = [('validé','val'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
+    STRAND_TYPE = [('-1','-1'),('1','1'),('n.a.','n.a.')]
 
     annot_id = models.AutoField(primary_key=True)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
     genome_ID = models.ForeignKey(Genome,on_delete=models.CASCADE)
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
+    strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
     seq_biotype = models.CharField(max_length=30)
     comments = models.TextField()
     annotation_status = models.TextField(choices=STATUS,default='attribué')
-    gene_id = models.CharField(max_length=100)
     description = models.TextField()
 

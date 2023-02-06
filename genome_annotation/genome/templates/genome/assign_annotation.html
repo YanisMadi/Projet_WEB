@@ -42,6 +42,14 @@
               </select>
             </div>
             <div>
+              <label for="genome">Génome :</label>
+              <select id="genome" name="genome">
+                {% for genome in genomes %}
+                <option value="{{ genome.num_accession }}">{{ genome.num_accession }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
               <label for="sequence">Séquence :</label>
               <select id="sequence" name="sequence">
                 {% for sequence in sequences %}

@@ -30,6 +30,7 @@
     </nav>
     
  	<div class ="container">
+    <br><br><br><br>
         <div class="title"> Formulaire d'annotation </div><br>
         <form action="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" method="post">
   {% csrf_token %}
@@ -45,13 +46,35 @@
   </div>
   <br>
   <div class="form-group">
-    <label for="seq_biotype">Biotype :    </label>
-    <td>{{ annotation.sequence_id.seq_biotype }}
+    <label for="adn_type">Type d'adn :    </label>
+    <td>{{ annotation.sequence_id.type_adn }}
   </div>
   <br>
   <div class="form-group">
-    <label for="gene_id">ID Gène :    </label>
-    <input type="text" class="form-control" id="gene_id" name="gene_id" required>
+    <label for="longueur">Longueur :    </label>
+    <td>{{ annotation.sequence_id.longueur }}
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="seq_start">Start Position :    </label>
+    <td>{{ annotation.sequence_id.longueur }}
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="seq_end">End position :    </label>
+    <td>{{ annotation.sequence_id.seq_end }}
+  </div>
+  <br>
+    <div class="form-group">
+    <label for="Brin">Sens  :    </label>
+    <select name="Brin">
+      <option value="1">Direct</option>
+      <option value="-1">Indirect</option>
+  </select><br><br>
+  </div>
+  <div class="form-group">
+    <label for="biotype">Biotype :    </label>
+    <input type="text" class="form-control" id="biotype" name="biotype" required>
   </div>
   <br>
   <div class="form-group">

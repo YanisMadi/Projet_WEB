@@ -315,8 +315,9 @@ def formulaire_genome(request):
 def assign_annotation(request):
     if request.method == 'GET':
         users = User.objects.filter(role__in=['annotateur', 'validateur'])
-        sequences = SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours'])
-        context = {'users': users, 'sequences': sequences, 'message': ''}
+        genomes = Genome.objects.filter(annotated_genome__in=['non annoté'])
+        sequences = SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours', 'validé']).filter(annotated_state__in=['non annoté'])
+        context = {'users': users, 'genomes': genomes, 'sequences': sequences, 'message': ''}
         return render(request, 'genome/assign_annotation.html', context)
 
     if request.method == 'POST':
@@ -334,8 +335,9 @@ def assign_annotation(request):
                     fail_silently=False,
                 )
         message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
-        context = {'users': User.objects.filter(role__in=['annotateur', 'validateur']), 'sequences': SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours']), 'message': message}
+        context = {'users': User.objects.filter(role__in=['annotateur', 'validateur']),'genomes':Genome.objects.filter(annotated_genome__in=['non annoté']), 'sequences': SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours', 'validé']).filter(annotated_state__in=['non annoté']), 'message': message}
         return render(request, 'genome/assign_annotation.html',context)
+
 
 
 def blast_view(request):
@@ -409,14 +411,28 @@ def annotations(request):
 def formulaire_annotation(request, annotation_id):
     if request.method == 'GET':
         annotation = Annotations.objects.filter(annot_id=annotation_id)[0]
-        print(annotation)
-        context = {'annotation': annotation}
-        return render(request,"genome/formulaire_annotation.html", context)
+        if request.user.email == annotation.email_annot.email:
+            context = {'annotation': annotation}
+            return render(request,"genome/formulaire_annotation.html", context)
+        else:
+            return redirect('login')
+
+@user_passes_test(a_v_role_required, login_url='/login/')
+def formulaire_annotation(request, annotation_id):
+    if request.method == 'GET':
+        annotation = Annotations.objects.filter(annot_id=annotation_id)[0]
+        if request.user.email == annotation.email_annot.email:
+            context = {'annotation': annotation}
+            return render(request,"genome/formulaire_annotation.html", context)
+        else:
+            return redirect('login')
     if request.method == 'POST':
-        gene_id = request.POST.get('gene_id')
+        sens = request.POST.get('Brin')
+        seq_biotype = request.POST.get('biotype')
         description = request.POST.get('description')
         annot = Annotations.objects.get(annot_id=annotation_id)
-        annot.gene_id = gene_id
+        annot.seq_biotype = seq_biotype
+        annot.strand = sens
         annot.description = description
         annot.annotation_status = 'en cours'
         annot.save()
