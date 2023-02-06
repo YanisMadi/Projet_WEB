@@ -93,12 +93,10 @@ class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
 
     num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
-    nom_gene = models.CharField(max_length=50)
     espece = models.CharField(max_length=50)
     type_adn = models.CharField(choices=DNA_TYPE,default='chromosome',max_length=10)
     sequence = models.TextField()
     longueur = models.PositiveIntegerField()
-    description = models.CharField(max_length=1000)
   
 
 class SequenceInfo(models.Model):
