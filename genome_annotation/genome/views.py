@@ -303,22 +303,28 @@ def formulaire_genome(request):
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
     
 def view_sequence(request): 
+    ## Visualisation de la séquence du génome + les gènes associés
     # Récupération de la séquence depuis le numéro accession fourni par l'url
     if request.method == "GET":
         numacc = request.GET.get('numacc')
         genome = Genome.objects.get(num_accession=numacc)
         sequence = genome.sequence
+        genes = SequenceInfo.objects.filter(num_accession=numacc)
         # Bouton pour télécharger la séquence en .txt
         if request.GET.get('download'):
                 response = HttpResponse(genome.sequence, content_type='text/plain')
                 response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(genome.num_accession)
                 return response
-        return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'], 'sequence': sequence, 'numacc': numacc})
-        
+        return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'],
+        'numacc': numacc,
+        'sequence': sequence,
+        'genes': genes})
+
 def view_genesequence(request):
     if request.method == "GET":
         seqid = request.GET.get('seqid')
         gene = SequenceInfo.objects.get(seq_id=seqid)
+        nom = gene.seq_name
         sequence_cds = gene.seq_cds
         sequence_pep = gene.seq_pep
         download_type = request.GET.get('download')
@@ -331,6 +337,7 @@ def view_genesequence(request):
                 response['Content-Disposition'] = 'attachment; filename="{}_pep.txt"'.format(gene.seq_id)
                 return response
         return render(request,"genome/view_genesequence.html",{'css_files': ['view_seq.css'],
+        'nom':nom,
         'sequence_cds': sequence_cds,
         'sequence_pep': sequence_pep,
         'seqid': seqid})
