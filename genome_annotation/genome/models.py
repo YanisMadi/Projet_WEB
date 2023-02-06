@@ -105,6 +105,7 @@ class UserManager(BaseUserManager):
 
 class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
+    ANNOTATION = [('oui','annoté'),('non,','non annoté')]
 
     num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
     nom_gene = models.CharField(max_length=50)
@@ -114,12 +115,14 @@ class Genome(models.Model):
     sequence = models.TextField()
     longueur = models.PositiveIntegerField()
     description = models.CharField(max_length=1000)
+    annotated_genome = models.CharField(choices=ANNOTATION, default='non annoté',max_length=10)
   
 
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
     STRAND_TYPE = [('backward','-1'),('forward','1')]
+    ANNOTATION = [('oui','annoté'),('non,','non annoté')]
     
     num_accession = models.CharField(max_length=30) # genome_id
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
@@ -136,6 +139,7 @@ class SequenceInfo(models.Model):
     longueur = models.IntegerField()
     strand = models.TextField(choices=STRAND_TYPE,default='forward')
     description = models.TextField()
+    annotated_state = models.CharField(choices=ANNOTATION, default='non annoté',max_length=10)
 
 
 class Annotations(models.Model):

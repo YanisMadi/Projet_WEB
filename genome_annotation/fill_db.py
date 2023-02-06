@@ -45,7 +45,8 @@ for file in data :
                 else : 
                     SequenceInfo(seq_id = gene_id ,seq_name =gene_name, seq_biotype=gene_biotype,
                             fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, cds = True, strand =sens ).save(force_insert= True) 
+                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, cds = True, strand =sens,
+                            annotated_state = "annoté" ).save(force_insert= True) 
 
         elif 'pep' in file :
             #on parse le fichier fasta
@@ -66,15 +67,17 @@ for file in data :
                 
                     SequenceInfo(seq_id = gene_id ,seq_name =gene_name ,seq_biotype=gene_biotype,
                             fonction = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True, strand =sens ).save(force_insert= True)
+                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True, strand =sens,
+                             annotated_state = "annoté").save(force_insert= True)
 
         else :
             #print('g')
-            #pour le génome
+            
             liSeq_g = ps.parsing_genome(file)
             for i in range(len(liSeq_g)) :
                 genome_id, genome_type, specy, seq, len_seq = liSeq_g[i]
-                Genome(num_accession = genome_id, espece = specy, type_adn = genome_type, sequence = seq, longueur = len_seq).save(force_insert= True)
+                Genome(num_accession = genome_id, espece = specy, type_adn = genome_type, 
+                       sequence = seq, longueur = len_seq, annotated_genome = "annoté").save(force_insert= True)
                
 
     #si c'est un nouveau
@@ -95,9 +98,10 @@ for file in data :
                 else : 
                 
                     SequenceInfo(seq_id = gene_id, seq_start= start, seq_end = end, 
-                            num_accession=genome_id, type_adn=genome_type, seq_cds = seq, longueur = seq_length, cds = True).save(force_insert= True)
+                            num_accession=genome_id, type_adn=genome_type, seq_cds = seq, 
+                            longueur = seq_length, cds = True, annotated_state = "non annoté").save(force_insert= True)
 
-        if 'pep' in file :
+        elif 'pep' in file :
             #print('pep')
             liSeq_new = ps.parsing_new(file) 
             for i in range(len(liSeq_new)) : 
@@ -111,7 +115,17 @@ for file in data :
             
                     SequenceInfo(seq_id = gene_id, seq_start= start, seq_end = end, 
                             num_accession=genome_id, type_adn=genome_type, seq_pep = seq, longueur = seq_length,
-                            pep = True).save(force_insert= True)
+                            pep = True, annotated_state = "non annoté").save(force_insert= True)
+
+
+        else : 
+
+            liSeq_g = ps.parsing_genome(file)
+            for i in range(len(liSeq_g)) :
+                genome_id, genome_type, specy, seq, len_seq = liSeq_g[i]
+                Genome(num_accession = genome_id, espece = specy, type_adn = genome_type, 
+                    sequence = seq, longueur = len_seq, annotated_genome = "non annoté").save(force_insert= True)
+                
 
     
     
