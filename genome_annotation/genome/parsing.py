@@ -65,7 +65,7 @@ def parsing_coding(fasta_file) :
             gene_type = infoline[0].split(" ")[1] #cds, pep, dna
             sens = infoline[5][0:2]
             gene_name = infoline[6].split(" ")[0]
-            gene_biotype = infoline[8].split(" ")[0]
+            gene_biotype = infoline[8].split(" ")[0].replace("_"," ")
             description = infoline[-1].strip("\n")#fonction
             start = infoline[3]
             end = infoline[4]
