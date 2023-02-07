@@ -319,7 +319,7 @@ def view_sequence(request):
     # Récupération de la séquence depuis le numéro accession fourni par l'url
     if request.method == "GET":
         numacc = request.GET.get('numacc')
-        genome = Genome.objects.get(num_accession=numacc,annotated_genome='annoté')
+        genome = Genome.objects.get(num_accession=numacc)
         sequence = genome.sequence
         genes = SequenceInfo.objects.filter(num_accession=numacc)
         # Bouton pour télécharger la séquence en .txt
@@ -336,7 +336,7 @@ def view_genesequence(request):
     ## Genes
     if request.method == "GET":
         seqid = request.GET.get('seqid')
-        gene = SequenceInfo.objects.get(seq_id=seqid,annotated_state='annoté')
+        gene = SequenceInfo.objects.get(seq_id=seqid)
         nom = gene.seq_name
         sequence_cds = gene.seq_cds
         sequence_pep = gene.seq_pep
@@ -492,7 +492,7 @@ def extract_data(request):
         seq_id = request.POST.get('seq_id')
         seq_name = request.POST.get('seq_name')
         seq_biotype = request.POST.get('seq_biotype')
-        fonction = request.POST.get('fonction')
+        description = request.POST.get('description')
         annotated_state = 'annoté'
 
         data = SequenceInfo.objects.all()
@@ -504,8 +504,8 @@ def extract_data(request):
             data = data.filter(seq_name=seq_name)
         if seq_biotype:
             data = data.filter(seq_biotype=seq_biotype)
-        if fonction:
-            data = data.filter(fonction=fonction)
+        if description:
+            data = data.filter(description=description)
         if annotated_state:
             data = data.filter(annotated_state=annotated_state)
 
