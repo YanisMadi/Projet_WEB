@@ -25,5 +25,6 @@ urlpatterns = [
     path('annotations_attrib/', views.annotations, name = 'annotations_attrib'),
     path('formulaire_annotation/<int:annotation_id>/', views.formulaire_annotation, name = 'formulaire_annotation'),
     path('success/', views.formulaire_annotation, name = 'success'),
+    path('extract_data/', views.extract_data, name = 'extract_data'),
 ]
 

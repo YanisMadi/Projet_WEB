@@ -481,3 +481,32 @@ def formulaire_annotation(request, annotation_id):
         message = "L'annotation pour la séquence '{}' a bien été enregistrée. Un validateur va analyser cette anotations.".format(annot.sequence_id.seq_id)
         context = {'message': message}
         return render(request,"genome/success.html", context)
+
+## Extract data
+def extract_data(request):
+    if request.method == 'GET':
+        return render(request, 'search_sequence_info.html')
+    
+    if request.method == 'POST':
+        type_adn = request.POST.get('type_adn')
+        seq_id = request.POST.get('seq_id')
+        seq_name = request.POST.get('seq_name')
+        seq_biotype = request.POST.get('seq_biotype')
+        fonction = request.POST.get('fonction')
+        annotated_state = 'annoté'
+
+        data = SequenceInfo.objects.all()
+        if type_adn:
+            data = data.filter(type_adn=type_adn)
+        if seq_id:
+            data = data.filter(seq_id=seq_id)
+        if seq_name:
+            data = data.filter(seq_name=seq_name)
+        if seq_biotype:
+            data = data.filter(seq_biotype=seq_biotype)
+        if fonction:
+            data = data.filter(fonction=fonction)
+        if annotated_state:
+            data = data.filter(annotated_state=annotated_state)
+
+        return render(request, 'data_search_result.html', {'data': data})
