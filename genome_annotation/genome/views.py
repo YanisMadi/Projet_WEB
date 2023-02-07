@@ -398,18 +398,21 @@ def blast_view(request):
 
         if sequence:
             if seq_type == "pep":
+                # On effectre la requête BLAST pour une recherche protéique
                 sequence = sequence.seq_pep
+                blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
             elif seq_type == "cds":
                 sequence = sequence.seq_cds
+                # On effectre la requête BLAST pour une recherche nucléotidique
+                blast_result = NCBIWWW.qblast("blastn", "nr", sequence)
             
-            # Effectuer la requête BLAST
-            blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
-            #print(blast_result)
+
             
-            # Analyser les résultats BLAST
+            #On parse le fichier xml
             blast_records = NCBIXML.parse(blast_result)
-            #print(blast_records)
             alignments = []
+
+            #on stocke les infos importantes 
             alignments = [{'hit_id': alignment.hit_id,
                'hit_def': alignment.hit_def,
                'score': hsp.score,
@@ -420,12 +423,15 @@ def blast_view(request):
               for hsp in alignment.hsps]
                 
 
+            # on retourne les résultats dans notre fichier html
             return render(request, 'genome/results.html', {'results': alignments})
         else:
             return HttpResponse('Aucune séquence trouvée avec l\'ID: ' + seq_id)
     else:
         
         return render(request, 'genome/blast.html', {'sequences': sequences})
+
+        
 ## Annotations
 # Rôles validateur et annotateur
 def a_v_role_required(user):
