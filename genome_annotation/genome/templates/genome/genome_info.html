@@ -31,33 +31,38 @@
   <div class ="container">
   {% block content %}
     <h1>Informations sur les génomes</h1>
-    <table>
+    <table name="Mytable">
       <thead>
         <tr>
           <th>Numéro d'accès</th>
-          <th>Nom du génome</th>
           <th>Espèce</th>
-          <th>Souche</th>
           <th>Séquence</th>
           <th>Longueur de la séquence</th>
-          <th>Description</th>
           <th>Type d'ADN</th>
         </tr>
       </thead>
       <tbody>
         {% for genome in genomes %}
+        <script>
+          var num = '{{genome.num_accession}}';
+        </script>
+
           <tr>
             <td>{{ genome.num_accession }}</td>
-            <td>{{ genome.nom_gene }}</td>
             <td>{{ genome.espece }}</td>
-            <td>{{ genome.souche }}</td>
-            <td>{{ genome.sequence_seq }}</td>
-            <td>{{ genome.longueur_seq }}</td>
-            <td>{{ genome.description }}</td>
-            <td>{{ genome.adn_type }}</td>
+            <td>
+              <a href="view_sequence/?numacc="
+              onclick="location.href=this.href+num;return false">Afficher la séquence</a>
+            </td>
+            <td>{{ genome.longueur }}</td>
+            <td>{{ genome.type_adn }}</td>
           </tr>
         {% endfor %}
       </tbody>
+      
     </table>
   {% endblock %}
   </div>
+
+  
+</body>

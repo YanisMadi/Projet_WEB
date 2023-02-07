@@ -252,6 +252,7 @@ def show_sequences(request):
 
 # Pour chercher un génome ou un gène / une protéine dans la base de données du site
 @user_passes_test(role_required, login_url='/login/')
+
 def formulaire_genome(request):
     if request.method == 'GET':
         return render(request, 'genome/formulaire.html', {
@@ -259,17 +260,16 @@ def formulaire_genome(request):
         })
     elif request.method == 'POST':
         accessionnb = request.POST.get('accessionnb')
-        espece = request.POST.get('espèce')
+        espece = request.POST.get('espece')
         souche = request.POST.get('souche')
         taille_seq = request.POST.get('taille_seq')
         idsequence = request.POST.get('idsequence')
-        adn_type = request.POST.get('type_adn')
+        type_adn = request.POST.get('type_adn')
         seq_start = request.POST.get('seq_start')
         seq_end = request.POST.get('seq_end')
-        Brin = request.POST.get('Brin')
+        strand = request.POST.get('strand')
         seq = request.POST.get('sequence')
         seq_taille = request.POST.get('seq_taille')
-        geneid = request.POST.get('geneid')
         gene_biotype = request.POST.get('gene_biotype')
         output_type = request.POST.get('output_type')
         if output_type == 'genome':
@@ -282,9 +282,9 @@ def formulaire_genome(request):
                 query_params['souche'] = souche
             if taille_seq:
                 query_params['longueur'] = taille_seq
-            if adn_type:
-                query_params['type_adn'] = adn_type
-            if adn_type:
+            if type_adn:
+                query_params['type_adn'] = type_adn
+            if seq:
                 query_params['sequence'] = seq
             genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
@@ -298,8 +298,10 @@ def formulaire_genome(request):
                 query_params['seq_start'] = seq_start
             if seq_end:
                 query_params['seq_end'] = seq_end
-            if Brin != "both":
-                query_params['strand'] = Brin
+            if strand :
+                query_params['strand'] = strand
+            if type_adn:
+                query_params['type_adn'] = type_adn
             if seq:
                 query_params['sequence'] = seq
             if seq_taille:
@@ -309,7 +311,47 @@ def formulaire_genome(request):
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
+            
+def view_sequence(request): 
+    ## Visualisation de la séquence du génome + les gènes associés
+    # Récupération de la séquence depuis le numéro accession fourni par l'url
+    if request.method == "GET":
+        numacc = request.GET.get('numacc')
+        genome = Genome.objects.get(num_accession=numacc)
+        sequence = genome.sequence
+        genes = SequenceInfo.objects.filter(num_accession=numacc)
+        # Bouton pour télécharger la séquence en .txt
+        if request.GET.get('download'):
+                response = HttpResponse(genome.sequence, content_type='text/plain')
+                response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(genome.num_accession)
+                return response
+        return render(request,"genome/view_sequence.html",{'css_files': ['view_seq.css'],
+        'numacc': numacc,
+        'sequence': sequence,
+        'genes': genes})
 
+def view_genesequence(request):
+    if request.method == "GET":
+        seqid = request.GET.get('seqid')
+        gene = SequenceInfo.objects.get(seq_id=seqid)
+        nom = gene.seq_name
+        sequence_cds = gene.seq_cds
+        sequence_pep = gene.seq_pep
+        download_type = request.GET.get('download')
+        if download_type == 'cds':
+                response = HttpResponse(sequence_cds, content_type='text/plain')
+                response['Content-Disposition'] = 'attachment; filename="{}_cds.txt"'.format(gene.seq_id)
+                return response
+        elif download_type == 'pep':
+                response = HttpResponse(sequence_pep, content_type='text/plain')
+                response['Content-Disposition'] = 'attachment; filename="{}_pep.txt"'.format(gene.seq_id)
+                return response
+        return render(request,"genome/view_genesequence.html",{'css_files': ['view_seq.css'],
+        'nom':nom,
+        'sequence_cds': sequence_cds,
+        'sequence_pep': sequence_pep,
+        'seqid': seqid})
+        
 ## Page d'attribution d'une séquence à un annotateur
 @user_passes_test(validateur_required, login_url='/login/')
 def assign_annotation(request):
@@ -337,7 +379,6 @@ def assign_annotation(request):
         message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
         context = {'users': User.objects.filter(role__in=['annotateur', 'validateur']),'genomes':Genome.objects.filter(annotated_genome__in=['non annoté']), 'sequences': SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours', 'validé']).filter(annotated_state__in=['non annoté']), 'message': message}
         return render(request, 'genome/assign_annotation.html',context)
-
 
 
 def blast_view(request):
