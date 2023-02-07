@@ -128,7 +128,7 @@ def annotateur_required(user):
 @user_passes_test(annotateur_required, login_url='/login/')
 def annotateur_page(request):
     return render(request, 'genome/annotateur_page.html', {
-        'css_files': ['form.css'],
+        'css_files': ['formulaire.css'],
     })
 
 # Page d'accueil des Validateurs
@@ -140,7 +140,7 @@ def validateur_required(user):
 @user_passes_test(validateur_required, login_url='/login/')
 def validateur_page(request):
     return render(request, 'genome/validateur_page.html', {
-        'css_files': ['form.css'],
+        'css_files': ['formulaire.css'],
     })
 
 # Page d'accueil des Lecteurs
@@ -152,7 +152,7 @@ def lecteur_required(user):
 @user_passes_test(lecteur_required, login_url='/login/')
 def lecteur_page(request):
     return render(request, 'genome/lecteur_page.html', {
-        'css_files': ['form.css'],
+        'css_files': ['formulaire.css'],
     })
 
 # Page de vaidation ou non des annotations
@@ -256,20 +256,19 @@ def show_sequences(request):
 def formulaire_genome(request):
     if request.method == 'GET':
         return render(request, 'genome/formulaire.html', {
-        'css_files': ['form.css'],
+        'css_files': ['formulaire.css'],
         })
     elif request.method == 'POST':
         accessionnb = request.POST.get('accessionnb')
-        espece = request.POST.get('espece')
-        souche = request.POST.get('souche')
-        taille_seq = request.POST.get('taille_seq')
         idsequence = request.POST.get('idsequence')
+        espece = request.POST.get('espece')
+        taille_min = request.POST.get('taille_min')
+        taille_max = request.POST.get('taille_max')
         type_adn = request.POST.get('type_adn')
         seq_start = request.POST.get('seq_start')
         seq_end = request.POST.get('seq_end')
         strand = request.POST.get('strand')
         seq = request.POST.get('sequence')
-        seq_taille = request.POST.get('seq_taille')
         gene_biotype = request.POST.get('gene_biotype')
         output_type = request.POST.get('output_type')
         if output_type == 'genome':
@@ -278,10 +277,10 @@ def formulaire_genome(request):
                 query_params['num_accession'] = accessionnb
             if espece:
                 query_params['espece'] = espece
-            if souche:
-                query_params['souche'] = souche
-            if taille_seq:
-                query_params['longueur'] = taille_seq
+            if taille_min:
+                query_params['longueur__gte'] = taille_min
+            if taille_max:
+                query_params['longueur__lte'] = taille_max
             if type_adn:
                 query_params['type_adn'] = type_adn
             if seq:
@@ -305,8 +304,10 @@ def formulaire_genome(request):
                 query_params['type_adn'] = type_adn
             if seq:
                 query_params['sequence'] = seq
-            if seq_taille:
-                query_params['longueur'] = taille_seq
+            if taille_min:
+                query_params['longueur__gte'] = taille_min
+            if taille_max:
+                query_params['longueur__lte'] = taille_max
             if gene_biotype:
                 query_params['seq_biotype'] = gene_biotype
             query_params['annotated_state'] = 'annoté'
