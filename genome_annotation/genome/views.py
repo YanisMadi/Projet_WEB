@@ -564,6 +564,13 @@ def validate_annotation(request):
                 annot.annotation_status = "validé"
                 annot.comments = request.POST.get("comment-" + str(annot.annot_id))
                 annot.save()
+                """
+                id = annot.sequence_id
+                seq = SequenceInfo.objects.get(seq_id=id)
+                seq.seq_biotype = annot.seq_biotype
+                seq.strand = annot.strand
+                seq.description = annot.description
+                """
                 count_validated += 1
                 send_mail(
                     "Annotation Validée",
