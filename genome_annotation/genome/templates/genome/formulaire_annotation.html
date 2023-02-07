@@ -30,7 +30,6 @@
     </nav>
     
  	<div class ="container">
-    <br><br><br><br>
         <div class="title"> Formulaire d'annotation </div><br>
         <form action="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" method="post">
   {% csrf_token %}
