@@ -21,12 +21,12 @@ from Bio.Blast import NCBIXML
 
 
 
-
 # Page d'accueil du site Web
 def annot_menu(request):
     return render(request, 'genome/annot_menu.html', {
         'css_files': ['home_page.css'],
     })
+
 
 # Page d'inscription au site
 def inscription(request):
@@ -77,6 +77,7 @@ def inscription(request):
         'css_files': ['Inscription.css'],
     })
 
+
 # Page de toutes les annotations en cours
 def annotation_list(request):
     # Récupérer toutes les annotations en attente de validation de génome de la base de données
@@ -85,6 +86,7 @@ def annotation_list(request):
     annotations = Annotations.objects.filter(**query_param)
     # Rendre le template avec le contexte de données
     return render(request, 'genome/annotation_list.html',{'annotations': annotations})
+
 
 # Page de connexion au site 
 def login_view(request):
@@ -114,10 +116,12 @@ def login_view(request):
         'css_files': ['login.css'],
     })
 
+
 # Pour se deconnecter 
 def logout_view(request):
     logout(request)
     return redirect('/')
+
 
 # Page d'accueil des Annotateurs
 def annotateur_required(user):
@@ -125,11 +129,13 @@ def annotateur_required(user):
         return user.role == "annotateur"
     return False
 
+
 @user_passes_test(annotateur_required, login_url='/login/')
 def annotateur_page(request):
     return render(request, 'genome/annotateur_page.html', {
         'css_files': ['form.css'],
     })
+
 
 # Page d'accueil des Validateurs
 def validateur_required(user):
@@ -137,11 +143,13 @@ def validateur_required(user):
         return user.role == "validateur"
     return False
 
+
 @user_passes_test(validateur_required, login_url='/login/')
 def validateur_page(request):
     return render(request, 'genome/validateur_page.html', {
         'css_files': ['form.css'],
     })
+
 
 # Page d'accueil des Lecteurs
 def lecteur_required(user):
@@ -149,11 +157,13 @@ def lecteur_required(user):
         return user.role == "lecteur"
     return False
 
+
 @user_passes_test(lecteur_required, login_url='/login/')
 def lecteur_page(request):
     return render(request, 'genome/lecteur_page.html', {
         'css_files': ['form.css'],
     })
+
 
 # Page de vaidation ou non des annotations
 @user_passes_test(validateur_required, login_url='/login/')
@@ -208,6 +218,7 @@ def role_required(user):
         return user.role in ['validateur', 'annotateur', 'lecteur']
     return False
 
+
 # Page pour accéder aux banques externes
 def get_data_from_ncbi(id_databank):
     url = f'https://api.ncbi.nlm.nih.gov/data/databank/id/{id_databank}'
@@ -217,9 +228,11 @@ def get_data_from_ncbi(id_databank):
     else:
         return None
 
+
 def get_data_from_ensembl(id_databank):
     result = ensembl_rest.sequence_id(id_databank, content_type='application/json')
     return result
+
 
 def get_data_from_uniprot(id_databank):
     url = f'https://www.uniprot.org/uniprot/{id_databank}.json'
@@ -228,7 +241,6 @@ def get_data_from_uniprot(id_databank):
         return response.json()
     else:
         return None
-
 
 
 def show_sequences(request):
@@ -313,7 +325,8 @@ def formulaire_genome(request):
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
-            
+
+
 def view_sequence(request): 
     ## Visualisation de la séquence du génome + les gènes associés
     # Récupération de la séquence depuis le numéro accession fourni par l'url
@@ -331,6 +344,7 @@ def view_sequence(request):
         'numacc': numacc,
         'sequence': sequence,
         'genes': genes})
+
 
 def view_genesequence(request):
     ## Genes
@@ -354,7 +368,8 @@ def view_genesequence(request):
         'sequence_cds': sequence_cds,
         'sequence_pep': sequence_pep,
         'seqid': seqid})
-        
+
+
 ## Page d'attribution d'une séquence à un annotateur
 @user_passes_test(validateur_required, login_url='/login/')
 def assign_annotation(request):
@@ -431,13 +446,14 @@ def blast_view(request):
         
         return render(request, 'genome/blast.html', {'sequences': sequences})
 
-        
+
 ## Annotations
 # Rôles validateur et annotateur
 def a_v_role_required(user):
     if user.is_authenticated:
         return user.role in ['validateur', 'annotateur']
     return False
+
 
 @user_passes_test(a_v_role_required, login_url='/login/')
 def annotations(request):
@@ -454,6 +470,7 @@ def annotations(request):
         else:
             return redirect('login')
 
+
 ## Formulaire de l'annotation
 @user_passes_test(a_v_role_required, login_url='/login/')
 def formulaire_annotation(request, annotation_id):
@@ -464,6 +481,7 @@ def formulaire_annotation(request, annotation_id):
             return render(request,"genome/formulaire_annotation.html", context)
         else:
             return redirect('login')
+
 
 @user_passes_test(a_v_role_required, login_url='/login/')
 def formulaire_annotation(request, annotation_id):
@@ -487,6 +505,7 @@ def formulaire_annotation(request, annotation_id):
         message = "L'annotation pour la séquence '{}' a bien été enregistrée. Un validateur va analyser cette anotations.".format(annot.sequence_id.seq_id)
         context = {'message': message}
         return render(request,"genome/success.html", context)
+
 
 ## Extract data
 def extract_data(request):
