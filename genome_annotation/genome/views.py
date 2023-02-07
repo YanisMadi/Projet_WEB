@@ -401,28 +401,24 @@ def assign_annotation(request):
 
 def blast_view(request):
 
+    #Pour la liste déroulante
     sequences = SequenceInfo.objects.all()
-    #print(sequences)
+
     if request.method == 'POST':
-        
         seq_id = request.POST.get('seq_id')
         seq_type = request.POST.get('type_seq')
-        #print(request.POST)
         sequence = SequenceInfo.objects.filter(seq_id=seq_id).first()
         
-
         if sequence:
             if seq_type == "pep":
-                # On effectre la requête BLAST pour une recherche protéique
+                # On effectue la requête BLAST pour une recherche protéique
                 sequence = sequence.seq_pep
                 blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
             elif seq_type == "cds":
                 sequence = sequence.seq_cds
-                # On effectre la requête BLAST pour une recherche nucléotidique
+                # On effectue la requête BLAST pour une recherche nucléotidique
                 blast_result = NCBIWWW.qblast("blastn", "nr", sequence)
-            
-
-            
+               
             #On parse le fichier xml
             blast_records = NCBIXML.parse(blast_result)
             alignments = []
@@ -437,13 +433,13 @@ def blast_view(request):
               for alignment in blast_record.alignments
               for hsp in alignment.hsps]
                 
-
             # on retourne les résultats dans notre fichier html
             return render(request, 'genome/results.html', {'results': alignments})
+
         else:
             return HttpResponse('Aucune séquence trouvée avec l\'ID: ' + seq_id)
+
     else:
-        
         return render(request, 'genome/blast.html', {'sequences': sequences})
 
 
