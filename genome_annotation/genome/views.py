@@ -233,7 +233,7 @@ def show_sequences(request):
     if request.method == "GET":
         form = DatabaseForm()
         return render(request, "genome/select_database.html", {"form": form})
-    elif request.method == "POST":
+    if request.method == "POST":
         form = DatabaseForm(request.POST)
         if form.is_valid():
             selected_database = form.cleaned_data[
@@ -316,7 +316,7 @@ def formulaire_genome(request):
                 "css_files": ["form.css"],
             },
         )
-    elif request.method == "POST":
+    if request.method == "POST":
         accessionnb = request.POST.get("accessionnb")
         espece = request.POST.get("espece")
         souche = request.POST.get("souche")
