@@ -30,40 +30,25 @@
     </nav>
     
  	<div class ="container">
+        <br><br>
         <div class="title"> Formulaire d'extraction </div><br>
           <form action="{% url 'extract_data' %}" method="post">
             {% csrf_token %}
-            <h3>Rechercher des données annotées</h3>
-            <div class="form-group">
-              <label for="num_accession">Numéro d'accès</label>
-              <input type="text" name="num_accession" id="num_accession" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="type_adn">Type d'ADN</label>
-              <select name="type_adn" id="type_adn" class="form-control">
-                <option value="">Tous</option>
-                <option value="">chromosome</option>
-                <option value="">plasmide</option>
-                {% for type, label in SequenceInfo.DNA_TYPE %}
-                <option value="{{ type }}">{{ label }}</option>
-                {% endfor %}
+            <h3>Choisir une séquence à extraire</h3>
+            <br>
+            <div>
+                <label for="sequence">Séquence :</label>
+                <select id="sequence" name="sequence">
+                  {% for sequence in sequences %}
+                  <option value="{{ sequence.seq_id }}">{{ sequence.seq_id }}</option>
+                  {% endfor %}
                 </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="annotated_state">Etat annoté</label>
-                    <select name="annotated_state" id="annotated_state" class="form-control">
-                      <option value="">Tous</option>
-                      {% for state, label in SequenceInfo.ANNOTATION %}
-                        <option value="{{ state }}">{{ label }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  <input type="submit" value="Rechercher" class="btn btn-primary">
-                </form>
+              </div>
+              <br>
                 <hr>
+                <br>
                 <h3>Champs à inclure dans le fichier extrait</h3>
-                <form action="{% url 'extract_data' %}" method="post">
-                  {% csrf_token %}
+                <br>
                   <table class="table">
                     <thead>
                       <tr>
@@ -77,43 +62,43 @@
                         <td>Génome ID</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="type_adn"></td>
+                        <td><input type="checkbox" name="fields" value="seq_id"></td>
                         <td>Séquence ID</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="type_adn"></td>
                         <td>Type d'adn</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="seq_cds"></td>
                         <td>Séquence CDS</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="seq_pep"></td>
                         <td>Séquence Peptidique</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="seq_biotype"></td>
                         <td>Biotype</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="longueur"></td>
                         <td>Longueur</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="strand"></td>
                         <td>Brin</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="seq_start"></td>
                         <td>Start Position</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="seq_end"></td>
                         <td>End Position</td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td><input type="checkbox" name="fields" value="description"></td>
                         <td>Description</td>
                       </tr>
                       <tr>
@@ -121,6 +106,9 @@
                     </tbody>
                   </table>
                   <input type="submit" value="Exporter" class="btn btn-primary">
+                  <div>
+                    {{ message }}
+                  </div>   
                 </form>
               </div>
              </body>
