@@ -5,19 +5,20 @@ from django.db import models
 from django.contrib.auth.hashers import check_password, make_password
 
 class User(AbstractBaseUser):
-    ROLES = [('admin', 'Admin'), ('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
-    username = models.CharField(max_length=150,unique=True)
+    ROLES = [('lecteur', 'Lecteur'), ('annotateur', 'Annotateur'), ('validateur', 'Validateur')]
+    username = models.CharField(max_length=150,unique=True) 
     email = models.EmailField(primary_key=True, unique=True)
     prenom = models.CharField(max_length=100)
     nom = models.CharField(max_length=100)
     numero_tel = models.IntegerField()
     role = models.TextField(choices=ROLES,default='lecteur')
-    password = models.CharField(null=False,max_length=128)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    last_login = models.DateTimeField(auto_now=True)
-    is_superuser = models.BooleanField(default=False)
-
+    password = models.CharField(null=False,max_length=128) 
+    is_active = models.BooleanField(default=True) 
+    is_staff = models.BooleanField(default=False) ## Admin
+    last_login = models.DateTimeField(auto_now=True) ## Dernière connexion du User enregisté
+    is_superuser = models.BooleanField(default=False) ## Admin
+    has_module_perms = models.BooleanField(default=False) ## Admin
+    is_validated = models.BooleanField(default=False) ## Pour chaque User créé l'admin doit valider
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','password']
@@ -48,7 +49,16 @@ class User(AbstractBaseUser):
     def is_lecteur(self):
         return self.role == 'lecteur'
 
-    
+    @property
+    def is__staff(self):
+        return self.is_staff == True
+
+    def has_module_perms(self, app_label):
+        return self.is_staff
+
+    def has_perm(self, perm, obj=None):
+        return self.is_staff
+
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
         
@@ -74,38 +84,45 @@ class User(AbstractBaseUser):
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, email, numero_tel, password=None, **extra_fields):
+    def create_user(self, username, email, numero_tel, role, password=None, **extra_fields):
         if not email:
             raise ValueError("Les utilisateurs doivent avoir un email")
-        user = self.model(username=username, email=self.normalize_email(email), numero_tel=numero_tel, **extra_fields)
-        user.set_password(password)
+        user = self.model(username=username, email=self.normalize_email(email), numero_tel=numero_tel, role=role, **extra_fields)
+        user.password = User.set_password(password)
+        user.last_login = timezone.now()
         user.save()
         return user
 
-    def create_superuser(self, email, numero_tel, password=None, **extra_fields):
-        user = self.create_user(email, numero_tel, password, **extra_fields)
+    def create_superuser(self, email, numero_tel, role, password=None, **extra_fields):
+        user = self.create_user(email, numero_tel, role, password, **extra_fields)
         user.is_admin = True
         user.save()
         return user
+    
+
+
 
 
 class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
+    ANNOTATION = [('annoté','annoté'),('non annoté,','non annoté')]
 
     num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
     espece = models.CharField(max_length=50)
     type_adn = models.CharField(choices=DNA_TYPE,default='chromosome',max_length=10)
     sequence = models.TextField()
     longueur = models.PositiveIntegerField()
+    annotated_genome = models.CharField(choices=ANNOTATION, default='non annoté',max_length=12)
   
 
 class SequenceInfo(models.Model):
 
-    DNA_TYPE = [('chr', 'Chromosome dna'),('plm', 'Plasmide dna')]
-    STRAND_TYPE = [('backward','-1'),('forward','1')]
+    DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
+    STRAND_TYPE = [('-1','-1'),('1','1'),('n.a.','n.a.')]
+    ANNOTATION = [('annoté','annoté'),('non annoté,','non annoté')]
     
     num_accession = models.CharField(max_length=30) # genome_id
-    type_adn = models.TextField(choices=DNA_TYPE,default=None)
+    type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
     seq_id = models.TextField(primary_key=True, blank=False)
     seq_name = models.CharField(max_length=30)
     cds = models.BooleanField(default=False)
@@ -117,24 +134,23 @@ class SequenceInfo(models.Model):
     seq_cds = models.TextField()
     seq_pep = models.TextField()
     longueur = models.IntegerField()
-    strand = models.TextField(choices=STRAND_TYPE,default='forward')
+    strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
     description = models.TextField()
+    annotated_state = models.CharField(choices=ANNOTATION, default='non annoté',max_length=12)
 
 
 class Annotations(models.Model):
 
     STATUS = [('validé','val'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
+    STRAND_TYPE = [('-1','-1'),('1','1'),('n.a.','n.a.')]
 
-    annot_id = models.IntegerField(primary_key=True, blank=False)
+    annot_id = models.AutoField(primary_key=True)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
     genome_ID = models.ForeignKey(Genome,on_delete=models.CASCADE)
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
-    Biotype = models.CharField(max_length=100)
+    strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
+    seq_biotype = models.CharField(max_length=30)
     comments = models.TextField()
-    annotation_status = models.TextField(choices=STATUS,default='n.a.')
-    gene_id = models.IntegerField()
-    gene_biotype = models.CharField(max_length=100)
-    transcript_biotype = models.CharField(max_length=100)
-    gene_symbol = models.CharField(max_length=100)
+    annotation_status = models.TextField(choices=STATUS,default='attribué')
     description = models.TextField()
 
