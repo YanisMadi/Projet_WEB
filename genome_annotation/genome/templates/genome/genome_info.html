@@ -35,10 +35,10 @@
       <thead>
         <tr>
           <th>Numéro d'accès</th>
-          <th>Espèce</th>
           <th>Séquence</th>
           <th>Longueur de la séquence</th>
           <th>Type d'ADN</th>
+          <th>Espèce</th>
         </tr>
       </thead>
       <tbody>
@@ -49,13 +49,13 @@
 
           <tr>
             <td>{{ genome.num_accession }}</td>
-            <td>{{ genome.espece }}</td>
             <td>
               <a href="view_sequence/?numacc="
               onclick="location.href=this.href+num;return false">Afficher la séquence</a>
             </td>
             <td>{{ genome.longueur }}</td>
             <td>{{ genome.type_adn }}</td>
+            <td>{{ genome.espece }}</td>
           </tr>
         {% endfor %}
       </tbody>
