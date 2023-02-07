@@ -2,9 +2,9 @@
 <html lang="fr" dir="ltr">
   <head>
   <meta charset="utf-8" />
-        <title> Formulaire </title>
+        <title> Formulaire d'extraction </title>
         {% load static %}
-	    <link rel="stylesheet" href="{% static 'formulaire.css' %}">
+	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
   </head>
   <body>
     <!-- Barre de navigation --> 
@@ -30,8 +30,8 @@
     </nav>
     
  	<div class ="container">
-        <div class="title"> Formulaire </div><br>
-          <form action="{% url 'search_sequence_info' %}" method="post">
+        <div class="title"> Formulaire d'extraction </div><br>
+          <form action="{% url 'extract_data' %}" method="post">
             {% csrf_token %}
             <h3>Rechercher des données annotées</h3>
             <div class="form-group">
@@ -42,6 +42,8 @@
               <label for="type_adn">Type d'ADN</label>
               <select name="type_adn" id="type_adn" class="form-control">
                 <option value="">Tous</option>
+                <option value="">chromosome</option>
+                <option value="">plasmide</option>
                 {% for type, label in SequenceInfo.DNA_TYPE %}
                 <option value="{{ type }}">{{ label }}</option>
                 {% endfor %}
@@ -72,16 +74,49 @@
                     <tbody>
                       <tr>
                         <td><input type="checkbox" name="fields" value="num_accession"></td>
-                        <td>Numéro d'accès</td>
+                        <td>Génome ID</td>
                       </tr>
                       <tr>
                         <td><input type="checkbox" name="fields" value="type_adn"></td>
-                        <td>Type d'ADN</td>
+                        <td>Séquence ID</td>
                       </tr>
                       <tr>
                         <td><input type="checkbox" name="fields" value="seq_name"></td>
-                        <td>Nom de séquence</td>
+                        <td>Type d'adn</td>
                       </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Séquence CDS</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Séquence Peptidique</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Biotype</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Longueur</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Brin</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Start Position</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>End Position</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" name="fields" value="seq_name"></td>
+                        <td>Description</td>
+                      </tr>
+                      <tr>
                       <!-- Ajoutez des lignes pour les autres champs -->
                     </tbody>
                   </table>
