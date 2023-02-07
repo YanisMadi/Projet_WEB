@@ -29,62 +29,58 @@
     
  	<div class ="container">
     <br><br>
-        <div class="title"> Formulaire </div><br>
+    <div class="title"> Formulaire </div><br>
 		<form method="post">
       {% csrf_token %}
-            <div class="form-details">
-                <div class = "input-box">
+      <div class="form-details">
+        <div class = "input-box">
+          <strong>Numéro d'accession du génome ou du gène </strong>
+          <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
 
-                <strong>Numéro d'accession du génome ou du gène : </strong>
-		        <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
+          <strong> Espèce </strong>
+          <input type="text" placeholder="Entrer le nom de l'espèce" name="espece"><br><br>
 
-                <strong> Espèces pour la recherche du génome :</strong>
-		        <input type="text" placeholder="Entrer le nom de l'espèce" name="espèce"><br><br>
+          <strong> Taille de la séquence </strong>
+          <input type="text" placeholder="Entrer la taille de la seq" name="taille_seq"><br><br>
 
-                <strong> Souche pour la recherche du génome :</strong>
-		        <input type="text" placeholder="Entrer le nom de la souche" name="souche"><br><br>
-
-                <strong> Taille de la séquence :</strong>
-		        <input type="text" placeholder="Entrer la taille de la seq" name="taille_seq"><br><br>
-
-                <strong> Type d'ADN du génome :</strong>
-                  <select name="Type d'ADN">
+          <strong> Type d'ADN du génome </strong>
+                  <select name="type_adn">
                       <option value="chromosome">Chromosome</option>
                       <option value="plasmide">Plasmide</option>
                   </select><br><br>
-    
-                  <strong>Séquence ID du gène :</strong>
-                  <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>  
 
-                <strong>Start position de la séquence :</strong>
-                <input type="text" placeholder="Entrer la start position" name="seq_start"><br><br>
-    
-                <strong>End position de la séquence :</strong>
-                <input type="text" placeholder="Entrer la end position" name="seq_end"><br><br>
-    
-                <strong> Brin pour le gène :</strong>
-                  <select name="Brin">
-                      <option value="both">Direct</option>
-                      <option value="backward">Indirect</option>
-                      <option value="forward">Direct et Indirect</option>
-                  </select><br><br>
+          <strong>Séquence ID du gène </strong>
+          <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>  
 
-                <strong>Biotype du gène :</strong>
-                <input type="text" placeholder="Entrer le gene biotype" name="gene_biotype"><br><br>
+          <strong>Start position de la séquence </strong>
+          <input type="text" placeholder="Entrer la start position" name="seq_start"><br><br>
 
-                <strong>Séquence du génome ou du gène :</strong><br>
-    	        <textarea id="textarea" rows="10" cols="55" name="seq" placeholder = "Entrer la séquence" minlength="4"></textarea>
-              
-                <strong>Type de sortie :</strong>
-                  <select name="output_type">
-                      <option value="genome">Génome</option>
-                      <option value="gene_protein">Gène/protéine</option>
-                  </select><br><br>
+          <strong>End position de la séquence </strong>
+          <input type="text" placeholder="Entrer la end position" name="seq_end"><br><br>
 
-                <div class="button">
-                  <input type="submit" value="Recherche"><br> 
-                </div>
-            </div>  
+          <strong> Brin pour le gène </strong>
+          <select name="strand">
+            <option value="">--Select--</option>
+            <option value="forward">Direct</option>
+            <option value="-1">Indirect</option>
+          </select><br><br>
+
+          <strong>Biotype du gène </strong>
+          <input type="text" placeholder="Entrer le gene biotype" name="gene_biotype"><br><br>
+
+          <strong>Séquence du génome ou du gène </strong><br>
+          <textarea id="textarea" rows="10" cols="55" name="seq" placeholder = "Entrer la séquence" minlength="4"></textarea>
+        
+          <strong>Type de sortie </strong>
+          <select name="output_type">
+            <option value="genome">Génome</option>
+            <option value="gene_protein">Gène/protéine</option>
+          </select><br><br>
+
+          <div class="button">
+            <input type="submit" value="Recherche"><br> 
+          </div>
+    </div>  
 		</form>
 	</div>
   </body>

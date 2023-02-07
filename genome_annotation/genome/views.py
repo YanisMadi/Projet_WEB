@@ -249,17 +249,16 @@ def formulaire_genome(request):
         })
     if request.method == 'POST':
         accessionnb = request.POST.get('accessionnb')
-        espece = request.POST.get('espèce')
+        espece = request.POST.get('espece')
         souche = request.POST.get('souche')
         taille_seq = request.POST.get('taille_seq')
         idsequence = request.POST.get('idsequence')
-        adn_type = request.POST.get('type_adn')
+        type_adn = request.POST.get('type_adn')
         seq_start = request.POST.get('seq_start')
         seq_end = request.POST.get('seq_end')
-        Brin = request.POST.get('Brin')
+        strand = request.POST.get('strand')
         seq = request.POST.get('sequence')
         seq_taille = request.POST.get('seq_taille')
-        geneid = request.POST.get('geneid')
         gene_biotype = request.POST.get('gene_biotype')
         output_type = request.POST.get('output_type')
         if output_type == 'genome':
@@ -272,9 +271,9 @@ def formulaire_genome(request):
                 query_params['souche'] = souche
             if taille_seq:
                 query_params['longueur'] = taille_seq
-            if adn_type:
-                query_params['type_adn'] = adn_type
-            if adn_type:
+            if type_adn:
+                query_params['type_adn'] = type_adn
+            if seq:
                 query_params['sequence'] = seq
             print(query_params)
             genomes = Genome.objects.filter(**query_params)
@@ -289,8 +288,10 @@ def formulaire_genome(request):
                 query_params['seq_start'] = seq_start
             if seq_end:
                 query_params['seq_end'] = seq_end
-            #if Brin != "both":
-            #    query_params['strand'] = Brin
+            if strand :
+                query_params['strand'] = strand
+            if type_adn:
+                query_params['type_adn'] = type_adn
             if seq:
                 query_params['sequence'] = seq
             if seq_taille:

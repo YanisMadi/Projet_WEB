@@ -111,7 +111,7 @@ nav.sticky .nav-links li a:hover{
     margin-bottom: 20px; /* add margin to separate the two containers */
   }
 
-  .btn{
+.btn{
     border-radius: 40px;
     font-size: 15px;
     font-weight: 60;

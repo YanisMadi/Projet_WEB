@@ -2,11 +2,12 @@
 <html lang="fr" dir="ltr">
   <head>
   <meta charset="utf-8" />
-        <title> Formulaire </title>
-        {% load static %}
-	    <link rel="stylesheet" href="{% static 'gene_info.css' %}">
+    <title> Formulaire </title>
+    {% load static %}
+	  <link rel="stylesheet" href="{% static 'gene_info.css' %}">
   </head>
- <body>
+
+  <body>
   <nav>
     <div class="nav-content">
       <div class="logo">
@@ -27,12 +28,13 @@
   </nav>
 
 <div class ="container">
-{% block content %}
+  {% block content %}
   <h1>Informations sur les gènes et protéines</h1>
   <table>
     <thead>
       <tr>
         <th>ID de séquence</th>
+        <th>Genome</th>
         <th>Nom de séquence</th>
         <th>Fonction</th>
         <th>Séquence</th>
@@ -51,6 +53,7 @@
       </script>
         <tr>
           <td>{{ sequence.seq_id }}</td>
+          <td>{{ sequence.num_accession }}</td>
           <td>{{ sequence.seq_name }}</td>
           <td>{{ sequence.fonction }}</td>
           <td><a href="view_genesequence/?seqid="
