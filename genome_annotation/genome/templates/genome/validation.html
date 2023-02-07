@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
         <title> Valider l'annotation </title>
         {% load static %}
-	    <link rel="stylesheet" href="{% static 'validation.css' %}">
+	    <link rel="stylesheet" href="{% static 'gene_info.css' %}">
   </head>
  <body>
   <nav>
@@ -14,7 +14,9 @@
       </div>
       <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
       <ul class="nav-links">
-        {% if user.is_annotateur %}
+        {% if user.is__staff %}
+        <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+        {% elif user.is_annotateur %}
           <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
         {% elif user.is_validateur %}
           <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
@@ -27,6 +29,7 @@
   </nav>
 
 <body>
+  <div class ="container">
     <form method="post">
         {% csrf_token %}
         <table>
@@ -36,14 +39,11 @@
                     <th>Email</th>
                     <th>Genome ID</th>
                     <th>Sequence ID</th>
+                    <th>Brin</th>
                     <th>Biotype</th>
-                    <th>Gene ID</th>
-                    <th>Gene Biotype</th>
-                    <th>Transcript Biotype</th>
-                    <th>Gene Symbol</th>
                     <th>Description</th>
-                    <th>Validate/Reject</th>
-                    <th>Comment</th>
+                    <th>Valider/Rejeter</th>
+                    <th>Commentaire</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,26 +51,24 @@
                 <tr>
                     <td>{{ annot.annot_id }}</td>
                     <td>{{ annot.email_annot }}</td>
-                    <td>{{ annot.genome_ID }}</td>
-                    <td>{{ annot.sequence_id }}</td>
-                    <td>{{ annot.Biotype }}</td>
-                    <td>{{ annot.gene_id }}</td>
-                    <td>{{ annot.gene_biotype }}</td>
-                    <td>{{ annot.transcript_biotype }}</td>
-                    <td>{{ annot.gene_symbol}}</td>
+                    <td>{{ annot.genome_ID.num_accession }}</td>
+                    <td>{{ annot.sequence_id.seq_id }}</td>
+                    <td>{{ annot.strand }}</td>
+                    <td>{{ annot.seq_biotype }}</td>
                     <td>{{ annot.description}}</td>
                     <td>
-                        <select name="validate_reject">
-                            <option value="validate">Validate</option>
-                            <option value="reject">Reject</option>
+                        <select name="validate_reject-{{ annot.annot_id }}">
+                            <option value="validate">Valider</option>
+                            <option value="reject">Rejeter</option>
                         </select>
                     </td>
-                    <td><textarea name="comment"></textarea></td>
+                    <td><textarea name="comment-{{ annot.annot_id }}"></textarea></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         <input type="submit" value="Submit">
     </form>
+  </div>
 </body>
 </html>

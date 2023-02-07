@@ -15,7 +15,9 @@
       </div>
       <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
       <ul class="nav-links">
-        {% if user.is_annotateur %}
+        {% if user.is__staff %}
+        <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+        {% elif user.is_annotateur %}
           <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
         {% elif user.is_validateur %}
           <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>

@@ -14,7 +14,9 @@
       </div>
       <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
       <ul class="nav-links">
-        {% if user.is_annotateur %}
+        {% if user.is__staff %}
+        <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+        {% elif user.is_annotateur %}
           <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
         {% elif user.is_validateur %}
           <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
@@ -28,7 +30,7 @@
 
   <div class ="container">
     {% block content %}
-      <h1>Annotations en cours</h1>
+      <h1>Annotations en cours de validation</h1>
       <table>
         <thead>
           <tr>
@@ -37,12 +39,6 @@
             <th>ID génome</th>
             <th>ID séquence</th>
             <th>Biotype</th>
-            <th>Comments</th>
-            <th>ID gène</th>
-            <th>Gène Biotype</th>
-            <th>Transcript Biotype</th>
-            <th>Gène symbol</th>
-            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -50,14 +46,9 @@
             <tr>
               <td>{{ annotation.annot_id }}</td>
               <td>{{ annotation.email_annot }}</td>
-              <td>{{ annotation.genome_ID }}</td>
-              <td>{{ annotation.sequence_id }}</td>
-              <td>{{ annotation.Biotype }}</td>
-              <td>{{ annotation.comments }}</td>
-              <td>{{ annotation.gene_id }}</td>
-              <td>{{ annotation.gene_biotype }}</td>
-              <td>{{ annotation.transcript_biotype }}</td>
-              <td>{{ annotation.gene_symbol }}</td>
+              <td>{{ annotation.genome_ID.num_accession }}</td>
+              <td>{{ annotation.sequence_id.seq_id }}</td>
+              <td>{{ annotation.sequence_id.biotype }}</td>
             </tr>
           {% endfor %}
         </tbody>

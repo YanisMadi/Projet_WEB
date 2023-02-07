@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Annotations, User, Genome, SequenceInfo
 from .forms.inscription_form import InscriptionForm
 from .forms.database_form import DatabaseForm
@@ -16,6 +16,9 @@ import urllib.request
 import requests
 import ensembl_rest
 import json
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
+
 
 
 
@@ -78,7 +81,7 @@ def inscription(request):
 def annotation_list(request):
     # Récupérer toutes les annotations en attente de validation de génome de la base de données
     query_param={}
-    query_param['annotation_status'] = 'en attente'
+    query_param['annotation_status'] = 'en cours'
     annotations = Annotations.objects.filter(**query_param)
     # Rendre le template avec le contexte de données
     return render(request, 'genome/annotation_list.html',{'annotations': annotations})
@@ -89,20 +92,24 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            if user.role == "annotateur":
-                # Redirection vers une page pour les annotateurs
-                return redirect('annotateur_page')
-            elif user.role == "lecteur":
-                # Redirection vers une page pour les lecteurs
-                return redirect('lecteur_page')
-            elif user.role == "validateur":
-                # Redirection vers une page pour les validateurs
-                return redirect('validateur_page')
+        if user is not None :
+            if user.is_validated == True:
+                login(request, user)
+                if user.role == "annotateur":
+                    # Redirection vers une page pour les annotateurs
+                    return redirect('annotateur_page')
+                elif user.role == "lecteur":
+                    # Redirection vers une page pour les lecteurs
+                    return redirect('lecteur_page')
+                elif user.role == "validateur":
+                    # Redirection vers une page pour les validateurs
+                    return redirect('validateur_page')
+            elif user.is_validated == False:
+                # Message d'erreur compte en cours de validation
+                messages.error(request, "Ton compte est en attente de validation par l'admin.")
         else:
-            # Message d'erreur si les identifiants sont incorrects
-            messages.error(request, "Email ou mot de passe incorrect.")
+            # Message d'erreur Email ou mot de passe incorect
+                messages.error(request, "Email ou mot de passe incorect.")
     return render(request, 'genome/login.html', {
         'css_files': ['login.css'],
     })
@@ -152,43 +159,47 @@ def lecteur_page(request):
 @user_passes_test(validateur_required, login_url='/login/')
 def validate_annotation(request):
     if request.method == "GET":
-        annotations = Annotations.objects.filter(annotation_status='en attente')
+        annotations = Annotations.objects.filter(annotation_status='en cours')
         return render(request, 'genome/validation.html', {'annotations': annotations})
-    if request.method == "POST":
+    elif request.method == "POST":
         count_validated = 0
         count_rejected = 0
-        for annot in Annotations.objects.filter(annotation_status='en attente'):
-            if request.POST.get('validate_reject_' + str(annot.annot_id)) == 'validate':
-                annot.annotation_status = 'val'
-                annot.comments = request.POST.get('comment_' + str(annot.annot_id))
+        for annot in Annotations.objects.filter(annotation_status='en cours'):
+            if request.POST.get('validate_reject-' + str(annot.annot_id)) == 'validate':
+                annot.annotation_status = 'validé'
+                annot.comments = request.POST.get('comment-' + str(annot.annot_id))
                 annot.save()
                 count_validated += 1
                 send_mail(
                     'Annotation Validée',
-                    'Votre annotation ID ('+str(annot.annot_id)+') a été validée avec le commentaire suivant : ' + annot.comments,
+                    'Votre annotation de la séquence ('+str(annot.sequence_id.seq_id)+') a été validée avec le commentaire suivant : ' + annot.comments,
                     'cypsgenome@gmail.com',
                     [annot.email_annot],
                     fail_silently=False,
                 )
-            elif request.POST.get('validate_reject_' + str(annot.annot_id)) == 'reject':
-                annot.annotation_status = 'rej'
-                annot.comments = request.POST.get('comment_' + str(annot.annot_id))
+            elif request.POST.get('validate_reject-' + str(annot.annot_id)) == 'reject':
+                annot.annotation_status = 'rejeté'
+                annot.comments = request.POST.get('comment-' + str(annot.annot_id))
                 annot.save()
                 count_rejected += 1
                 send_mail(
                     'Annotation Rejetée',
-                    'Votre annotation ID ('+str(annot.annot_id)+') a été rejetée avec le commentaire suivant : ' + annot.comments,
+                    'Votre annotation ID ('+str(annot.sequence_id.seq_id)+') a été rejetée avec le commentaire suivant : ' + annot.comments,
                     'cypsgenome@gmail.com',
                     [annot.email_annot],
                     fail_silently=False,
                 )
         message = ""
-        if count_validated > 0:
+        if count_validated == 1:
+            message += str(count_validated) + " annotation a été validée. "
+        if count_rejected == 1:
+            message += str(count_rejected) + " annotation a été rejetée. "
+        if count_validated > 1:
             message += str(count_validated) + " annotations ont été validées. "
-        if count_rejected > 0:
+        if count_rejected > 1:
             message += str(count_rejected) + " annotations ont été rejetées. "
-
-        return HttpResponse(message)
+        context = {'message': message}
+        return render(request,"genome/success.html", context)
 
 
 # Les 3 rôles
@@ -224,7 +235,7 @@ def show_sequences(request):
     if request.method == "GET":
         form = DatabaseForm()
         return render(request, 'genome/select_database.html', {'form': form})
-    if request.method == 'POST':
+    elif request.method == 'POST':
         form = DatabaseForm(request.POST)
         if form.is_valid():
             selected_database = form.cleaned_data['Choisir_une_banque_de_données_externe']
@@ -247,7 +258,7 @@ def formulaire_genome(request):
         return render(request, 'genome/formulaire.html', {
         'css_files': ['form.css'],
         })
-    if request.method == 'POST':
+    elif request.method == 'POST':
         accessionnb = request.POST.get('accessionnb')
         espece = request.POST.get('espece')
         souche = request.POST.get('souche')
@@ -275,7 +286,6 @@ def formulaire_genome(request):
                 query_params['type_adn'] = type_adn
             if seq:
                 query_params['sequence'] = seq
-            print(query_params)
             genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
         elif output_type == 'gene_protein':
@@ -300,9 +310,8 @@ def formulaire_genome(request):
                 query_params['seq_biotype'] = gene_biotype
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
-            #sequences = SequenceInfo.objects.filter()
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
-    
+            
 def view_sequence(request): 
     ## Visualisation de la séquence du génome + les gènes associés
     # Récupération de la séquence depuis le numéro accession fourni par l'url
@@ -342,39 +351,133 @@ def view_genesequence(request):
         'sequence_cds': sequence_cds,
         'sequence_pep': sequence_pep,
         'seqid': seqid})
+        
+## Page d'attribution d'une séquence à un annotateur
+@user_passes_test(validateur_required, login_url='/login/')
+def assign_annotation(request):
+    if request.method == 'GET':
+        users = User.objects.filter(role__in=['annotateur', 'validateur'])
+        genomes = Genome.objects.filter(annotated_genome__in=['non annoté'])
+        sequences = SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours', 'validé']).filter(annotated_state__in=['non annoté'])
+        context = {'users': users, 'genomes': genomes, 'sequences': sequences, 'message': ''}
+        return render(request, 'genome/assign_annotation.html', context)
 
-# Admin 
-def admin_required(user):
-    return user.is_staff
-
-@user_passes_test(admin_required)
-def manage_users(request):
-    users = User.objects.all()
-    context = {'users': users}
-    return render(request, 'genome/manage_users.html', context)
-
-@user_passes_test(admin_required)
-def create_user(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        role = request.POST.get('role')
-        user = User.objects.create_user(email=email, password=password, role=role)
-        user.save()
-        return redirect('manage_users')
-    return render(request, 'genome/create_user.html')
+        email = request.POST.get('user')
+        sequence_id = request.POST.get('sequence')
+        user = User.objects.get(email=email)
+        sequence = SequenceInfo.objects.get(seq_id=sequence_id)
+        genome = Genome.objects.get(num_accession=sequence.num_accession)
+        annotation = Annotations.objects.create(email_annot=user, sequence_id=sequence, genome_ID=genome, annotation_status='attribué')
+        annotation.save()
+        send_mail("Attribution d'une séquence à annoter",
+                    'Vous avez une nouvelle séquence à annoter ! Son ID est : ('+sequence_id+')',
+                    'cypsagenome@gmail.com',
+                    [email],
+                    fail_silently=False,
+                )
+        message = "La séquence '{}' a été attribuée à '{}'".format(sequence_id, user.email)
+        context = {'users': User.objects.filter(role__in=['annotateur', 'validateur']),'genomes':Genome.objects.filter(annotated_genome__in=['non annoté']), 'sequences': SequenceInfo.objects.exclude(annotations__annotation_status__in=['attribué', 'en cours', 'validé']).filter(annotated_state__in=['non annoté']), 'message': message}
+        return render(request, 'genome/assign_annotation.html',context)
 
-@user_passes_test(admin_required)
-def delete_user(request, user_id):
-    User.objects.get(id=user_id).delete()
-    return redirect('manage_users')
 
-@user_passes_test(admin_required)
-def assign_role(request, user_id):
+def blast_view(request):
+
+    sequences = SequenceInfo.objects.all()
+    #print(sequences)
     if request.method == 'POST':
-        role = request.POST.get('role')
-        user = User.objects.get(id=user_id)
-        user.role = role
-        user.save()
-        return redirect('manage_users')
-    return render(request, 'genome/assign_role.html', {'user': User.objects.get(id=user_id), 'roles': User.ROLES})
+        
+        seq_id = request.POST.get('seq_id')
+        seq_type = request.POST.get('type_seq')
+        #print(request.POST)
+        sequence = SequenceInfo.objects.filter(seq_id=seq_id).first()
+        
+
+        if sequence:
+            if seq_type == "pep":
+                sequence = sequence.seq_pep
+            elif seq_type == "cds":
+                sequence = sequence.seq_cds
+            
+            # Effectuer la requête BLAST
+            blast_result = NCBIWWW.qblast("blastp", "nr", sequence)
+            #print(blast_result)
+            
+            # Analyser les résultats BLAST
+            blast_records = NCBIXML.parse(blast_result)
+            #print(blast_records)
+            alignments = []
+            alignments = [{'hit_id': alignment.hit_id,
+               'hit_def': alignment.hit_def,
+               'score': hsp.score,
+               'evalue': hsp.expect,
+               'identity': hsp.identities / hsp.align_length * 100}
+              for blast_record in blast_records
+              for alignment in blast_record.alignments
+              for hsp in alignment.hsps]
+                
+
+            return render(request, 'genome/results.html', {'results': alignments})
+        else:
+            return HttpResponse('Aucune séquence trouvée avec l\'ID: ' + seq_id)
+    else:
+        
+        return render(request, 'genome/blast.html', {'sequences': sequences})
+
+
+## Annotations
+# Rôles validateur et annotateur
+def a_v_role_required(user):
+    if user.is_authenticated:
+        return user.role in ['validateur', 'annotateur']
+    return False
+
+@user_passes_test(a_v_role_required, login_url='/login/')
+def annotations(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            email = request.user.email
+            annotations = Annotations.objects.filter(email_annot__email=email, annotation_status='attribué')
+            if annotations:
+                context = {'annotations': annotations}
+                return render(request, 'genome/annotations.html', context)
+            else:
+                context = {'message': "Aucune séquence n'a été attribuée"}
+                return render(request, 'genome/annotations.html', context)
+        else:
+            return redirect('login')
+
+## Formulaire de l'annotation
+@user_passes_test(a_v_role_required, login_url='/login/')
+def formulaire_annotation(request, annotation_id):
+    if request.method == 'GET':
+        annotation = Annotations.objects.filter(annot_id=annotation_id)[0]
+        if request.user.email == annotation.email_annot.email:
+            context = {'annotation': annotation}
+            return render(request,"genome/formulaire_annotation.html", context)
+        else:
+            return redirect('login')
+
+@user_passes_test(a_v_role_required, login_url='/login/')
+def formulaire_annotation(request, annotation_id):
+    if request.method == 'GET':
+        annotation = Annotations.objects.filter(annot_id=annotation_id)[0]
+        if request.user.email == annotation.email_annot.email:
+            context = {'annotation': annotation}
+            return render(request,"genome/formulaire_annotation.html", context)
+        else:
+            return redirect('login')
+    if request.method == 'POST':
+        sens = request.POST.get('Brin')
+        seq_biotype = request.POST.get('biotype')
+        description = request.POST.get('description')
+        annot = Annotations.objects.get(annot_id=annotation_id)
+        annot.seq_biotype = seq_biotype
+        annot.strand = sens
+        annot.description = description
+        annot.annotation_status = 'en cours'
+        annot.save()
+        message = "L'annotation pour la séquence '{}' a bien été enregistrée. Un validateur va analyser cette anotations.".format(annot.sequence_id.seq_id)
+        context = {'message': message}
+        return render(request,"genome/success.html", context)
+

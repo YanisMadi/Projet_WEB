@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Formulaire Anntation </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+  </head>
+  <body>
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+          <a >CYPS Genome Annotation.</a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+          {% if user.is__staff %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+          {% elif user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+        </ul>
+      </div>
+    </nav>
+    
+ 	<div class ="container">
+    <br><br><br><br>
+        <div class="title"> Formulaire d'annotation </div><br>
+        <form action="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" method="post">
+  {% csrf_token %}
+  <br>
+  <div class="form-group">
+    <label for="genome_ID">ID Génome :    </label>
+    <td>{{ annotation.genome_ID.num_accession }}</td>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="sequence_id">ID Séquence :    </label>
+    <td>{{ annotation.sequence_id.seq_id }}</td>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="adn_type">Type d'adn :    </label>
+    <td>{{ annotation.sequence_id.type_adn }}
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="longueur">Longueur :    </label>
+    <td>{{ annotation.sequence_id.longueur }}
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="seq_start">Start Position :    </label>
+    <td>{{ annotation.sequence_id.longueur }}
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="seq_end">End position :    </label>
+    <td>{{ annotation.sequence_id.seq_end }}
+  </div>
+  <br>
+    <div class="form-group">
+    <label for="Brin">Sens  :    </label>
+    <select name="Brin">
+      <option value="1">Direct</option>
+      <option value="-1">Indirect</option>
+  </select><br><br>
+  </div>
+  <div class="form-group">
+    <label for="biotype">Biotype :    </label>
+    <input type="text" class="form-control" id="biotype" name="biotype" required>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="description">Description :    </label>
+    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+  </div>
+  <br>
+  <button type="submit" class="btn btn-primary">Envoyer</button>
+  <div>
+    {{ message }}
+  </div>  
+</form>
+</div>
+  </body>
+</html>
