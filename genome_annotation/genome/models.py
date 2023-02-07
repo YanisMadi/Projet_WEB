@@ -128,7 +128,6 @@ class SequenceInfo(models.Model):
     cds = models.BooleanField(default=False)
     pep = models.BooleanField(default=False)
     seq_biotype = models.CharField(max_length=30)
-    fonction = models.CharField(max_length=100)
     seq_start = models.IntegerField()
     seq_end =models.IntegerField()
     seq_cds = models.TextField()
@@ -150,7 +149,7 @@ class Annotations(models.Model):
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
     strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
     seq_biotype = models.CharField(max_length=30)
+    description = models.TextField()
     comments = models.TextField()
     annotation_status = models.TextField(choices=STATUS,default='attribué')
-    description = models.TextField()
 
