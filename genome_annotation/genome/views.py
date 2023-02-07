@@ -257,12 +257,15 @@ def show_sequences(request):
 ## Comparaison et Alignement de séquences
 @user_passes_test(role_required, login_url="/login/")
 def blast_view(request):
+
     # Pour la liste déroulante
     sequences = SequenceInfo.objects.all()
+
     if request.method == "POST":
         seq_id = request.POST.get("seq_id")
         seq_type = request.POST.get("type_seq")
         sequence = SequenceInfo.objects.filter(seq_id=seq_id).first()
+
         if sequence:
             if seq_type == "pep":
                 # On effectue la requête BLAST pour une recherche protéique
@@ -272,9 +275,11 @@ def blast_view(request):
                 sequence = sequence.seq_cds
                 # On effectue la requête BLAST pour une recherche nucléotidique
                 blast_result = NCBIWWW.qblast("blastn", "nr", sequence)
+
             # On parse le fichier xml
             blast_records = NCBIXML.parse(blast_result)
             alignments = []
+
             # on stocke les infos importantes
             alignments = [
                 {
@@ -288,10 +293,13 @@ def blast_view(request):
                 for alignment in blast_record.alignments
                 for hsp in alignment.hsps
             ]
+
             # on retourne les résultats dans notre fichier html
             return render(request, "genome/results.html", {"results": alignments})
+
         else:
             return HttpResponse("Aucune séquence trouvée avec l'ID: " + seq_id)
+
     else:
         return render(request, "genome/blast.html", {"sequences": sequences})
 
