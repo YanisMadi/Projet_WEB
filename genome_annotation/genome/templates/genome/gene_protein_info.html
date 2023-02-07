@@ -31,12 +31,11 @@
 
 <div class ="container">
   {% block content %}
-  <h1>Informations sur les gènes et protéines</h1>
+  <h1>Information sur les séquences</h1>
   <table>
     <thead>
       <tr>
         <th>ID de séquence</th>
-        <th>Genome</th>
         <th>Nom de séquence</th>
         <th>Fonction</th>
         <th>Séquence</th>
@@ -45,6 +44,8 @@
         <th>Longueur</th>
         <th>Brin</th>
         <th>Type ADN</th>
+        <th>Genome</th>
+        <th>Biotype</th>
       </tr>
     </thead>
     <tbody>
@@ -55,17 +56,18 @@
       </script>
         <tr>
           <td>{{ sequence.seq_id }}</td>
-          <td>{{ sequence.num_accession }}</td>
           <td>{{ sequence.seq_name }}</td>
-          <td>{{ sequence.description }}</td>
           <td><a href="view_genesequence/?seqid="
             onclick="location.href=this.href+seqid;return false">Afficher la séquence</a>
           </td>
+          <td>{{ sequence.description }}</td>
           <td>{{ sequence.seq_start }}</td>
           <td>{{ sequence.seq_end }}</td>
           <td>{{ sequence.longueur }}</td>
           <td>{{ sequence.strand }}</td>
           <td>{{ sequence.type_adn}}</td>
+          <td>{{ sequence.num_accession }}</td>
+          <td>{{ sequence.seq_biotype}}</td>
         </tr>
       {% endfor %}
     </tbody>
