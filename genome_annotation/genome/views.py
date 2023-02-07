@@ -286,6 +286,7 @@ def formulaire_genome(request):
                 query_params['type_adn'] = type_adn
             if seq:
                 query_params['sequence'] = seq
+            query_params['annotated_genome']='annoté'
             genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
         elif output_type == 'gene_protein':
@@ -308,6 +309,7 @@ def formulaire_genome(request):
                 query_params['longueur'] = taille_seq
             if gene_biotype:
                 query_params['seq_biotype'] = gene_biotype
+            query_params['annotated_state'] = 'annoté'
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
@@ -317,7 +319,7 @@ def view_sequence(request):
     # Récupération de la séquence depuis le numéro accession fourni par l'url
     if request.method == "GET":
         numacc = request.GET.get('numacc')
-        genome = Genome.objects.get(num_accession=numacc)
+        genome = Genome.objects.get(num_accession=numacc,annotated_genome='annoté')
         sequence = genome.sequence
         genes = SequenceInfo.objects.filter(num_accession=numacc)
         # Bouton pour télécharger la séquence en .txt
@@ -331,9 +333,10 @@ def view_sequence(request):
         'genes': genes})
 
 def view_genesequence(request):
+    ## Genes
     if request.method == "GET":
         seqid = request.GET.get('seqid')
-        gene = SequenceInfo.objects.get(seq_id=seqid)
+        gene = SequenceInfo.objects.get(seq_id=seqid,annotated_state='annoté')
         nom = gene.seq_name
         sequence_cds = gene.seq_cds
         sequence_pep = gene.seq_pep
@@ -423,8 +426,6 @@ def blast_view(request):
     else:
         
         return render(request, 'genome/blast.html', {'sequences': sequences})
-
-
 ## Annotations
 # Rôles validateur et annotateur
 def a_v_role_required(user):
@@ -480,4 +481,3 @@ def formulaire_annotation(request, annotation_id):
         message = "L'annotation pour la séquence '{}' a bien été enregistrée. Un validateur va analyser cette anotations.".format(annot.sequence_id.seq_id)
         context = {'message': message}
         return render(request,"genome/success.html", context)
-
