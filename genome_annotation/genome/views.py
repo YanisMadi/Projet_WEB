@@ -564,13 +564,15 @@ def validate_annotation(request):
                 annot.annotation_status = "validé"
                 annot.comments = request.POST.get("comment-" + str(annot.annot_id))
                 annot.save()
-                """
-                id = annot.sequence_id
+                id = annot.sequence_id.seq_id
                 seq = SequenceInfo.objects.get(seq_id=id)
+                seq.seq_name = annot.seq_name
                 seq.seq_biotype = annot.seq_biotype
                 seq.strand = annot.strand
                 seq.description = annot.description
-                """
+                seq.annotated_state = "annoté"
+                seq.save()
+                
                 count_validated += 1
                 send_mail(
                     "Annotation Validée",
@@ -643,10 +645,12 @@ def formulaire_annotation(request, annotation_id):
         sens = request.POST.get("Brin")
         seq_biotype = request.POST.get("biotype")
         description = request.POST.get("description")
+        seq_name = request.POST.get("seq_name")
         annot = Annotations.objects.get(annot_id=annotation_id)
         annot.seq_biotype = seq_biotype
         annot.strand = sens
         annot.description = description
+        annot.seq_name = seq_name
         annot.annotation_status = "en cours"
         annot.save()
         message = "L'annotation pour la séquence '{}' a bien été enregistrée. Un validateur va analyser cette anotations.".format(
