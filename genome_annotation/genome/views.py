@@ -306,11 +306,9 @@ def formulaire_genome(request):
                 else :
                     # valeurs aberrantes
                     query_params['sequence'] = None
-                    
-            
             genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
-            
+
         elif output_type == 'gene_protein':
             query_params = {}
             if accessionnb:

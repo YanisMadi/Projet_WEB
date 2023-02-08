@@ -79,6 +79,7 @@ nav.sticky .nav-links li a:hover{
   margin: 0 auto;
   background-color: white;
   padding: 20px;
+  overflow-y: scroll;
 }
 
 table {
