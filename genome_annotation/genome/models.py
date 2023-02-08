@@ -152,3 +152,8 @@ class Annotations(models.Model):
     comments = models.TextField()
     annotation_status = models.TextField(choices=STATUS,default='attribué')
 
+class Discussion(models.Model):
+    envoyeur = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    destinataire = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient')
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

@@ -4,6 +4,7 @@ import requests
 import ensembl_rest
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -12,10 +13,10 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
-from .models import Annotations, User, Genome, SequenceInfo
+from .models import Annotations, User, Genome, SequenceInfo, Discussion
 from .forms.inscription_form import InscriptionForm
 from .forms.database_form import DatabaseForm
-
+from .forms.discussion_form import SendMessageForm, ViewMessageForm
 
 ## ---------------------------- Pour limiter l'accès aux pages ------------------------------------
 # Role lecteur
@@ -669,3 +670,22 @@ def annotation_list(request):
     annotations = Annotations.objects.filter(**query_param)
     # Rendre le template avec le contexte de données
     return render(request, "genome/annotation_list.html", {"annotations": annotations})
+
+## Forum des annotateurs (et validateurs)
+@user_passes_test(a_v_role_required, login_url="/login/")
+def send_message(request):
+    if request.method == "GET":
+        messages = Discussion.objects.filter(Q(envoyeur=request.user) | Q(destinataire=request.user)).order_by('timestamp')
+        return render(request, 'genome/view_discussion.html', {'messages': messages})
+    if request.method == 'POST':
+        form = SendMessageForm(request.POST)
+        if form.is_valid():
+            destinataire = form.cleaned_data['destinataire']
+            message = form.cleaned_data['message']
+            Discussion.objects.create(envoyeur=request.user, destinataire=destinataire, message=message)
+            mess ="Ton message a bien été envoyé à " + str(destinataire) + "."
+            return render(request, 'genome/send_message.html', {'form': form, 'mess':mess})
+    else:
+        form = SendMessageForm()
+    return render(request, 'genome/send_message.html', {'form': form})
+
