@@ -33,14 +33,23 @@
 		<form method="post">
       {% csrf_token %}
       <div class="form-details">
+
         <div class = "input-box">
 
           <strong> Type de sortie </strong>
-          <br>
           <select name="output_type">
-            <option value="genome">Génome</option>
-            <option value="gene_protein">Gène/protéine</option>
-          </select><br><br>
+            <option value="genome"> Génome </option>
+            <option value="gene_protein"> Gène/protéine </option>
+          </select>
+          <br><br>
+
+          <strong> Etat d'annotation </strong>
+          <select name="annotated_state">
+            <option value=""> -- Select -- </option>
+            <option value="annoté"> Annoté </option>
+            <option value="non annoté"> Non annoté </option>
+          </select>
+          <br><br>
 
           <strong> Numéro d'accession du génome </strong>
           <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb">
@@ -119,7 +128,7 @@
 
           <strong> Séquence du génome ou du gène </strong>
           <br>
-          <textarea id="textarea" rows="10" cols="55" name="seq" placeholder = "Entrer la séquence" minlength="4"></textarea>
+          <textarea id="textarea" rows="10" cols="55" name="sequence" placeholder = "Entrer la séquence" minlength="3"></textarea>
 
           <div class="button">
             <input type="submit" value="Recherche"><br> 

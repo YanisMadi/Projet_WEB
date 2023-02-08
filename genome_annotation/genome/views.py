@@ -271,6 +271,7 @@ def formulaire_genome(request):
         seq = request.POST.get('sequence')
         gene_biotype = request.POST.get('gene_biotype')
         output_type = request.POST.get('output_type')
+        annotated_state = request.POST.get('annotated_state')
         if output_type == 'genome':
             query_params = {}
             if accessionnb:
@@ -283,11 +284,33 @@ def formulaire_genome(request):
                 query_params['longueur__lte'] = taille_max
             if type_adn:
                 query_params['type_adn'] = type_adn
+            if annotated_state :
+                query_params['annotated_genome'] = annotated_state
             if seq:
-                query_params['sequence'] = seq
-            query_params['annotated_genome']='annoté'
+                seq = seq.replace("\r","")
+                seq = seq.replace("\n","")
+                if re.search("^[ATGC%]+$", seq) != None :
+                    # regex %
+                    if re.search("^[ATGC]+%$",seq):
+                        #commence par seq
+                        query_params['sequence__regex'] = "^" + seq.replace("%",".*")
+                    elif re.search("%[ATGC]+$",seq) :
+                        # se termine par seq
+                        query_params['sequence__regex'] = seq.replace("%",".*") + "$"
+                    elif re.search("%[ATGC]+%",seq) :
+                        # contient seq
+                        query_params['sequence__contains'] = seq.replace("%","")
+                    elif re.search("^[A-Z]+$", seq) :
+                        #egalite
+                        query_params['sequence'] = seq
+                else :
+                    # valeurs aberrantes
+                    query_params['sequence'] = None
+                    
+            
             genomes = Genome.objects.filter(**query_params)
             return render(request, 'genome/genome_info.html', {'genomes': genomes})
+            
         elif output_type == 'gene_protein':
             query_params = {}
             if accessionnb:
@@ -302,15 +325,47 @@ def formulaire_genome(request):
                 query_params['strand'] = strand
             if type_adn:
                 query_params['type_adn'] = type_adn
-            if seq:
-                query_params['sequence'] = seq
             if taille_min:
                 query_params['longueur__gte'] = taille_min
             if taille_max:
                 query_params['longueur__lte'] = taille_max
             if gene_biotype:
                 query_params['seq_biotype'] = gene_biotype
-            query_params['annotated_state'] = 'annoté'
+            if annotated_state :
+                query_params['annotated_state'] = annotated_state
+            if seq:
+                if re.search("^[ATGC%]+$", seq) != None :
+                    # sequence cds
+                    if re.search("^[ATGC]+%$",seq):
+                        #commence par seq
+                        query_params['seq_cds__regex'] = "^" + seq.replace("%",".*")
+                    elif re.search("%[ATGC]+$",seq) :
+                        # se termine par seq
+                        query_params['seq_cds__regex'] = seq.replace("%",".*") + "$"
+                    elif re.search("%[ATGC]+%",seq) :
+                        # contient seq
+                        query_params['seq_cds__contains'] = seq.replace("%","")
+                    elif re.search("^[ATGC]+$", seq) :
+                        # égalité
+                        query_params['seq_cds'] = seq
+                elif re.search("^[A-Z%]+$", seq) != None :
+                    # sequence pep
+                    if re.search("^[A-Z]+%$",seq):
+                        # commence par seq
+                        query_params['seq_pep__regex'] = "^" + seq.replace("%",".*")
+                    elif re.search("%[A-Z]+$",seq) :
+                        # finit par seq
+                        query_params['seq_pep__regex'] = seq.replace("%",".*") + "$"
+                    elif re.search("%[A-Z]+%",seq) :
+                        # contient seq
+                        query_params['seq_pep__contains']= seq.replace("%","")
+                    elif re.search("^[A-Z]+$", seq) :
+                        # égalité
+                        query_params['seq_pep'] = seq
+                else :
+                    # valeurs aberrantes
+                    query_params['seq_cds'] = None
+                    query_params['seq_pep'] = None  
             print(query_params)
             sequences = SequenceInfo.objects.filter(**query_params)
             return render(request, 'genome/gene_protein_info.html', {'sequences': sequences})
