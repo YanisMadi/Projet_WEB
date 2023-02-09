@@ -1,0 +1,136 @@
+/* Google Font Import Link */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Ubuntu',sans-serif;
+}
+body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center; 
+    background: #f5f3f5; 
+    overflow-y: scroll;
+ 
+}
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    
+}
+nav.sticky{
+    padding: 15px 20px;
+    background: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+nav .nav-content{
+    height: 50%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+nav .logo a{
+    font-weight: 500;
+    font-size: 35px;
+    color: #bab3bb;
+}
+nav.sticky .logo a{
+    color: #fff;
+}
+.nav-content .nav-links{
+    display: flex;
+}
+.nav-content .nav-links li{
+    list-style: none;
+    margin: 0 8px;
+}
+/* Les titres dans le menu de navigation */
+.nav-links li a{
+    text-decoration: none;
+    color: #0E2431;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 4px;
+    transition: all 0.3s ease;
+}
+.nav-links li a:hover{
+    color: #d980e0;
+}
+nav.sticky .nav-links li a{
+    color:  #0E2431;
+    transition: all 0.4s ease;
+}
+nav.sticky .nav-links li a:hover{
+    color: #0E2431;
+}
+
+.container {
+    margin: auto;
+    width: 75%;
+    max-height: calc(100vh - 100px); /* définir la hauteur maximale en fonction de la hauteur de l'écran moins une marge */
+    overflow-y: scroll; /* activé la barre de défilement seulement sur l'axe vertical */
+}
+.container .title{ 
+    font-size: 25px;
+    font-weight: 500;
+    position: relative;
+    height: 0%;
+}
+
+.container::-webkit-scrollbar {
+    width: 0%; /* définir la largeur de la barre de défilement */
+    background-color: #F5F5F5; /* définir la couleur de fond */
+    height: 0%;
+  }
+  
+  .container::-webkit-scrollbar-thumb {
+    width: 0%;
+    background-color: #fbf7f7; /* définir la couleur de la barre de défilement */
+    height: 0%;
+    
+  }
+
+
+div:target {
+    padding-top: 7em; 
+    margin-top: -7em; 
+}
+
+table {
+    width: auto;
+    border-collapse: collapse;
+    overflow-y: scroll;
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #dddddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.button {
+    background-color: rgba(5, 5, 5, 0.416); /* Définit la couleur de fond pour le bouton */
+    color: white; /* Définit la couleur du texte pour le bouton */
+    padding: 10px 20px; /* Définit l'espacement intérieur pour le bouton */
+    border-radius: 5px; /* Définit les coins arrondis pour le bouton */
+    text-decoration: none; /* Supprime la décoration de lien pour le bouton */
+    font-weight: bold; /* Définit le poids de police pour le texte */
+    display: inline-block; /* Affiche le bouton en ligne avec d'autres éléments */
+  }
