@@ -410,7 +410,7 @@ def formulaire_genome(request):
                 "css_files": ["form.css"],
             },
         )
-    if request.method == "POST":
+    elif request.method == "POST":
         accessionnb = request.POST.get("accessionnb")
         espece = request.POST.get("espece")
         souche = request.POST.get("souche")
