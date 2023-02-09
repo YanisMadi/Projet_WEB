@@ -253,7 +253,13 @@ def get_data_from_InterPro(id_databank) :
             grouped_data.append(temp)
             temp = []
 
-    return info, go_terms
+    grouped_data = [{'identifiant': ele[0],
+        'nom': ele[1],
+        'categorie_code': ele[2],
+        'categorie_nom': ele[3],}
+    for ele in grouped_data]   
+
+    return info, grouped_data
 
 
 def get_data_from_ensembl(id_databank):
