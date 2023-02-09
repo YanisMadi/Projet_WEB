@@ -218,15 +218,56 @@ def role_required(user):
         return user.role in ['validateur', 'annotateur', 'lecteur']
     return False
 
+def get_id_InterPro_from_Uniprot(id_databank) :
 
-# Page pour accéder aux banques externes
-def get_data_from_ncbi(id_databank):
-    url = f'https://api.ncbi.nlm.nih.gov/data/databank/id/{id_databank}'
+    url = f"https://rest.uniprot.org/uniprotkb/search?query={id_databank}"
+
     response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
+
+    #on récupère les infos qui nous interessent sous le format json
+    response = response.json()
+    #print(response)
+    dic = response['results'][0]['uniProtKBCrossReferences']
+    for i in range(len(dic)) :
+        if dic[i]['database'] == 'InterPro' : 
+            id_Interpro = dic[i]['id']
+
+    return id_Interpro
+
+
+def get_data_from_InterPro(id_databank) :
+
+    info = []
+    go_terms= []
+    id_Interpro = get_id_InterPro_from_Uniprot(id_databank)
+
+    url = f'https://www.ebi.ac.uk/interpro/api/entry/interpro/{id_Interpro}'
+    response = requests.get(url)
+    response = response.json()
+
+    info.append(response['metadata']['accession'])
+    info.append(response['metadata']['entry_id'])
+    info.append(response['metadata']['type'])
+
+    for go in range(len(response['metadata']['go_terms'])):
+        go_terms.append(response['metadata']['go_terms'][go]['identifier'])
+        go_terms.append(response['metadata']['go_terms'][go]['name'])
+        go_terms.append(response['metadata']['go_terms'][go]['category']['code'])
+        go_terms.append(response['metadata']['go_terms'][go]['category']['name'])
+
+    grouped_data = []
+    temp = []
+
+    for i, item in enumerate(go_terms):
+        if isinstance(item, str) and item.startswith('GO'):
+            if temp:
+                grouped_data.append(temp)
+            temp.append(item)
+            temp.extend(go_terms[i+1:i+4])
+            grouped_data.append(temp)
+            temp = []
+
+    return info, go_terms
 
 
 def get_data_from_ensembl(id_databank):
@@ -235,30 +276,89 @@ def get_data_from_ensembl(id_databank):
 
 
 def get_data_from_uniprot(id_databank):
-    url = f'https://www.uniprot.org/uniprot/{id_databank}.json'
+
+    info = []
+    url = f"https://rest.uniprot.org/uniprotkb/search?query={id_databank}"
+
     response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
+
+    #on récupère les infos qui nous interessent sous le format json
+    response = response.json()
+    dic = response['results'][0]
+
+    if 'uniProtkbId' in dic : 
+        uniProtkbId = dic['uniProtkbId'] 
+        info.append(uniProtkbId)
+
+    else :
+        info.append('None')
+   
+    if 'scientificName' in dic['organism'] :
+        espece = dic['organism']['scientificName']
+        info.append(espece)
+        
+    else :
+        info.append('None')
+
+    if 'alternativeNames' in dic['proteinDescription'] : 
+        fonction = dic['proteinDescription']['alternativeNames'][0]['fullName']['value']
+        info.append(fonction)
+
+    else :
+        info.append('None')
+
+    if 'geneName' in dic['genes'][0] :
+        gene_symbol = dic['genes'][0]['geneName']['value']
+        info.append(gene_symbol)
+
+    else :
+        info.append('None')
+
+    if 'recommendedName' in dic['proteinDescription'] : 
+        fonction = response['results'][0]['proteinDescription']['recommendedName']['fullName']['value']
+        info.append(fonction)
+
+    else :
+        info.append('None')
+        
+    if 'orderedLocusNames' in dic['genes'][0] : 
+        gene_name = response['results'][0]['genes'][0]['orderedLocusNames'][0]['value']
+        info.append(gene_name)
+
+    else :
+        info.append('None')
+
+    if 'length' in dic['sequence'] : 
+        longueur = dic['sequence']['length']
+        info.append(longueur)
+    
+    else :
+        info.append('None')
+
+    return info
 
 
 def show_sequences(request):
     if request.method == "GET":
         form = DatabaseForm()
+        print(form)
         return render(request, 'genome/select_database.html', {'form': form})
     elif request.method == 'POST':
         form = DatabaseForm(request.POST)
+        print(form)
         if form.is_valid():
             selected_database = form.cleaned_data['Choisir_une_banque_de_données_externe']
             id_databank = form.cleaned_data['id_databank']
-            if selected_database == 'NCBI':
-                data = get_data_from_ncbi(id_databank)
+            if selected_database == 'InterPro':
+                info, go_terms = get_data_from_InterPro(id_databank)
+                return render(request, "genome/result_InterPro.html", {'selected_database': selected_database, 'inter': info, 'go': go_terms})
             elif selected_database == 'Ensembl':
                 data = get_data_from_ensembl(id_databank)
+                return render(request, "genome/result_ensembl.html", {'selected_database': selected_database, 'results': data})
             elif selected_database == 'Uniprot':
                 data = get_data_from_uniprot(id_databank)
-            data=json.dumps(data, indent=4)
+                return render(request, 'genome/result_uniprot.html', {'results': data})
+            
             return render(request, "genome/data.html", {'selected_database': selected_database, 'data': data})
 
 
@@ -530,3 +630,7 @@ def extract_data(request):
             data = data.filter(annotated_state=annotated_state)
 
         return render(request, 'data_search_result.html', {'data': data})
+
+
+
+
