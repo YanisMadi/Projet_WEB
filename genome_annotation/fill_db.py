@@ -39,13 +39,12 @@ for file in data :
                 if SequenceInfo.objects.filter(pk=gene_id).exists(): 
                     Seq = SequenceInfo.objects.get(pk=gene_id)
                     Seq.seq_cds = seq
-                    Seq.cds = True
-                    Seq.save(force_update=True, update_fields=['seq_cds', 'cds'])               
+                    Seq.save(force_update=True, update_fields=['seq_cds'])               
 
                 else : 
                     SequenceInfo(seq_id = gene_id ,seq_name =gene_name, seq_biotype=gene_biotype,
                             description = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, cds = True, strand =sens,
+                            type_adn = genome_type, seq_cds=seq, longueur=seq_length, strand =sens,
                             annotated_state = "annoté" ).save(force_insert= True) 
 
         elif 'pep' in file :
@@ -60,14 +59,13 @@ for file in data :
                 if SequenceInfo.objects.filter(pk=gene_id).exists(): 
                     Seq = SequenceInfo.objects.get(pk=gene_id)
                     Seq.seq_pep = seq
-                    Seq.pep = True
-                    Seq.save(force_update=True, update_fields=['seq_pep', 'pep'])               
+                    Seq.save(force_update=True, update_fields=['seq_pep'])               
 
                 else : 
                 
                     SequenceInfo(seq_id = gene_id ,seq_name =gene_name ,seq_biotype=gene_biotype,
                             description = description,seq_start=start,seq_end=end, num_accession = genome_id, 
-                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, pep = True, strand =sens,
+                            type_adn = genome_type, seq_pep=seq, longueur=seq_length, strand =sens,
                              annotated_state = "annoté").save(force_insert= True)
 
         else :
@@ -92,14 +90,13 @@ for file in data :
                 if SequenceInfo.objects.filter(pk=gene_id).exists(): 
                     Seq = SequenceInfo.objects.get(pk=gene_id)
                     Seq.seq_cds = seq
-                    Seq.cds = True
-                    Seq.save(force_update=True, update_fields=['seq_cds', 'cds'])
+                    Seq.save(force_update=True, update_fields=['seq_cds'])
 
                 else : 
                 
                     SequenceInfo(seq_id = gene_id, seq_start= start, seq_end = end, 
                             num_accession=genome_id, type_adn=genome_type, seq_cds = seq, 
-                            longueur = seq_length, cds = True, annotated_state = "non annoté").save(force_insert= True)
+                            longueur = seq_length, annotated_state = "non annoté").save(force_insert= True)
 
         elif 'pep' in file :
             #print('pep')
@@ -109,13 +106,12 @@ for file in data :
                 if SequenceInfo.objects.filter(pk=gene_id).exists(): 
                     Seq = SequenceInfo.objects.get(pk=gene_id)
                     Seq.seq_pep = seq
-                    Seq.pep = True
-                    Seq.save(force_update=True, update_fields=['seq_pep', 'pep'])
+                    Seq.save(force_update=True, update_fields=['seq_pep'])
                 else : 
             
                     SequenceInfo(seq_id = gene_id, seq_start= start, seq_end = end, 
-                            num_accession=genome_id, type_adn=genome_type, seq_pep = seq, longueur = seq_length,
-                            pep = True, annotated_state = "non annoté").save(force_insert= True)
+                            num_accession=genome_id, type_adn=genome_type, seq_pep = seq, longueur = seq_length
+                            , annotated_state = "non annoté").save(force_insert= True)
 
 
         else : 

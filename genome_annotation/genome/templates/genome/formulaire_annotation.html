@@ -28,14 +28,20 @@
         </ul>
       </div>
     </nav>
-    
-    <div class ="container">
+    <div class="parent">
+      <div class ="container" style="margin-top: 300px;">
 
-      <div class="title"> Formulaire d'annotation </div><br>
+        <div class="title"> Formulaire d'annotation </div>
+        <br>
         <form action="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" method="post">
           {% csrf_token %}
           <br>
-
+          <div class="form-group">
+            <label for="genome_ID">Espece :    </label>
+            <td>{{ annotation.genome_ID.espece }}</td>
+          </div>
+          <br>
+          
           <div class="form-group">
             <label for="genome_ID">ID Génome :    </label>
             <td>{{ annotation.genome_ID.num_accession }}</td>
@@ -85,6 +91,12 @@
             <input type="text" class="form-control" id="biotype" name="biotype" required>
           </div>
           <br>
+
+          <div class="form-group">
+            <label for="seq_name">Nom séquence :    </label>
+            <input type="text" class="form-control" id="seq_name" name="seq_name" required>
+          </div>
+          <br>
       
           <div class="form-group">
             <label for="description">Description :    </label>
@@ -92,12 +104,18 @@
           </div>
           <br>
       
-          <button type="submit" class="btn btn-primary">Envoyer</button>
+          <button type="submit" class="btn btn-primary" style="font-size: 15px; font-weight: 60; background: #d980e0; color: white;border-radius: 40px;">Envoyer</button>
           
           <div>
           {{ message }}
           </div>  
+
         </form>
+      </div>
+
+      <div class ="container" style="margin-bottom: 20px; opacity:90% ;">
+        <a href="view_genesequence/?seqid={{ annotation.sequence_id.seq_id }} " style="font-size: 15px; font-weight: 60; background: #d980e0; color: white;border-radius: 40px;">Afficher la séquence</a>
+      </div>
     </div>
   </body>
 </html>

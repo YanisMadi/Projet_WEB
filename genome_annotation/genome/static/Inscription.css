@@ -103,10 +103,13 @@ nav.sticky .nav-links li a:hover{
     margin: 20px 0 12px 0;
 }
 
+.container:first-child {
+    margin-bottom: 20px; /* add margin to separate the two containers */
+  }
+
 form .user-details .input-box{
    margin-bottom: 15px;
-
-    width: calc(100% / 2- 20px);
+   width: calc(100% / 2- 20px);
 }
 .user-details .input-box .details{
     display: block;
