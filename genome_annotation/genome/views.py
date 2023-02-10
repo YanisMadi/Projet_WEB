@@ -213,7 +213,7 @@ def get_id_InterPro_from_Uniprot(id_databank) :
     response = requests.get(url)
     #on récupère les infos qui nous interessent sous le format json
     response = response.json()
-    #print(response)
+
     dic = response['results'][0]['uniProtKBCrossReferences']
     for i in range(len(dic)) :
         if dic[i]['database'] == 'InterPro' : 
@@ -226,16 +226,20 @@ def get_data_from_InterPro(id_databank) :
 
     info = []
     go_terms= []
+
+    #Appel de la fonction id_databank
     id_Interpro = get_id_InterPro_from_Uniprot(id_databank)
 
     url = f'https://www.ebi.ac.uk/interpro/api/entry/interpro/{id_Interpro}'
     response = requests.get(url)
+    #on récupère les infos sous le format json
     response = response.json()
 
     info.append(response['metadata']['accession'])
     info.append(response['metadata']['entry_id'])
     info.append(response['metadata']['type'])
 
+    #On met dans uen liste les infos go_terms contenu dans le json
     for go in range(len(response['metadata']['go_terms'])):
         go_terms.append(response['metadata']['go_terms'][go]['identifier'])
         go_terms.append(response['metadata']['go_terms'][go]['name'])
@@ -245,6 +249,7 @@ def get_data_from_InterPro(id_databank) :
     grouped_data = []
     temp = []
 
+    #On fait une liste de liste regroupant les go_terms et leurs infos
     for i, item in enumerate(go_terms):
         if isinstance(item, str) and item.startswith('GO'):
             if temp:
@@ -254,6 +259,7 @@ def get_data_from_InterPro(id_databank) :
             grouped_data.append(temp)
             temp = []
 
+    # Pour faciliter l'affichage dans le HTML
     grouped_data = [{'identifiant': ele[0],
         'nom': ele[1],
         'categorie_code': ele[2],
@@ -264,7 +270,9 @@ def get_data_from_InterPro(id_databank) :
 
 
 def get_data_from_ensembl(id_databank):
+
     result = ensembl_rest.sequence_id(id_databank, content_type="application/json")
+
     return result
 
 
@@ -279,6 +287,7 @@ def get_data_from_uniprot(id_databank):
     response = response.json()
     dic = response['results'][0]
 
+    #On récupère les infos et on les met dans une liste
     if 'uniProtkbId' in dic : 
         uniProtkbId = dic['uniProtkbId'] 
         info.append(uniProtkbId)
@@ -334,22 +343,39 @@ def get_data_from_uniprot(id_databank):
 ## Page des banques externes
 @user_passes_test(role_required, login_url="/login/")
 def show_sequences(request):
+    #On montre les infos dans les differentes banques de données
+
     if request.method == "GET":
+
         form = DatabaseForm()
+
         return render(request, 'genome/select_database.html', {'form': form})
+
     elif request.method == 'POST':
+
         form = DatabaseForm(request.POST)
+
         if form.is_valid():
+
             selected_database = form.cleaned_data['Choisir_une_banque_de_données_externe']
             id_databank = form.cleaned_data['id_databank']
+
             if selected_database == 'InterPro':
+
                 info, go_terms = get_data_from_InterPro(id_databank)
+
                 return render(request, "genome/result_InterPro.html", {'selected_database': selected_database, 'inter': info, 'go': go_terms})
+
             elif selected_database == 'Ensembl':
+
                 data = get_data_from_ensembl(id_databank)
+
                 return render(request, "genome/result_ensembl.html", {'selected_database': selected_database, 'results': data})
+
             elif selected_database == 'Uniprot':
+
                 data = get_data_from_uniprot(id_databank)
+
                 return render(request, 'genome/result_uniprot.html', {'results': data})
             
             return render(request, "genome/data.html", {'selected_database': selected_database, 'data': data})
