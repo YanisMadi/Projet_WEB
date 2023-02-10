@@ -1,6 +1,7 @@
 import json
 import csv
 import requests
+import re
 import ensembl_rest
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
