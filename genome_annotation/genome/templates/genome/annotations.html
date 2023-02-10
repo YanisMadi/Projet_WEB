@@ -6,58 +6,59 @@
         {% load static %}
 	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
   </head>
- <body>
-  <nav>
-    <div class="nav-content">
-      <div class="logo">
-        <a >CYPS Genome Annotation.</a> 
+  <body>
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+          <a>CYPS Genome Annotation </a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+          {% if user.is__staff %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+          {% elif user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+        </ul>
       </div>
-      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
-      <ul class="nav-links">
-        {% if user.is__staff %}
-        <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
-        {% elif user.is_annotateur %}
-          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
-        {% elif user.is_validateur %}
-          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
-        {% elif user.is_lecteur %}
-          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
-        {% endif %}
-        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
-      </ul>
-    </div>
-  </nav>
-  
-<div class ="container">
-        <div class="title"> Mes annotations attribuées </div><br>
-{% if annotations %}
-<table>
-    <thead>
-      <tr>
-        <th style="padding-right: 20px;">ID génome</th>
-        <th style="padding-right: 20px;">ID séquence</th>
-        <th style="padding-right: 0px;">Statut</th>
-        <th style="padding-right: 0px;"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for annotation in annotations %}
-        <tr>
-            <td style="padding: 5px">{{ annotation.genome_ID.num_accession }}</td>
-            <td style="padding: 5px">{{ annotation.sequence_id.seq_id }}</td>
-            <td style="padding: 5px">{{ annotation.annotation_status }}</td>
-            <td style="padding: 15px">
-                <a href="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" class="button">Annoter</a>
+    </nav>
+    
+    <div class ="container">
+      <div class="title"> Mes annotations attribuées </div><br>
+        {% if annotations %}
+        <table>
+            <thead>
+              <tr>
+                <th style="padding-right: 20px;">ID génome</th>
+                <th style="padding-right: 20px;">ID séquence</th>
+                <th style="padding-right: 0px;">Statut</th>
+                <th style="padding-right: 0px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for annotation in annotations %}
+                <tr>
+                    <td style="padding: 5px">{{ annotation.genome_ID.num_accession }}</td>
+                    <td style="padding: 5px">{{ annotation.sequence_id.seq_id }}</td>
+                    <td style="padding: 5px">{{ annotation.annotation_status }}</td>
+                    <td style="padding: 15px">
+                        <a href="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" class="button">Annoter</a>
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
 
-              </td>
-              
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% else %}
-  <p>Aucune séquence ne t'a été attribuée.</p>
-{% endif %}
-</div>
-</body>
+        {% else %}
+          <p>Aucune séquence ne t'a été attribuée.</p>
+        {% endif %}
+
+    </div>
+  </body>
+  
 </html>
