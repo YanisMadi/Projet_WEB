@@ -18,6 +18,7 @@ from .models import Annotations, User, Genome, SequenceInfo, Discussion
 from .forms.inscription_form import InscriptionForm
 from .forms.database_form import DatabaseForm
 from .forms.discussion_form import SendMessageForm, ViewMessageForm
+from django.utils.safestring import mark_safe
 
 ## ---------------------------- Pour limiter l'accès aux pages ------------------------------------
 # Role lecteur
@@ -562,9 +563,9 @@ def view_genesequence(request):
         gene = SequenceInfo.objects.get(seq_id=seqid)
         nom = gene.seq_name
         genome = Genome.objects.get(num_accession = gene.num_accession)
-        sequence_genome = genome.sequence
         sequence_cds = gene.seq_cds
         sequence_pep = gene.seq_pep
+        sequence_genome = mark_safe(genome.sequence.replace(sequence_cds, "<span style='color:red;'>" + sequence_cds + "</span>"))
         download_type = request.GET.get("download")
         if download_type == "cds":
             response = HttpResponse(sequence_cds, content_type="text/plain")
