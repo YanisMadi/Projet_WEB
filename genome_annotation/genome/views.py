@@ -561,6 +561,8 @@ def view_genesequence(request):
         seqid = request.GET.get('seqid')
         gene = SequenceInfo.objects.get(seq_id=seqid)
         nom = gene.seq_name
+        genome = Genome.objects.get(num_accession = gene.num_accession)
+        sequence_genome = genome.sequence
         sequence_cds = gene.seq_cds
         sequence_pep = gene.seq_pep
         download_type = request.GET.get("download")
@@ -585,6 +587,7 @@ def view_genesequence(request):
                 "sequence_cds": sequence_cds,
                 "sequence_pep": sequence_pep,
                 "seqid": seqid,
+                "sequence_genome" : sequence_genome,
             },
         )
 
