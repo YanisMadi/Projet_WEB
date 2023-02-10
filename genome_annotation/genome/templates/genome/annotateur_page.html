@@ -7,43 +7,42 @@
     <link rel="stylesheet" href="{% static 'Inscription.css' %}">
 </head>
 
-<body>
-  <!-- Barre de navigation --> 
-  <nav>
-    <div class="nav-content">
-        <div class="logo">
-            <a >CYPS Genome Annotation.</a> 
+    <body>
+    <!-- Barre de navigation --> 
+        <nav>
+            <div class="nav-content">
+                <div class="logo">
+                    <a >CYPS Genome Annotation</a> 
+                </div>
+                <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+                <ul class="nav-links">
+                    <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div class="container">
+            <p><h2> Tu es Annotateur tu as plusieurs fonctionnalités ! </h2><br>
+            <p>Clique sur <strong>Choisir une séquence à annoter</strong> pour choisir une séquence à annoter. Après avoir choisi une séquence, tu pourras remplir plusieurs catégories afin d'annoter ta séquence. Tu peux vérifier l'historique des annotations.</p><br>
+            <button class='btn btn--assign' type='submit' onclick = "location.href='/formulaire/'">Chercher un génome/une protéine</button>
+            <button class='btn btn--assign' type='submit' onclick = "location.href = '/annotations_attrib/'">Choisir une séquence à annoter</button> 
+            <button class='btn btn--assign' type='submit' onclick = "location.href='/extract_data/'">Télécharger des données</button>
+            <button class='btn btn--assign' type='submit' onclick = "location.href = '/annotations/'">Voir les annotations en cours</button>
+            <button class='btn btn--assign' type='submit' onclick = "location.href = '/sequence/'">Banques de données externes</button>    
+            <button class='btn btn--assign' type='submit' onclick = "location.href = '/blast/'"> Recherche d'alignement de séquences </button> 
+            <button class='btn btn--assign' type='submit' onclick = "location.href = '/forum/'">Forum des annotateurs</button>  
         </div>
-        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
-        <ul class="nav-links">
-            <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
-        </ul>
-    </div>
-</nav>
 
-
-<div class="container">
-  <p><h2> Tu es Annotateur tu as plusieurs fonctionnalités ! </h2><br>
-      <p>Clique sur <strong>Choisir une séquence à annoter</strong> pour choisir une séquence à annoter. Après avoir choisi une séquence, tu pourras remplir plusieurs catégories afin d'annoter ta séquence. Tu peux vérifier l'historique des annotations.</p><br>
-      <button class='btn btn--assign' type='submit' onclick = "location.href='/formulaire/'">Chercher un génome/une protéine</button>
-      <button class='btn btn--assign' type='submit' onclick = "location.href = '/annotations_attrib/'">Choisir une séquence à annoter</button> 
-      <button class='btn btn--assign' type='submit' onclick = "location.href='/extract_data/'">Télécharger des données</button>
-      <button class='btn btn--assign' type='submit' onclick = "location.href = '/annotations/'">Voir les annotations en cours</button>
-      <button class='btn btn--assign' type='submit' onclick = "location.href = '/sequence/'">Banques de données externes</button>    
-      <button class='btn btn--assign' type='submit' onclick = "location.href = '/blast/'"> Recherche d'alignement de séquences </button> 
-      <button class='btn btn--assign' type='submit' onclick = "location.href = '/forum/'">Forum des annotateurs</button>  
-</div>
-
-<!-- Logo -->
-  <script>
-let nav = document.querySelector("nav");
-    window.onscroll = function() {
-        if(document.documentElement.scrollTop > 20){
-            nav.classList.add("sticky");
-        }else {
-            nav.classList.remove("sticky");
-        }
-    }
-  </script>
-</body>
+        <script>
+            let nav = document.querySelector("nav");
+                window.onscroll = function() {
+                    if(document.documentElement.scrollTop > 20){
+                        nav.classList.add("sticky");
+                    }else {
+                        nav.classList.remove("sticky");
+                    }
+                }
+        </script>
+    </body>
 </html>
