@@ -564,7 +564,28 @@ def view_genesequence(request):
         genome = Genome.objects.get(num_accession = gene.num_accession)
         sequence_cds = gene.seq_cds
         sequence_pep = gene.seq_pep
-        sequence_genome = mark_safe(genome.sequence.replace(sequence_cds, "<span style='color:red;'>" + sequence_cds + "</span>"))
+        start = max(gene.seq_start - 1000, 0)
+        end = min(gene.seq_end + 1000, genome.longueur)
+        sequence_genome = genome.sequence[start:end]
+
+        if start == 0 : 
+            print('ok')
+            sequence_genome = mark_safe( "<strong> <span style='color: orange ;'> 1 </span> </strong>" + sequence_genome.replace(sequence_cds, "<strong> <span style='color:green;'>" 
+                    + str(gene.seq_start) + "</span> </strong>" + " " + "<span style='color:red;'>" + sequence_cds + "</span>" + 
+                " " + "<strong>  <span style='color:green;'>" + str(gene.seq_end) + "</span> </strong>") + " <strong> <span style='color: orange ;'> ... -" + str(genome.longueur) + "</span> </strong>")
+
+        elif end == genome.longueur : 
+            sequence_genome = mark_safe("<strong> <span style='color: orange ;'> 1- ... </span> </strong>" + sequence_genome.replace(sequence_cds, 
+                "<strong> <span style='color:green;'>" + str(gene.seq_start) + "</span> </strong>" + " " + "<span style='color:red;'>" + sequence_cds + "</span>" + 
+                " " + "<strong>  <span style='color:green;'>" + str(gene.seq_end) + "</span> </strong>" ) + " <strong> <span style='color: orange ;'>" + str(genome.longueur) + "</span> </strong>")
+
+        else : 
+            sequence_genome = mark_safe("<strong> <span style='color: orange ;'> 1- ... </span> </strong>"+ sequence_genome.replace(sequence_cds,
+                "<strong> <span style='color:green;'>" + str(gene.seq_start) + "</span> </strong>" + " " + "<span style='color:red;'>" + sequence_cds + "</span>" + 
+                " " + "<strong>  <span style='color:green;'>" + str(gene.seq_end) + "</span> </strong>" ) + " <strong> <span style='color: orange ;'> ... -" + str(genome.longueur) + "</span> </strong>")
+
+
+
         download_type = request.GET.get("download")
         if download_type == "cds":
             response = HttpResponse(sequence_cds, content_type="text/plain")
