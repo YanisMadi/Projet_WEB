@@ -31,6 +31,7 @@
     <div class="parent">
         <div class ="container" style="margin-bottom: 20px;">
             <div class="title">Sequence codante {{seqid}} ({{nom}})</div>
+            <br><br>
                 <div>
                     <button class="download-cds-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
                         <a href="?seqid={{ seqid }}&download=cds">Télécharger la séquence codante</a>
@@ -63,6 +64,15 @@
             <input type="hidden" name="output_type" value='gene_protein'>
             <input type="submit" value="Informations sur la séquence " style="font-size: 15px; font-weight: 60; background: #d980e0; color: white;border-radius: 40px;">
           </form>
+        </div>
+
+        <div class ="container" style="margin-bottom: 20px;">
+          <div class="title"> Visualisation dans le génome </div>
+          <br><br>
+          <div style="height: 1000px; width: 900px; word-wrap: break-word;">
+            {{ sequence_genome }}
+          </div>
+        
         </div>
 
     </div>
