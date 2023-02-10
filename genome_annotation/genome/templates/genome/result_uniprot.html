@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Résultat Recherche Uniprot </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'results_ext.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is__staff %}
+        <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+        {% elif user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class ="container">
+    <div class="title"> Résultat de la recherche Uniprot</div><br>
+
+        <table style="margin-top: 50px;">
+            <thead>
+                <tr>
+                    <th>uniProtkbId</th>
+                    <th> Espece</th>
+                    <th>alternative Names</th>
+                    <th> gene symbole</th>
+                    <th>recommended Name</th>
+                    <th>Gene_name</th>
+                    <th>Taille Séquence</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+              
+                    <tr>
+                        <td>{{ results.0 }}</td>
+                        <td>{{ results.1 }}</td>
+                        <td>{{ results.2 }}</td>
+                        <td>{{ results.3 }}</td>
+                        <td>{{ results.4 }}</td>
+                        <td>{{ results.5 }}</td>
+                        <td>{{ results.6 }}</td>
+                    </tr>
+
+            </tbody>
+        </table><br>
+
+        <div class ="container">
+          <div class="title"> Voir les infos sur Uniprot</div><br>
+          
+          <a href="https://www.uniprot.org/uniprotkb/{{ results.0 }}/entry" class="button">Voir sur Uniprot</a> <br>
+        </div> <br>
+        
+    </div>
+
+    
+
+</body>
+</html>
+

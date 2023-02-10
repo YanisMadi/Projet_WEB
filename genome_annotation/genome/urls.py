@@ -26,5 +26,6 @@ urlpatterns = [
     path('formulaire_annotation/<int:annotation_id>/', views.formulaire_annotation, name = 'formulaire_annotation'),
     path('success/', views.formulaire_annotation, name = 'success'),
     path('extract_data/', views.extract_data, name = 'extract_data'),
+    path('forum/', views.send_message, name = 'forum'),
 ]
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Résultat Recherche Uniprot </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'results_ext.css' %}">
+  </head>
+ <body>
+  <nav>
+    <div class="nav-content">
+      <div class="logo">
+        <a >CYPS Genome Annotation.</a> 
+      </div>
+      <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+      <ul class="nav-links">
+        {% if user.is__staff %}
+        <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+        {% elif user.is_annotateur %}
+          <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+        {% elif user.is_validateur %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+        {% elif user.is_lecteur %}
+          <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class ="container" style="margin-top: 100px;">
+    
+    <div class="title"> Résultat de la recherche InterPro</div><br>
+    
+    <table style="margin-top: 50px;">
+      <thead>
+          <tr>
+            <th>Indentifiant</th>
+            <th>Nom</th>
+            <th>Categorie Code</th>
+            <th>Categorie Nom</th>
+              
+          </tr>
+      </thead>
+      <tbody>
+        
+        {% for ele in go %}
+        <tr>
+          <td>{{ ele.identifiant }}</td>
+          <td>{{ ele.nom }}</td>
+          <td>{{ ele.categorie_code }}</td>
+          <td>{{ ele.categorie_nom }}</td>
+        </tr>
+      {% endfor %}
+
+      </tbody>
+  </table><br>
+
+
+        <table style="margin-top: 50px;">
+            <thead>
+                <tr>
+                    <th>Id InterPro</th>
+                    <th>Id entry</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+
+            <tbody>
+              
+                <tr>
+                    <td>{{ inter.0 }}</td>
+                    <td>{{ inter.1 }}</td>
+                    <td>{{ inter.2 }}</td>
+    
+                </tr>
+      
+
+            </tbody>
+        </table><br>
+
+        <div class ="container">
+          <div class="title"> Voir les infos sur InterPro</div><br>
+          
+          <a href="https://www.ebi.ac.uk/interpro/entry/InterPro/{{ inter.0 }}/" class="button">Voir info sur Interpro</a> <br>
+        </div> <br>
+        
+    </div>
+
+    
+
+</body>
+</html>

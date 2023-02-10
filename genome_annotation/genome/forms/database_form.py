@@ -2,7 +2,7 @@ from django import forms
 
 class DatabaseForm(forms.Form):
     DATABASES = (
-        ('NCBI', 'NCBI'),
+        ('InterPro', 'InterPro'),
         ('Ensembl', 'Ensembl'),
         ('Uniprot', 'Uniprot'),
     )
