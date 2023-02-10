@@ -7,37 +7,43 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'home_page.css' %}">
    </head>
-<body>
   
-  <!-- Barre de navigation --> 
-  <nav>
-    <div class="nav-content">
-    <div class="logo">
-        <a >CYPS Genome Annotation.</a> <!-- enlever le lien ? -->
-    </div>
-    <ul class="nav-links">
-        <li><a href="/">Accueil</a></li>
-        <li><a href="/inscription/">S'inscrire</a></li>
-        <li><a href="/login/">Se connecter</a></li>
-    </ul>
-    </div>
-  </nav>
+  <body>
+  
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+            <a >CYPS Genome Annotation </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/inscription/">S'inscrire</a></li>
+            <li><a href="/login/">Se connecter</a></li>
+        </ul>
+      </div>
+    </nav>
 
-  <section class="home"></section>
-  <div class="text">
-    <p><h2> Bienvenue dans l'application CYPS Genome Annotation ! </h2><br>
-      <a href="/admin/"> Page Admin </a></p>
-  </div>
-<!-- Logo -->
-  <script>
-let nav = document.querySelector("nav");
-    window.onscroll = function() {
-        if(document.documentElement.scrollTop > 20){
+    <section class="home"></section>
+      <div class="text">
+        <p><h2> Bienvenue dans l'application CYPS Genome Annotation ! </h2><br>
+          <strong><a href="/admin/"> >>> Page Admin </a> </strong> </p> 
+      </div>
+      <div class="text">
+        <p> L’annotation de gènes constitue un domaine de la biologie moléculaire. Elle permet la compréhension de fonctions biologiques des organismes par l’étude de la fonction, la structure et l’expression des gènes. Ces dernières années, la quantité de données génomiques a considérablement augmenté. C’est dans ce contexte que ce projet de programmation WEB a été proposé. Ce projet consiste en la conception d’une application web pour l'annotation fonctionnelle de génomes et de séquences codantes et protéiques. Le site CYPS Genome Annotation permet aux biologistes et aux bio-informaticiens d’annoter les fonctions des séquences génomiques et protéiques provenant de génomes procaryotes.  L'objectif est de concevoir un site web ergonomique et intuitif pour l'utilisateur, rendant ainsi son utilisation simple et facile.</p>
+      </div>
+
+
+    <script>
+      let nav = document.querySelector("nav");
+        window.onscroll = function() {
+          if(document.documentElement.scrollTop > 20){
             nav.classList.add("sticky");
-        }else {
+          }
+          else {
             nav.classList.remove("sticky");
+          }
         }
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
