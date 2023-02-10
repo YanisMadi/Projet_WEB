@@ -471,9 +471,9 @@ def formulaire_genome(request):
             if idsequence:
                 query_params["seq_id"] = idsequence
             if seq_start:
-                query_params["seq_start"] = seq_start
+                query_params["seq_start__gte"] = seq_start
             if seq_end:
-                query_params["seq_end"] = seq_end
+                query_params["seq_end__lte"] = seq_end
             if strand:
                 query_params["strand"] = strand
             if type_adn:
