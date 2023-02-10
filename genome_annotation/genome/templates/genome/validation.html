@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
         <title> Valider l'annotation </title>
         {% load static %}
-	    <link rel="stylesheet" href="{% static 'validation.css' %}">
+	    <link rel="stylesheet" href="{% static 'gene_info.css' %}">
   </head>
  <body>
   <nav>
@@ -39,8 +39,9 @@
                     <th>Email</th>
                     <th>Genome ID</th>
                     <th>Sequence ID</th>
+                    <th>Nom Séquence</th>
+                    <th>Brin</th>
                     <th>Biotype</th>
-                    <th>Gene ID</th>
                     <th>Description</th>
                     <th>Valider/Rejeter</th>
                     <th>Commentaire</th>
@@ -53,8 +54,9 @@
                     <td>{{ annot.email_annot }}</td>
                     <td>{{ annot.genome_ID.num_accession }}</td>
                     <td>{{ annot.sequence_id.seq_id }}</td>
-                    <td>{{ annot.sequence_id.seq_biotype }}</td>
-                    <td>{{ annot.gene_id }}</td>
+                    <td>{{ annot.seq_name }}</td>
+                    <td>{{ annot.strand }}</td>
+                    <td>{{ annot.seq_biotype }}</td>
                     <td>{{ annot.description}}</td>
                     <td>
                         <select name="validate_reject-{{ annot.annot_id }}">

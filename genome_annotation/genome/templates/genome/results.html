@@ -3,10 +3,11 @@
     <head>
       <title>Résultats de la recherche BLAST</title>
       {% load static %}
-    <link rel="stylesheet" href="{% static 'results_blast.css' %}">
+    <link rel="stylesheet" href="{% static 'results_ext.css' %}">
       <!-- Barre de navigation --> 
 
     </head>
+<body>
 <nav>
   <div class="nav-content">
     <div class="logo">
@@ -26,11 +27,11 @@
       <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
     </ul>
   </div>
-</nav>
-        
-    <body>
+</nav> <br><br>
+
+<h1></h1>
         <div class="container">
-            <table>
+            <table style="margin-top: 50px;">
                 <thead>
                     <tr>
                         <th>Hit ID</th>

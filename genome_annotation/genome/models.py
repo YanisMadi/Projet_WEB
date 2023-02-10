@@ -105,50 +105,55 @@ class UserManager(BaseUserManager):
 
 class Genome(models.Model):
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
+    ANNOTATION = [('annoté','annoté'),('non annoté,','non annoté')]
 
     num_accession = models.CharField(primary_key=True, blank=False,max_length=50)
-    nom_gene = models.CharField(max_length=50)
     espece = models.CharField(max_length=50)
-    souche = models.CharField(max_length=50)
     type_adn = models.CharField(choices=DNA_TYPE,default='chromosome',max_length=10)
     sequence = models.TextField()
     longueur = models.PositiveIntegerField()
-    description = models.CharField(max_length=1000)
+    annotated_genome = models.CharField(choices=ANNOTATION, default='non annoté',max_length=12)
   
 
 class SequenceInfo(models.Model):
 
     DNA_TYPE = [('chr', 'chromosome'),('plm', 'plasmide')]
-    STRAND_TYPE = [('backward','-1'),('forward','1')]
+    STRAND_TYPE = [('-1','-1'),('1','1'),('n.a.','n.a.')]
+    ANNOTATION = [('annoté','annoté'),('non annoté,','non annoté')]
     
     num_accession = models.CharField(max_length=30) # genome_id
     type_adn = models.TextField(choices=DNA_TYPE,default='chromosome')
     seq_id = models.TextField(primary_key=True, blank=False)
     seq_name = models.CharField(max_length=30)
-    cds = models.BooleanField(default=False)
-    pep = models.BooleanField(default=False)
     seq_biotype = models.CharField(max_length=30)
-    fonction = models.CharField(max_length=100)
     seq_start = models.IntegerField()
     seq_end =models.IntegerField()
     seq_cds = models.TextField()
     seq_pep = models.TextField()
     longueur = models.IntegerField()
-    strand = models.TextField(choices=STRAND_TYPE,default='forward')
+    strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
     description = models.TextField()
+    annotated_state = models.CharField(choices=ANNOTATION, default='non annoté',max_length=12)
 
 
 class Annotations(models.Model):
 
     STATUS = [('validé','val'),('attribué','att'),('en cours', 'en attente'),('rejeté', 'rej')]
+    STRAND_TYPE = [('-1','-1'),('1','1'),('n.a.','n.a.')]
 
     annot_id = models.AutoField(primary_key=True)
     email_annot = models.ForeignKey(User,on_delete=models.CASCADE)
     genome_ID = models.ForeignKey(Genome,on_delete=models.CASCADE)
     sequence_id = models.ForeignKey(SequenceInfo,on_delete=models.CASCADE)
+    seq_name = models.CharField(max_length=30)
+    strand = models.TextField(choices=STRAND_TYPE,default='n.a.')
     seq_biotype = models.CharField(max_length=30)
+    description = models.TextField()
     comments = models.TextField()
     annotation_status = models.TextField(choices=STATUS,default='attribué')
-    gene_id = models.CharField(max_length=100)
-    description = models.TextField()
 
+class Discussion(models.Model):
+    envoyeur = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    destinataire = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient')
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

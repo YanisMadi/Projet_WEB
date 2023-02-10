@@ -138,7 +138,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cypsgenome@gmail.com'
-EMAIL_HOST_PASSWORD = 'pumwrxkkoqzwfahv'
+EMAIL_HOST_PASSWORD = ''
 
 # Authentification pour se connecter
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']

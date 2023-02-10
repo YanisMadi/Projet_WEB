@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+          <title> Formulaire </title>
+          {% load static %}
+        <link rel="stylesheet" href="{% static 'view_seq.css' %}">
+  </head>
+
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+          <a >CYPS Genome Annotation.</a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+          {% if user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+        </ul>
+      </div>
+    </nav>
+  
+  <body>
+    <div class="parent">
+        <div class ="container" style="margin-bottom: 20px;">
+            <div class="title">Sequence codante {{seqid}} ({{nom}})</div>
+                <div>
+                    <button class="download-cds-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
+                        <a href="?seqid={{ seqid }}&download=cds">Télécharger la séquence codante</a>
+                    </button>
+                </div>
+        </div>
+        <div class ="container" style="margin-bottom: 20px;">
+            <div style="height: auto; width: 900px; overflow-y: scroll; word-wrap: break-word;">
+            {{ sequence_cds }}
+            </div> 
+        </div>
+        <div class ="container" style="margin-bottom: 20px;">
+            <div class="title">Sequence peptidique {{seqid}} ({{nom}})</div>
+            <div>
+                <button class="download-pep-button" style="font-size: 15px; font-weight: 60; width: 150px; background: #d980e0; color: white;border-radius: 40px;">
+                    <a href="?seqid={{ seqid }}&download=pep">Télécharger la séquence peptidique</a>
+                </button>
+            </div>
+        </div>
+
+        <div class ="container" style="margin-bottom: 20px;">
+            <div style="height: auto; width: 900px; overflow-y: scroll; word-wrap: break-word;">
+                {{ sequence_pep }}</div>
+        </div>
+
+        <div class ="container" style="margin-bottom: 20px;">
+          <form method="post" action="{% url 'formulaire' %}">
+            {% csrf_token %}
+            <input type="hidden" name="idsequence" value='{{ seqid }}'>
+            <input type="hidden" name="output_type" value='gene_protein'>
+            <input type="submit" value="Informations sur la séquence " style="font-size: 15px; font-weight: 60; background: #d980e0; color: white;border-radius: 40px;">
+          </form>
+        </div>
+
+    </div>
+  </body>
+</html>

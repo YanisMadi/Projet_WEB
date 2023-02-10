@@ -26,7 +26,7 @@ def parsing_genome(fasta_file) :
     ## Genome information
     infoline=content[0].split(":")
     genome_id=infoline[2] #ASM744v1 par exemple
-    genome_type=infoline[0].strip(">") #Chromosome dna
+    genome_type=infoline[1].split(" ")[0] #chromosome
     sens=infoline[4]
     
     ## Sequence
@@ -61,17 +61,17 @@ def parsing_coding(fasta_file) :
             infoline = content[i].split(":")
             
             ## Information Gene
-            gene_id = infoline[0][1:9]
-            gene_type = infoline[0][10:13] #cds, pep, dna
+            gene_id = infoline[0].split(" ")[0].strip(">")
+            gene_type = infoline[0].split(" ")[1] #cds, pep, dna
             sens = infoline[5][0:2]
-            gene_name = infoline[6][0:5]
-            gene_biotype = infoline[8].split(" ")[0]
+            gene_name = infoline[6].split(" ")[0]
+            gene_biotype = infoline[8].split(" ")[0].replace("_"," ")
             description = infoline[-1].strip("\n")#fonction
             start = infoline[3]
             end = infoline[4]
             ## Information génome
             genome_id = infoline[1]# localisation chromosome ASM744v1 par exemple
-            genome_type = infoline[0][14:24]
+            genome_type = infoline[0].split(" ")[2]
             
             ## Sequence
             for j in range (i+1,len(content)):
@@ -109,13 +109,13 @@ def parsing_new(fasta_file) :
             infoline = content[i].split(":")
             
             ## Information Gene
-            gene_id = infoline[0][1:9]
-            gene_type = infoline[0][10:13] #cds, pep, dna
+            gene_id = infoline[0].split(" ")[0].strip(">")
+            gene_type = infoline[0].split(" ")[1] #cds, pep, dna
             start = infoline[3]
             end = infoline[4].strip("\n")
             ## Information génome
             genome_id = infoline[1]# localisation chromosome ASM744v1 par exemple
-            genome_type = infoline[0][14:24]
+            genome_type = infoline[0].split(" ")[2]
             
             ## Sequence
             for j in range (i+1,len(content)):

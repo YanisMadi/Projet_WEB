@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
         <title> Formulaire </title>
         {% load static %}
-	    <link rel="stylesheet" href="{% static 'form.css' %}">
+	    <link rel="stylesheet" href="{% static 'formulaire.css' %}">
   </head>
   <body>
     <!-- Barre de navigation --> 
@@ -15,9 +15,7 @@
         </div>
         <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
         <ul class="nav-links">
-          {% if user.is__staff %}
-          <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
-          {% elif user.is_annotateur %}
+          {% if user.is_annotateur %}
             <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
           {% elif user.is_validateur %}
             <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
@@ -30,62 +28,111 @@
     </nav>
     
  	<div class ="container">
-        <div class="title"> Formulaire </div><br>
+    <div class="title"> Formulaire </div><br>
 		<form method="post">
       {% csrf_token %}
-            <div class="form-details">
-                <div class = "input-box">
+      <div class="form-details">
 
-                <strong>Numéro d'accession du génome ou du gène : </strong>
-		        <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb"><br><br>
+        <div class = "input-box">
 
-                <strong> Espèces pour la recherche du génome :</strong>
-		        <input type="text" placeholder="Entrer le nom de l'espèce" name="espèce"><br><br>
+          <strong> Type de sortie </strong>
+          <select name="output_type">
+            <option value="genome"> Génome </option>
+            <option value="gene_protein"> Gène/protéine </option>
+          </select>
+          <br><br>
 
-                <strong> Souche pour la recherche du génome :</strong>
-		        <input type="text" placeholder="Entrer le nom de la souche" name="souche"><br><br>
+          <strong> Etat d'annotation </strong>
+          <select name="annotated_state">
+            <option value=""> -- Select -- </option>
+            <option value="annoté"> Annoté </option>
+            <option value="non annoté"> Non annoté </option>
+          </select>
+          <br><br>
 
-                <strong> Taille de la séquence :</strong>
-		        <input type="text" placeholder="Entrer la taille de la seq" name="taille_seq"><br><br>
+          <strong> Numéro d'accession du génome </strong>
+          <input type="text" placeholder="Entrer le numéro d'accession" name="accessionnb">
+          <I> Exemple : ASM744v1 ...</I>
+          <br><br>
 
-                <strong> Type d'ADN du génome :</strong>
-                  <select name="Type d'ADN">
-                      <option value="chromosome">Chromosome</option>
-                      <option value="plasmide">Plasmide</option>
-                  </select><br><br>
-    
-                  <strong>Séquence ID du gène :</strong>
-                  <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence"><br><br>  
+          <sub> - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -  - - - - - - - - - - - - - - - - - - - - - - -</sub>
+          <br><br>
 
-                <strong>Start position de la séquence :</strong>
-                <input type="text" placeholder="Entrer la start position" name="seq_start"><br><br>
-    
-                <strong>End position de la séquence :</strong>
-                <input type="text" placeholder="Entrer la end position" name="seq_end"><br><br>
-    
-                <strong> Brin pour le gène :</strong>
-                  <select name="Brin">
-                      <option value="both">Direct</option>
-                      <option value="backward">Indirect</option>
-                      <option value="forward">Direct et Indirect</option>
-                  </select><br><br>
+          <strong> Séquence ID du gène </strong>
+          <input type="text" placeholder="Entrer l'ID de la séquence" name="idsequence">
+          <I> Exemple : AAN78501 ...</I>
+          <br><br>  
 
-                <strong>Biotype du gène :</strong>
-                <input type="text" placeholder="Entrer le gene biotype" name="gene_biotype"><br><br>
+          <strong> Position de la séquence </strong>
+          <table>
+            <thead>
+              <th> <sub> Start </sub> </th>
+              <th> <sub> End </sub> </th>
+            </thead>
+            <tbody>
+              <td> <input type="text" placeholder="Entrer la start position" name="seq_start">
+              </td>
+              <td> <input type="text" placeholder="Entrer la end position" name="seq_end">
+              </td>
+            </tbody>
+          </table>
+          <I> Exemple : Start 190 - End 255 ...</I>
+          <br><br>
 
-                <strong>Séquence du génome ou du gène :</strong><br>
-    	        <textarea id="textarea" rows="10" cols="55" name="seq" placeholder = "Entrer la séquence" minlength="4"></textarea>
-              
-                <strong>Type de sortie :</strong>
-                  <select name="output_type">
-                      <option value="genome">Génome</option>
-                      <option value="gene_protein">Gène/protéine</option>
-                  </select><br><br>
+          <strong> Biotype </strong>
+          <input type="text" placeholder="Entrer le gene biotype" name="gene_biotype">
+          <I> Exemple : protein coding ...</I>
 
-                <div class="button">
-                  <input type="submit" value="Recherche"><br> 
-                </div>
-            </div>  
+          <br><br>
+          <sub> - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -  - - - - - - - - - - - - - - - - - - - - - - -</sub>
+          <br><br>
+
+          <strong> Taille de la séquence </strong>
+          <table>
+            <thead>
+              <th> <sub> Minimum </sub> </th>
+              <th> <sub> Maximum </sub> </th>
+            </thead>
+            <tbody>
+              <td> <input type="text" placeholder="Entrer la taille de la seq" name="taille_min">
+              </td>
+              <td> <input type="text" placeholder="Entrer la taille de la seq" name="taille_max">
+              </td>
+            </tbody>
+          </table>
+          <br><br>
+
+          <strong> Type d'ADN </strong>
+          <br>
+          <select name="type_adn">
+            <option value=""> -- Select -- </option>
+            <option value="chromosome">Chromosome</option>
+            <option value="plasmide">Plasmide</option>
+          </select>
+          <br><br>
+
+          <strong> Espèce </strong>
+          <input type="text" placeholder="Entrer le nom de l'espèce" name="espece">
+          <I> Exemple : Escherichia coli ...</I>
+          <br><br>
+
+          <strong> Sens du brin </strong>
+          <br>
+          <select name="strand">
+            <option value=""> -- Select -- </option>
+            <option value="forward"> Direct </option>
+            <option value="-1"> Indirect </option>
+          </select>
+          <br><br>
+
+          <strong> Séquence du génome ou du gène </strong>
+          <br>
+          <textarea id="textarea" rows="10" cols="55" name="sequence" placeholder = "Entrer la séquence" minlength="3"></textarea>
+
+          <div class="button">
+            <input type="submit" value="Recherche"><br> 
+          </div>
+    </div>  
 		</form>
 	</div>
   </body>

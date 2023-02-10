@@ -36,7 +36,6 @@
       <tr>
         <th style="padding-right: 20px;">ID génome</th>
         <th style="padding-right: 20px;">ID séquence</th>
-        <th style="padding-right: 20px;">Biotype</th>
         <th style="padding-right: 0px;">Statut</th>
         <th style="padding-right: 0px;"></th>
       </tr>
@@ -46,7 +45,6 @@
         <tr>
             <td style="padding: 5px">{{ annotation.genome_ID.num_accession }}</td>
             <td style="padding: 5px">{{ annotation.sequence_id.seq_id }}</td>
-            <td style="padding: 5px">{{ annotation.sequence_id.seq_biotype }}</td>
             <td style="padding: 5px">{{ annotation.annotation_status }}</td>
             <td style="padding: 15px">
                 <a href="{% url 'formulaire_annotation' annotation_id=annotation.annot_id %}" class="button">Annoter</a>

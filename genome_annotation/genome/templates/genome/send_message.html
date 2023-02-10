@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+        <title> Forum des annotateurs </title>
+        {% load static %}
+	    <link rel="stylesheet" href="{% static 'Inscription.css' %}">
+  </head>
+  <body>
+    <!-- Barre de navigation --> 
+    <nav>
+      <div class="nav-content">
+        <div class="logo">
+          <a >CYPS Genome Annotation.</a> 
+        </div>
+        <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
+        <ul class="nav-links">
+          {% if user.is__staff %}
+          <li><a href="{% url 'validateur_page' %}">Accueil Admin</a></li>
+          {% elif user.is_annotateur %}
+            <li><a href="{% url 'annotateur_page' %}">Accueil Annotateur</a></li>
+          {% elif user.is_validateur %}
+            <li><a href="{% url 'validateur_page' %}">Accueil Validateur</a></li>
+          {% elif user.is_lecteur %}
+            <li><a href="{% url 'lecteur_page' %}">Accueil Lecteur</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">  
+        {% block content %}
+        <h2>Envoyer un message</h2>
+        <button class='btn btn--assign' type='submit' onclick = "location.href = '/forum/'">Voir les messages reçus</button>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Envoyer</button>
+            <div>
+                {{ mess }}
+              </div>  
+        </form>
+        {% endblock %}
+    </div> 
+</body>
+</html>
