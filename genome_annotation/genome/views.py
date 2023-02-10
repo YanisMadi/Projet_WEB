@@ -204,7 +204,6 @@ def lecteur_page(request):
     )
 
 
-
 ## --------------------- BANQUES EXTERNES / ALIGNEMENT DE SEQUENCES (API) --------------------
 
 def get_id_InterPro_from_Uniprot(id_databank) :
