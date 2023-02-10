@@ -34,6 +34,8 @@
         <br>
         {% csrf_token %}
         {{ form.as_p }}
+        <input type="submit" value="Envoyer un message">
+        <br>
         </form>
 
         {% for message in messages %}
@@ -45,7 +47,6 @@
             <br>
         </div>
         {% endfor %}
-        <input type="submit" value="Envoyer un message">
     </div> 
   </body>
 </html>
