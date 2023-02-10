@@ -2,6 +2,7 @@ import json
 import csv
 import requests
 import ensembl_rest
+import re
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 from django.db.models import Q
