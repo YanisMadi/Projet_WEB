@@ -11,7 +11,7 @@
     <nav>
       <div class="nav-content">
         <div class="logo">
-          <a >CYPS Genome Annotation.</a> 
+          <a >CYPS Genome Annotation </a> 
         </div>
         <p>{% if user.is_authenticated %}Bienvenue {{ user.get_short_name }} !{% endif %}</p>
         <ul class="nav-links">
@@ -30,39 +30,43 @@
     </nav>
     
     <div class ="container">
-          <div class="title"> Attribuer une séquence à un annotateur </div><br>
-          <form method="post">
-            {% csrf_token %}
-            <div>
-              <label for="user">Annotateur :</label>
-              <select id="user" name="user">
-                {% for user in users %}
-                  <option value="{{ user.email }}">{{ user.email }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div>
-              <label for="genome">Génome :</label>
-              <select id="genome" name="genome">
-                {% for genome in genomes %}
-                <option value="{{ genome.num_accession }}">{{ genome.num_accession }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div>
-              <label for="sequence">Séquence :</label>
-              <select id="sequence" name="sequence">
-                {% for sequence in sequences %}
-                <option value="{{ sequence.seq_id }}">{{ sequence.seq_id }}</option>
+      <div class="title"> Attribuer une séquence à un annotateur </div><br>
+        <form method="post">
+          {% csrf_token %}
+          <div>
+            <label for="user">Annotateur :</label>
+            <select id="user" name="user">
+              {% for user in users %}
+                <option value="{{ user.email }}">{{ user.email }}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-                {% endfor %}
-              </select>
-            </div>
-            <button type="submit">Attribuer l'annotation</button>
-            <div>
-              {{ message }}
-            </div>            
-          </form>
-        </div>
-      </body>
-    </html>
+          <div>
+            <label for="genome">Génome :</label>
+            <select id="genome" name="genome">
+              {% for genome in genomes %}
+              <option value="{{ genome.num_accession }}">{{ genome.num_accession }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div>
+            <label for="sequence">Séquence :</label>
+            <select id="sequence" name="sequence">
+              {% for sequence in sequences %}
+              <option value="{{ sequence.seq_id }}">{{ sequence.seq_id }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit">Attribuer l'annotation</button>
+
+          <div>
+            {{ message }}
+          </div>         
+
+        </form>
+      </div>
+  </body>
+</html>
